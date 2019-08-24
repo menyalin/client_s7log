@@ -53,10 +53,6 @@ function createProvider () {
       $query: {
         // fetchPolicy: 'cache-and-network',
       }
-    },
-    errorHandler (error) {
-      // eslint-disable-next-line no-console
-      console.log('%cError', 'background: red; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold;', error.message)
     }
   })
   return apolloProvider
@@ -79,9 +75,11 @@ async function onLogin (apolloClient, token) {
 // Manually call this when user log out
 async function onLogout (apolloClient) {
   if (typeof localStorage !== 'undefined') {
-    localStorage.removeItem(AUTH_TOKEN)
+    localStorage.setItem(AUTH_TOKEN, '')
   }
-  if (apolloClient.wsClient) restartWebsockets(apolloClient.wsClient)
+  if (apolloClient.wsClient) {
+    restartWebsockets(apolloClient.wsClient)
+  }
   try {
     await apolloClient.resetStore()
   } catch (e) {

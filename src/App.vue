@@ -67,13 +67,13 @@
 import ErrorSnackbar from './components/common/ErrorSnackbar'
 import { mapGetters } from 'vuex'
 import AppSpinner from './components/common/AppSpinner'
-import { ChatMessageAdddedSubscription } from './store/queries'
+import { changeActiveUsers } from './store/queries'
 
 export default {
   name: 'App',
   mounted () {
     const observer = this.$apollo.subscribe({
-      query: ChatMessageAdddedSubscription
+      query: changeActiveUsers
     })
     observer.subscribe({
       next (data) {
@@ -98,7 +98,7 @@ export default {
     itemsForRender () {
       let visibleItems = []
       if (this.isLoggedIn) {
-        visibleItems = [1, 2, 5, 6]
+        visibleItems = [1, 2, 5, 6, 7]
       } else {
         visibleItems = [1, 3, 4, 6]
       }
@@ -113,7 +113,8 @@ export default {
       { id: 2, title: 'Profile', icon: 'mdi-account-details', url: '/profile' },
       { id: 3, title: 'Sign In', icon: 'mdi-account', url: '/signin' },
       { id: 4, title: 'Sign Up', icon: 'mdi-account-plus', url: '/signup' },
-      { id: 5, title: 'Sign Out', icon: 'mdi-logout', url: '/signOut' }
+      { id: 5, title: 'Sign Out', icon: 'mdi-logout', url: '/signOut' },
+      { id: 7, title: 'Admin', icon: 'mdi-alien', url: '/admin' }
     ]
   })
 }

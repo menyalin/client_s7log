@@ -14,5 +14,10 @@ new Vue({
   store,
   apolloProvider: createProvider(),
   vuetify,
+  created () {
+    if (localStorage.token && localStorage.getItem('token') !== '') {
+      store.dispatch('getCurrentUser')
+    }
+  },
   render: h => h(App)
 }).$mount('#app')

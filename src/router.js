@@ -5,6 +5,7 @@ import Profile from './components/Auth/Profile'
 import SignIn from './components/Auth/SignIn'
 import SignUp from './components/Auth/SignUp'
 import SignOut from './components/Auth/SignOut'
+import Admin from './components/Admin'
 
 Vue.use(Router)
 
@@ -36,6 +37,11 @@ export default new Router({
       path: '/signOut',
       name: 'SignOut',
       component: SignOut
+    },
+    {
+      path: '/admin',
+      name: 'Admin',
+      component: Admin
     }
   ]
 })
