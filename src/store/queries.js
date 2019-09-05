@@ -10,9 +10,23 @@ export const GET_POSTS = gql`
         }
     } `
 
+export const isExistEmailQuery = gql`
+    query isExistEmail ($email: String!) {
+        isExistEmail(email: $email)
+    }
+`
+
 export const SIGN_IN = gql`
     mutation ($email: String!, $password: String!) {
         signinUser(email: $email, password: $password) {
+            token
+        }
+    }
+`
+
+export const SIGN_UP = gql`
+    mutation ($name: String, $email: String!, $password: String!) {
+        signupUser(name: $name, email: $email, password: $password) {
             token
         }
     }
