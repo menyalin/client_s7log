@@ -5,8 +5,20 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-  name: 'Profile'
+  name: 'Profile',
+  computed: {
+    ...mapGetters(['error'])
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (!vm.$store.getters.isLoggedIn) {
+        vm.$router.push('/signin')
+      }
+    })
+  }
 }
 </script>
 
