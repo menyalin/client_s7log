@@ -1,18 +1,15 @@
 import { apolloClient, onLogin, onLogout } from '../vue-apollo'
-import { SIGN_IN, SIGN_UP, GET_CURRENT_USER, getActiveUsers, changeActiveUsers } from './queries'
+import { SIGN_IN, SIGN_UP, GET_CURRENT_USER } from './authQueries'
 import router from '../router'
 
 export default {
   state: {
-    user: null,
-    activeUsers: []
+    user: null
+
   },
   mutations: {
     setCurrentUser (state, payload) {
       state.user = payload
-    },
-    setActiveUsers (state, payload) {
-      state.activeUsers = payload
     }
   },
   actions: {
@@ -81,31 +78,11 @@ export default {
           commit('setLoading', false)
           commit('setError', err)
         })
-    },
-    getActiveUsers ({ commit, dispatch }, payload) {
-      commit('clearError')
-      commit('setLoading', true)
-      apolloClient.query({
-        query: getActiveUsers,
-        subscribeToMore: {
-          document: changeActiveUsers,
-          updateQuery: (previousResult, data) => {
-            console.log('[from subscription]', data)
-          }
-        }
-      }).then(({ data: { getActiveUsers } }) => {
-        commit('setLoading', false)
-        commit('setActiveUsers', getActiveUsers)
-      }).catch(err => {
-        commit('setLoading', false)
-        commit('setError', err)
-      })
     }
   },
   getters: {
     currentUser: state => state.user,
-    isLoggedIn: (state) => !!state.user,
-    activeUsers: (state) => state.activeUsers
+    isLoggedIn: (state) => !!state.user
 
   }
 }

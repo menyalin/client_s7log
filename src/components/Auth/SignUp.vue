@@ -55,7 +55,7 @@
 
 <script>
 import { required, email, sameAs } from 'vuelidate/lib/validators'
-import { isExistEmailQuery } from '../../store/queries'
+import { isExistEmailQuery } from '../../store/authQueries'
 
 export default {
   name: 'SignUn',

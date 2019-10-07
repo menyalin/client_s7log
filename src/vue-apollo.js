@@ -9,7 +9,7 @@ Vue.use(VueApollo)
 const AUTH_TOKEN = 'token'
 
 // Http endpoint
-const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'http://localhost:4000/graphql'
+const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'http://localhost:3000/graphql'
 
 // Config
 const defaultOptions = {
@@ -17,7 +17,8 @@ const defaultOptions = {
   httpEndpoint,
   // You can use `wss` for secure connection (recommended in production)
   // Use `null` to disable subscriptions
-  wsEndpoint: process.env.VUE_APP_GRAPHQL_WS || 'ws://localhost:4000/graphql',
+  wsEndpoint: null,
+  // wsEndpoint: process.env.VUE_APP_GRAPHQL_WS || 'ws://localhost:3000/graphql',
   // LocalStorage token
   tokenName: AUTH_TOKEN,
   // Enable Automatic Query persisting with Apollo Engine
@@ -37,11 +38,11 @@ const defaultOptions = {
   // getAuth: (tokenName) => ...
 
 }
-
+// eslint-disable-next-line
 const { apolloClient, wsClient } = createApolloClient({
   ...defaultOptions
 })
-apolloClient.wsClient = wsClient
+// apolloClient.wsClient = wsClient
 
 function createProvider () {
   // Create apollo client

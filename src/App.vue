@@ -1,89 +1,67 @@
 <template>
-    <v-app>
-        <template v-if="loadingApp">
-            <AppSpinner/>
-        </template>
-        <template v-else>
-            <v-navigation-drawer app temporary fixed v-model="drawer">
-                <v-card class="mx-auto" max-width="300" tile>
-                    <v-list class="mt-3">
-                        <v-list-item-group color="primary">
-                            <v-list-item ripple v-for="item in itemsForRender" :key="item.id">
-                                <v-list-item-icon>
-                                    <v-icon v-text="item.icon"/>
-                                </v-list-item-icon>
-                                <v-list-item-content>
-                                    <v-list-item-title v-text="item.title"/>
-                                </v-list-item-content>
-                            </v-list-item>
-                        </v-list-item-group>
-                    </v-list>
-                </v-card>
-            </v-navigation-drawer>
-            <v-app-bar app color="primary" dark dense>
-                <v-app-bar-nav-icon @click="toggleDrawer" class="hidden-md-and-up"/>
-                <v-toolbar-title class="hidden-sm-and-down">
-                    <router-link to="/" tag="span" class="main__title"
-                    >Vue Share
-                    </router-link
-                    >
-                </v-toolbar-title>
-                <v-spacer/>
-                <v-text-field
-                        dark
-                        prepend-icon="mdi-magnify"
-                        single-line
-                        hide-details
-                        placeholder="Search post"
-                />
-                <v-spacer/>
-                <v-toolbar-items class="hidden-xs-only">
-                    <v-btn
-                            v-for="item in itemsForRender"
-                            text
-                            :key="item.id"
-                            :to="item.url"
-                    >
-                        <v-icon left class="hidden-sm-only">{{ item.icon }}</v-icon>
-                        {{ item.title }}
-                    </v-btn>
-                </v-toolbar-items>
-            </v-app-bar>
-            <v-content>
-                <v-container fluid>
-                    <transition name="fade">
-                        <router-view/>
-                    </transition>
-                </v-container>
-            </v-content>
-            <v-footer app></v-footer>
-        </template>
-        <template v-if="error">
-            <ErrorSnackbar/>
-        </template>
-    </v-app>
+  <v-app>
+    <template v-if="loadingApp">
+      <AppSpinner />
+    </template>
+    <template v-else>
+      <v-navigation-drawer app temporary fixed v-model="drawer">
+        <v-card class="mx-auto" max-width="300" tile>
+          <v-list class="mt-3">
+            <v-list-item-group color="primary">
+              <v-list-item ripple v-for="item in itemsForRender" :key="item.id">
+                <v-list-item-icon>
+                  <v-icon v-text="item.icon" />
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title v-text="item.title" />
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-card>
+      </v-navigation-drawer>
+      <v-app-bar app color="primary" dark dense>
+        <v-app-bar-nav-icon @click="toggleDrawer" class="hidden-md-and-up" />
+        <v-toolbar-title class="hidden-sm-and-down">
+          <router-link to="/" tag="span" class="main__title">Vue Share</router-link>
+        </v-toolbar-title>
+        <v-spacer />
+        <v-text-field
+          dark
+          prepend-icon="mdi-magnify"
+          single-line
+          hide-details
+          placeholder="Search post"
+        />
+        <v-spacer />
+        <v-toolbar-items class="hidden-xs-only">
+          <v-btn v-for="item in itemsForRender" text :key="item.id" :to="item.url">
+            <v-icon left class="hidden-sm-only">{{ item.icon }}</v-icon>
+            {{ item.title }}
+          </v-btn>
+        </v-toolbar-items>
+      </v-app-bar>
+      <v-content>
+        <v-container fluid>
+          <transition name="fade">
+            <router-view />
+          </transition>
+        </v-container>
+      </v-content>
+      <v-footer app></v-footer>
+    </template>
+    <template v-if="error">
+      <ErrorSnackbar />
+    </template>
+  </v-app>
 </template>
 <script>
 import ErrorSnackbar from './components/common/ErrorSnackbar'
 import { mapGetters } from 'vuex'
 import AppSpinner from './components/common/AppSpinner'
-import { changeActiveUsers } from './store/queries'
 
 export default {
   name: 'App',
-  mounted () {
-    const observer = this.$apollo.subscribe({
-      query: changeActiveUsers
-    })
-    observer.subscribe({
-      next (data) {
-        console.log(data)
-      },
-      error (error) {
-        console.log(error)
-      }
-    })
-  },
   methods: {
     toggleDrawer () {
       this.drawer = !this.drawer
@@ -121,24 +99,24 @@ export default {
 </script>
 
 <style>
-    .main__title {
-        cursor: pointer;
-        font-size: 1.2em;
-        color: darkgray;
-    }
+.main__title {
+  cursor: pointer;
+  font-size: 1.2em;
+  color: darkgray;
+}
 
-    .fade-enter-active,
-    .fade-leave-active {
-        transition-property: opacity;
-        transition-duration: 0.3s;
-    }
+.fade-enter-active,
+.fade-leave-active {
+  transition-property: opacity;
+  transition-duration: 0.3s;
+}
 
-    .fade-enter-active {
-        transition-delay: 0.3s;
-    }
+.fade-enter-active {
+  transition-delay: 0.3s;
+}
 
-    .fade-enter,
-    .fade-leave-active {
-        opacity: 0;
-    }
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
 </style>
