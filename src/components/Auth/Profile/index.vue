@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col>
+    <v-row wrap>
+      <v-col cols="4">
         <app-personal-info />
         <app-user-phones />
       </v-col>
@@ -10,7 +10,6 @@
 </template>
 
 <script>
-
 import appUserPhones from './userPhones'
 import appPersonalInfo from './personalInfo'
 
