@@ -1,15 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './components/home'
-import Profile from './components/Auth/Profile'
+import Profile from './components/Auth/Profile/index.vue'
 import SignIn from './components/Auth/SignIn'
 import SignUp from './components/Auth/SignUp'
 import SignOut from './components/Auth/SignOut'
 import Admin from './components/Admin'
 
-Vue.use(Router)
+Vue.use( Router )
 
-export default new Router({
+export default new Router( {
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -44,4 +44,4 @@ export default new Router({
       component: Admin
     }
   ]
-})
+} )
