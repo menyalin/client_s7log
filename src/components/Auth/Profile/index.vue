@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="isLoggedIn">
     <v-row wrap>
       <v-col cols="4">
         <app-personal-info />
@@ -12,13 +12,16 @@
 <script>
 import appUserPhones from './userPhones'
 import appPersonalInfo from './personalInfo'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Profile',
-
   components: {
     appUserPhones,
     appPersonalInfo
+  },
+  computed: {
+    ...mapGetters(['isLoggedIn'])
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
