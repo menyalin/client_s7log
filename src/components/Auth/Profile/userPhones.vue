@@ -6,7 +6,7 @@
           <v-subheader>Телефоны:</v-subheader>
         </v-col>
         <v-spacer />
-        <app-edit-phone-modal newPhone="true" v-on:phone-number-added="addNewPhoneHahdler" />
+        <app-edit-phone-modal :newPhone="true" v-on:phone-number-added="addNewPhoneHahdler" />
       </v-row>
     </v-container>
 
@@ -20,7 +20,7 @@
             </v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action>
-            <v-icon>mdi-pencil-outline</v-icon>
+            <app-edit-phone-modal :newPhone="false" :phone="phone" />
           </v-list-item-action>
         </v-list-item>
       </v-list>

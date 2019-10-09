@@ -1,9 +1,12 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="490">
-    <template v-slot:activator="{ on }">
+    <template v-if="newPhone" v-slot:activator="{ on }">
       <v-btn class="ma-2" dark color="green" small fab @click="openDialogHandler">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
+    </template>
+    <template v-else v-slot:activator="{ on }">
+      <v-icon @click="openDialogHandler">mdi-pencil-outline</v-icon>
     </template>
     <v-card>
       <v-card-title class="headline">{{ this.newPhone ? 'Новый': 'Старый' }}</v-card-title>
@@ -25,9 +28,36 @@
         </v-container>
       </v-card-text>
       <v-card-actions>
-        <div class="flex-grow-1"></div>
-        <v-btn color="green darken-1" text @click="сancelHandler">Отмена</v-btn>
-        <v-btn color="green darken-1" text @click="addNewPhoneHandler" :loading="loading">Добавить</v-btn>
+        <v-btn
+          class="ma-2"
+          dark
+          color="warning"
+          small
+          fab
+          v-if="!newPhone"
+          @click="deletePhoneHandler"
+        >
+          <v-icon>mdi-trash-can-outline</v-icon>
+        </v-btn>
+
+        <v-spacer />
+        <v-btn color="green darken-1" text @click="dialog=false">Отмена</v-btn>
+        <v-btn
+          v-if="newPhone"
+          color="green darken-1"
+          text
+          @click="addNewPhoneHandler"
+          :loading="loading"
+          :disabled="!formValid"
+        >Добавить</v-btn>
+        <v-btn
+          v-else
+          color="green darken-1"
+          text
+          @click="updatePhoneHandler"
+          :loading="loading"
+          :disabled="!formValid"
+        >Сохранить</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -50,16 +80,33 @@ export default {
   data() {
     return {
       dialog: false,
-      phoneType: [],
+      phoneType: '',
       phoneNumber: '',
       isMainPhone: false
     }
   },
-  computed: {
-    ...mapGetters(['phoneTypes', 'loading'])
+  mounted() {
+    if (!this.newPhone) {
+      this.phoneType = this.phone.type
+      this.phoneNumber = this.phone.number
+      this.isMainPhone = this.phone.isMain
+    }
   },
-  props: ['newPhone'],
+  computed: {
+    ...mapGetters(['phoneTypes', 'loading']),
+    formValid() {
+      if (this.newPhone) {
+        return this.phoneType !== '' && this.phoneNumber !== ''
+      } else {
+        return true
+      }
+    }
+  },
+  props: ['newPhone', 'phone'],
   methods: {
+    deletePhoneHandler() {
+        
+    },
     openDialogHandler() {
       this.dialog = true
     },
@@ -69,6 +116,7 @@ export default {
       this.isMainPhone = false
     },
     сancelHandler() {
+      console.log('cancel')
       this.dialog = false
     },
     addNewPhoneHandler() {
@@ -90,8 +138,11 @@ export default {
         })
         .catch(e => {
           this.$store.commit('setLoading', false)
+          this.resetFields()
+          this.dialog = false
         })
-    }
+    },
+    updatePhoneHandler() {}
   }
 }
 </script>
