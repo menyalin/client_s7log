@@ -14,8 +14,9 @@
         <v-container>
           <v-row>
             <v-col>
+              <label v-if="!newPhone">{{ phone._id }}</label>
               <v-select :items="phoneTypes" label="Тип" v-model="phoneType" />
-              <v-text-field label="Номер телефона" v-model="phoneNumber" />
+              <v-text-field label="Номер телефона" v-model="phoneNumber" :disabled="!newPhone" />
               <v-checkbox
                 dense
                 v-model="isMainPhone"
@@ -41,19 +42,17 @@
         </v-btn>
 
         <v-spacer />
-        <v-btn color="green darken-1" text @click="dialog=false">Отмена</v-btn>
+        <v-btn color="primary" @click="dialog=false">Отмена</v-btn>
         <v-btn
           v-if="newPhone"
-          color="green darken-1"
-          text
+          color="primary"
           @click="addNewPhoneHandler"
           :loading="loading"
-          :disabled="!formValid"
+          :disabled="!formValid || loading"
         >Добавить</v-btn>
         <v-btn
           v-else
-          color="green darken-1"
-          text
+          color="primary"
           @click="updatePhoneHandler"
           :loading="loading"
           :disabled="!formValid"
@@ -76,6 +75,27 @@ const addNewPhoneQuery = gql`
     }
   }
 `
+const deleteMyPhoneQuery = gql`
+  mutation deleteMyPhone($_id: String!) {
+    deleteMyPhone(_id: $_id) {
+      _id
+      type
+      number
+      isMain
+    }
+  }
+`
+const updateMyPhoneQuery = gql`
+  mutation updateMyPhone($_id: String!, $type: String, $isMain: Boolean) {
+    updateMyPhone(_id: $_id, type: $type, isMain: $isMain) {
+      _id
+      type
+      number
+      isMain
+    }
+  }
+`
+
 export default {
   data() {
     return {
@@ -98,25 +118,52 @@ export default {
       if (this.newPhone) {
         return this.phoneType !== '' && this.phoneNumber !== ''
       } else {
-        return true
+        return (
+          this.phoneType !== this.phone.type ||
+          this.isMainPhone !== this.phone.isMain
+        )
       }
     }
   },
   props: ['newPhone', 'phone'],
   methods: {
     deletePhoneHandler() {
-        
+      this.$store.commit('setLoading', true)
+      this.$apollo
+        .mutate({
+          mutation: deleteMyPhoneQuery,
+          variables: {
+            _id: this.phone._id
+          }
+        })
+        .then(({ data: { deleteMyPhone: phones } }) => {
+          this.$emit('update-phones', phones)
+          this.$store.commit('setLoading', false)
+          this.dialog = false
+        })
+        .catch(e => {
+          this.$store.commit('setLoading', false)
+          this.$store.commit('setError', e.message)
+          this.dialog = false
+        })
     },
     openDialogHandler() {
+      if (!this.newPhone) {
+        this.resetFields()
+      }
       this.dialog = true
     },
     resetFields() {
-      this.phoneNumber = ''
-      this.phoneType = []
-      this.isMainPhone = false
+      if (!this.newPhone) {
+        this.phoneType = this.phone.type
+        this.isMainPhone = this.phone.isMain
+      } else {
+        this.phoneNumber = ''
+        this.phoneType = []
+        this.isMainPhone = false
+      }
     },
     сancelHandler() {
-      console.log('cancel')
       this.dialog = false
     },
     addNewPhoneHandler() {
@@ -142,7 +189,30 @@ export default {
           this.dialog = false
         })
     },
-    updatePhoneHandler() {}
+    updatePhoneHandler() {
+      if (!this.newPhone && this.formValid) {
+        this.$store.commit('setLoading', true)
+        this.$apollo
+          .mutate({
+            mutation: updateMyPhoneQuery,
+            variables: {
+              _id: this.phone._id,
+              type: this.phoneType,
+              isMain: this.isMainPhone
+            }
+          })
+          .then(({ data: { updateMyPhone: phones } }) => {
+            this.$emit('update-phones', phones)
+            this.$store.commit('setLoading', false)
+            this.dialog = false
+          })
+          .catch(e => {
+            this.$store.commit('setLoading', false)
+            this.$store.commit('setError', e.message)
+            this.dialog = false
+          })
+      }
+    }
   }
 }
 </script>
