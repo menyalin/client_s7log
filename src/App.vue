@@ -87,7 +87,7 @@ export default {
     drawer: false,
     items: [
       { id: 6, title: 'Chat', icon: 'mdi-chat-outline', url: '/chat' },
-      { id: 1, title: 'Posts', icon: 'mdi-message-text', url: '/posts' },
+      { id: 1, title: 'Company', icon: 'mdi-domain', url: '/company' },
       { id: 2, title: 'Profile', icon: 'mdi-account-details', url: '/profile' },
       { id: 3, title: 'Sign In', icon: 'mdi-account', url: '/signin' },
       { id: 4, title: 'Sign Up', icon: 'mdi-account-plus', url: '/signup' },

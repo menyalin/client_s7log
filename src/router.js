@@ -6,7 +6,7 @@ import SignIn from './components/Auth/SignIn'
 import SignUp from './components/Auth/SignUp'
 import SignOut from './components/Auth/SignOut'
 import Admin from './components/Admin'
-
+import Company from './components/Company'
 Vue.use( Router )
 
 export default new Router( {
@@ -42,6 +42,11 @@ export default new Router( {
       path: '/admin',
       name: 'Admin',
       component: Admin
+    },
+    {
+      path: '/company',
+      name: 'Company',
+      component: Company
     }
   ]
 } )
