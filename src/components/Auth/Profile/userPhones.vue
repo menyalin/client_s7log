@@ -13,8 +13,8 @@
       <div v-if="userPhones.length">
         <v-list two-line dense class="pt-0 pb-0">
           <v-list-item v-for="phone of userPhones" :key="phone._id">
-            <v-list-item-content class="pl-4">
-              <v-list-item-title :class="{title: phone.isMain}">{{ phone.number }}</v-list-item-title>
+            <v-list-item-content class="pl-3">
+              <v-list-item-title :class="{title: phone.isMain}" class="pa-1">{{ phone.number }}</v-list-item-title>
               <v-list-item-subtitle>
                 <span>{{ phone.type }}</span>
               </v-list-item-subtitle>
@@ -31,14 +31,13 @@
       </div>
       <div v-else class="pa-3">Телефоны не указаны</div>
     </div>
-    <div v-else class="text-center pa-5">
-      <v-progress-circular indeterminate color="primary"></v-progress-circular>
-    </div>
+    <app-small-spinner v-else />
   </v-card>
 </template>
 
 <script>
 import appEditPhoneModal from './editPhoneModal'
+import appSmallSpinner from '@/components/common/smallSpinner'
 import { mapGetters } from 'vuex'
 import gql from 'graphql-tag'
 
@@ -65,7 +64,8 @@ export default {
     }
   },
   components: {
-    appEditPhoneModal
+    appEditPhoneModal,
+    appSmallSpinner
   },
   apollo: {
     userPhones: {

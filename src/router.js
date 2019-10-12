@@ -7,6 +7,7 @@ import SignUp from './components/Auth/SignUp'
 import SignOut from './components/Auth/SignOut'
 import Admin from './components/Admin'
 import Company from './components/Company'
+import CompanyInfo from './components/Company/companyInfo'
 Vue.use( Router )
 
 export default new Router( {
@@ -47,6 +48,11 @@ export default new Router( {
       path: '/company',
       name: 'Company',
       component: Company
+    },
+    {
+      path: '/company/:id',
+      name: 'CompanyInfo',
+      component: CompanyInfo
     }
   ]
 } )
