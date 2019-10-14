@@ -26,7 +26,7 @@
                         :to="`/company/${company._id}`"
                       >
                         <v-list-item-content class="pl-3">
-                          <v-list-item-title class="pb-2 headline">{{ company.name }}</v-list-item-title>
+                          <v-list-item-title class="pb-2 pt-2 headline">{{ company.name }}</v-list-item-title>
                           <v-list-item-subtitle>
                             <span class="pl-1">ИНН: {{ company.inn }}</span>
                           </v-list-item-subtitle>

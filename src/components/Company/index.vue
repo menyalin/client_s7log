@@ -13,12 +13,23 @@
 import appLeftBar from './leftBar'
 import appAddNewCompany from './addNewCompany'
 import appMyCompanyList from './myCompanyList'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
     appLeftBar,
     appAddNewCompany,
     appMyCompanyList
+  },
+  computed: {
+    ...mapGetters(['isLoggedIn'])
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (!vm.$store.getters.isLoggedIn) {
+        vm.$router.push('/signin')
+      }
+    })
   }
 }
 </script>

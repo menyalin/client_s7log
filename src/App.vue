@@ -63,7 +63,7 @@ import AppSpinner from './components/common/AppSpinner'
 export default {
   name: 'App',
   methods: {
-    toggleDrawer () {
+    toggleDrawer() {
       this.drawer = !this.drawer
     }
   },
@@ -73,12 +73,12 @@ export default {
   },
   computed: {
     ...mapGetters(['user', 'isLoggedIn', 'loadingApp', 'error']),
-    itemsForRender () {
+    itemsForRender() {
       let visibleItems = []
       if (this.isLoggedIn) {
         visibleItems = [1, 2, 5, 6, 7]
       } else {
-        visibleItems = [1, 3, 4, 6]
+        visibleItems = [3, 4]
       }
       return this.items.filter(item => visibleItems.indexOf(item.id) !== -1)
     }
