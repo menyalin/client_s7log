@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
+import router from './router/index'
 import store from './store/index'
 import { createProvider } from './vue-apollo'
 import vuetify from './plugins/vuetify'
@@ -11,17 +11,18 @@ import '@mdi/font/css/materialdesignicons.css'
 
 Vue.config.productionTip = false
 
-Vue.use(Vuelidate)
+Vue.use( Vuelidate )
 
-new Vue({
+new Vue( {
   router,
   store,
   apolloProvider: createProvider(),
   vuetify,
-  created () {
-    if (localStorage.token && localStorage.getItem('token') !== '') {
-      store.dispatch('getCurrentUser')
+  created ()
+  {
+    if ( localStorage.token && localStorage.getItem( 'token' ) !== '' ) {
+      store.dispatch( 'getCurrentUser' )
     }
   },
-  render: h => h(App)
-}).$mount('#app')
+  render: h => h( App )
+} ).$mount( '#app' )

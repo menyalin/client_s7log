@@ -5,6 +5,7 @@
     </v-col>
     <v-col>
       <app-my-company-list />
+      <app-my-contract-list />
       <app-add-new-company />
     </v-col>
   </v-row>
@@ -13,13 +14,15 @@
 import appLeftBar from './leftBar'
 import appAddNewCompany from './addNewCompany'
 import appMyCompanyList from './myCompanyList'
+import appMyContractList from './myContractList'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
     appLeftBar,
     appAddNewCompany,
-    appMyCompanyList
+    appMyCompanyList,
+    appMyContractList
   },
   computed: {
     ...mapGetters(['isLoggedIn'])

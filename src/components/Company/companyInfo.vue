@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3></h3>
+    <h3>{{ detailCompanyInfo }}</h3>
   </div>
 </template>
 
@@ -32,8 +32,12 @@ const detailCompanyInfoQuery = gql`
 export default {
   name: 'companyInfo',
   data: () => ({
-    detailCompanyInfo: {}
+    detailCompanyInfo: {},
+    companyId: ''
   }),
+  beforeCreate() {
+    this.companyId = this.$route.params.id
+  },
   components: {
     // appSmallSpinner
   },
@@ -48,7 +52,7 @@ export default {
     detailCompanyInfo: {
       query: detailCompanyInfoQuery,
       variables: {
-        id: $route.params.id
+        id: '5da0838f4b56a0149cba98a6'
       }
     }
   }

@@ -1,13 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './components/home'
-import Profile from './components/Auth/Profile/index.vue'
-import SignIn from './components/Auth/SignIn'
-import SignUp from './components/Auth/SignUp'
-import SignOut from './components/Auth/SignOut'
-import Admin from './components/Admin'
-import Company from './components/Company'
-import CompanyInfo from './components/Company/companyInfo'
+import Home from '@/components/home'
+import Profile from '@/components/Auth/Profile/index.vue'
+import SignIn from '@/components/Auth/SignIn'
+import SignUp from '@/components/Auth/SignUp'
+import SignOut from '@/components/Auth/SignOut'
+import Admin from '@/components/Admin'
+import Company from '@/components/Company'
+import CompanyInfo from '@/components/Company/companyInfo'
+import orderLayout from '@/components/Order/index.vue'
+import orderRoutes from './orderRoutes'
+
 Vue.use( Router )
 
 export default new Router( {
@@ -51,8 +54,12 @@ export default new Router( {
     },
     {
       path: '/company/:id',
-      name: 'CompanyInfo',
       component: CompanyInfo
+    },
+    {
+      path: '/orders',
+      component: orderLayout,
+      children: orderRoutes
     }
   ]
 } )

@@ -76,7 +76,7 @@ export default {
     itemsForRender() {
       let visibleItems = []
       if (this.isLoggedIn) {
-        visibleItems = [1, 2, 5, 6, 7]
+        visibleItems = [1, 2, 5, 6]
       } else {
         visibleItems = [3, 4]
       }
@@ -86,7 +86,7 @@ export default {
   data: () => ({
     drawer: false,
     items: [
-      { id: 6, title: 'Chat', icon: 'mdi-chat-outline', url: '/chat' },
+      { id: 6, title: 'Orders', icon: 'mdi-dump-truck', url: '/orders' },
       { id: 1, title: 'Company', icon: 'mdi-domain', url: '/company' },
       { id: 2, title: 'Profile', icon: 'mdi-account-details', url: '/profile' },
       { id: 3, title: 'Sign In', icon: 'mdi-account', url: '/signin' },
