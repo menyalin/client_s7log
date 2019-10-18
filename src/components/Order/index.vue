@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col class="nav-list" cols="12" sm="4" md="3" lg="2" xl="2" offset-xl="1">
+      <v-col class="nav-list" cols="12" sm="12" md="3" lg="2" xl="2">
         <app-side-bar />
       </v-col>
       <v-col class="orders-content">
