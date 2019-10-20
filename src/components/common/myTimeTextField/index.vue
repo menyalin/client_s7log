@@ -8,6 +8,7 @@
       :value="propTime"
       @change="inputHandler"
       append-icon="mdi-clock"
+      class="pt-0 mt-0"
     />
   </div>
 </template>
