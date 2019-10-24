@@ -8,7 +8,7 @@ export default {
   components: {
     // AppSpinner
   },
-  beforeRouteEnter (to, from, next) {
+  beforeRouteEnter(to, from, next) {
     next(vm => {
       vm.$store.dispatch('signOut')
     })
@@ -16,5 +16,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

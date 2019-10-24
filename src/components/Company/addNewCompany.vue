@@ -8,7 +8,9 @@
             <v-container>
               <v-row no-gutters>
                 <v-col cols="3">
-                  <v-alert v-if="alert" type="success">Компания успешно создана</v-alert>
+                  <v-alert v-if="alert" type="success"
+                    >Компания успешно создана</v-alert
+                  >
                   <v-text-field label="Название" v-model="name" />
                   <v-text-field label="Полное название" v-model="fullName" />
                   <v-text-field label="ИНН" v-model="inn" />
@@ -22,7 +24,8 @@
               @click="saveHandler"
               :disabled="loading"
               :loading="loading"
-            >Сохранить</v-btn>
+              >Сохранить</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-col>

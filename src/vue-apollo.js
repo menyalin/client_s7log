@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
-import { createApolloClient, restartWebsockets } from 'vue-cli-plugin-apollo/graphql-client'
+import {
+  createApolloClient,
+  restartWebsockets
+} from 'vue-cli-plugin-apollo/graphql-client'
 
 // Install the vue plugin
 Vue.use(VueApollo)
@@ -9,7 +12,8 @@ Vue.use(VueApollo)
 const AUTH_TOKEN = 'token'
 
 // Http endpoint
-const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'http://localhost:3000/graphql'
+const httpEndpoint =
+  process.env.VUE_APP_GRAPHQL_HTTP || 'http://localhost:3000/graphql'
 
 // Config
 const defaultOptions = {
@@ -36,15 +40,15 @@ const defaultOptions = {
 
   // Override the way the Authorization header is set
   // getAuth: (tokenName) => ...
-
 }
 // eslint-disable-next-line
 const { apolloClient, wsClient } = createApolloClient({
   ...defaultOptions
 })
+
 // apolloClient.wsClient = wsClient
 
-function createProvider () {
+function createProvider() {
   // Create apollo client
 
   // Create vue apollo provider
@@ -60,7 +64,7 @@ function createProvider () {
 }
 
 // Manually call this when user log in
-async function onLogin (apolloClient, token) {
+async function onLogin(apolloClient, token) {
   if (typeof localStorage !== 'undefined' && token) {
     localStorage.setItem(AUTH_TOKEN, token)
   }
@@ -74,7 +78,7 @@ async function onLogin (apolloClient, token) {
 }
 
 // Manually call this when user log out
-async function onLogout (apolloClient) {
+async function onLogout(apolloClient) {
   if (typeof localStorage !== 'undefined') {
     localStorage.setItem(AUTH_TOKEN, '')
   }
@@ -88,9 +92,5 @@ async function onLogout (apolloClient) {
     console.log('%cError on cache reset (logout)', 'color: orange;', e.message)
   }
 }
-export {
-  onLogin,
-  onLogout,
-  createProvider,
-  apolloClient
-}
+
+export { onLogin, onLogout, createProvider, apolloClient }

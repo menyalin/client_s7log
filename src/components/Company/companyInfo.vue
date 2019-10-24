@@ -4,7 +4,6 @@
   </div>
 </template>
 
-
 <script>
 import gql from 'graphql-tag'
 // import appSmallSpinner from '@/components/common/smallSpinner'

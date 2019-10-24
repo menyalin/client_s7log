@@ -14,7 +14,11 @@
         <v-list two-line dense class="pt-0 pb-0">
           <v-list-item v-for="phone of userPhones" :key="phone._id">
             <v-list-item-content class="pl-3">
-              <v-list-item-title :class="{title: phone.isMain}" class="pa-1">{{ phone.number }}</v-list-item-title>
+              <v-list-item-title
+                :class="{ title: phone.isMain }"
+                class="pa-1"
+                >{{ phone.number }}</v-list-item-title
+              >
               <v-list-item-subtitle>
                 <span>{{ phone.type }}</span>
               </v-list-item-subtitle>

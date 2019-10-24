@@ -30,7 +30,9 @@
                 type="submit"
                 :loading="loading"
                 :disabled="loading || $v.$invalid"
-              >Login</v-btn>
+              >
+                Login</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-form>
@@ -45,7 +47,7 @@ import { required, email } from 'vuelidate/lib/validators'
 export default {
   name: 'SignIn',
   methods: {
-    submitHandler () {
+    submitHandler() {
       this.$store.dispatch('signIn', {
         email: this.$v.form.email.$model.toLowerCase(),
         password: this.$v.form.password.$model
@@ -65,10 +67,10 @@ export default {
     }
   },
   computed: {
-    loading () {
+    loading() {
       return this.$store.getters.loading
     },
-    emailErrors () {
+    emailErrors() {
       if (this.$v.form.email.$error) {
         if (!this.$v.form.email.required) return 'Поле не может быть пустым'
         if (!this.$v.form.email.email) return 'Введите корректный email'
@@ -76,7 +78,7 @@ export default {
         return null
       }
     },
-    passwordErrors () {
+    passwordErrors() {
       if (this.$v.form.password.$error) {
         return 'Поле не может быть пустым'
       } else return null
@@ -85,5 +87,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

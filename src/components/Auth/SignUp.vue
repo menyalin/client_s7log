@@ -44,7 +44,8 @@
                 type="submit"
                 :loading="loading"
                 :disabled="loading || $v.$invalid"
-              >Login</v-btn>
+                >Login</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-form>
@@ -60,7 +61,7 @@ import { isExistEmailQuery } from '../../store/authQueries'
 export default {
   name: 'SignUn',
   methods: {
-    submitHandler () {
+    submitHandler() {
       this.$store.dispatch('signUp', {
         name: this.$v.form.name.$model.trim(),
         email: this.$v.form.email.$model.toLowerCase(),
@@ -71,7 +72,7 @@ export default {
   apollo: {
     isExistEmail: {
       query: isExistEmailQuery,
-      variables () {
+      variables() {
         return {
           email: this.$v.form.email.$model.toLowerCase() || ' '
         }
@@ -92,7 +93,7 @@ export default {
       email: {
         required,
         email,
-        async isExistEmailValidator (value) {
+        async isExistEmailValidator(value) {
           if (this.$v.form.email.required && this.$v.form.email.email) {
             this.$apollo.queries.isExistEmail.skip = false
             if (this.isExistEmail) {
@@ -113,15 +114,15 @@ export default {
     }
   },
   computed: {
-    loading () {
+    loading() {
       return this.$store.getters.loading
     },
-    nameErrors () {
+    nameErrors() {
       if (this.$v.form.name.$error) {
         return 'Поле не может быть пустым'
       } else return null
     },
-    emailErrors () {
+    emailErrors() {
       if (this.$v.form.email.$error) {
         if (!this.$v.form.email.required) return 'Поле не может быть пустым'
         if (!this.$v.form.email.email) return 'Введите корректный email'
@@ -132,12 +133,12 @@ export default {
         return null
       }
     },
-    passwordErrors () {
+    passwordErrors() {
       if (this.$v.form.password.$error) {
         return 'Поле не может быть пустым'
       } else return null
     },
-    confirmPasswordErrors () {
+    confirmPasswordErrors() {
       if (this.$v.form.confirmPassword.$error) {
         return 'Пароли не совпадают'
       } else return null
@@ -146,5 +147,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

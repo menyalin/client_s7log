@@ -11,18 +11,17 @@ import '@mdi/font/css/materialdesignicons.css'
 
 Vue.config.productionTip = false
 
-Vue.use( Vuelidate )
+Vue.use(Vuelidate)
 
-new Vue( {
+new Vue({
   router,
   store,
   apolloProvider: createProvider(),
   vuetify,
-  created ()
-  {
-    if ( localStorage.token && localStorage.getItem( 'token' ) !== '' ) {
-      store.dispatch( 'getCurrentUser' )
+  created() {
+    if (localStorage.token && localStorage.getItem('token') !== '') {
+      store.dispatch('getCurrentUser')
     }
   },
-  render: h => h( App )
-} ).$mount( '#app' )
+  render: h => h(App)
+}).$mount('#app')

@@ -9,9 +9,8 @@
 <script>
 export default {
   name: 'Admin',
-  created () {}
+  created() {}
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

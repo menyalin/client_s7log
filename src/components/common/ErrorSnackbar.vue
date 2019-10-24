@@ -1,6 +1,6 @@
 <template>
   <v-snackbar v-model="snackbar" :timeout="timeout" color="warning">
-    {{ error || "Неизвестная ошибка"}}
+    {{ error || 'Неизвестная ошибка' }}
     <v-btn color="blue" text @click="snackbar = false">Close</v-btn>
   </v-snackbar>
 </template>
@@ -18,5 +18,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

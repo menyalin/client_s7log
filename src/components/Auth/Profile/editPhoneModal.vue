@@ -1,7 +1,14 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="490">
     <template v-if="newPhone" v-slot:activator="{ on }">
-      <v-btn class="ma-2" dark color="green" small fab @click="openDialogHandler">
+      <v-btn
+        class="ma-2"
+        dark
+        color="green"
+        small
+        fab
+        @click="openDialogHandler"
+      >
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </template>
@@ -9,14 +16,20 @@
       <v-icon @click="openDialogHandler">mdi-pencil-outline</v-icon>
     </template>
     <v-card>
-      <v-card-title class="headline">{{ this.newPhone ? 'Новый': 'Старый' }}</v-card-title>
+      <v-card-title class="headline">{{
+        this.newPhone ? 'Новый' : 'Старый'
+      }}</v-card-title>
       <v-card-text>
         <v-container>
           <v-row>
             <v-col>
               <label v-if="!newPhone">{{ phone._id }}</label>
               <v-select :items="phoneTypes" label="Тип" v-model="phoneType" />
-              <v-text-field label="Номер телефона" v-model="phoneNumber" :disabled="!newPhone" />
+              <v-text-field
+                label="Номер телефона"
+                v-model="phoneNumber"
+                :disabled="!newPhone"
+              />
               <v-checkbox
                 dense
                 v-model="isMainPhone"
@@ -42,21 +55,23 @@
         </v-btn>
 
         <v-spacer />
-        <v-btn color="primary" @click="dialog=false">Отмена</v-btn>
+        <v-btn color="primary" @click="dialog = false">Отмена</v-btn>
         <v-btn
           v-if="newPhone"
           color="primary"
           @click="addNewPhoneHandler"
           :loading="loading"
           :disabled="!formValid || loading"
-        >Добавить</v-btn>
+          >Добавить</v-btn
+        >
         <v-btn
           v-else
           color="primary"
           @click="updatePhoneHandler"
           :loading="loading"
           :disabled="!formValid"
-        >Сохранить</v-btn>
+          >Сохранить</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>

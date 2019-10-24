@@ -1,11 +1,9 @@
 <template>
   <v-container fluid class="pa-0 ma-0">
-    <v-row :class="rowClasses" dense no-gutters @click='clickHandler'>
-      <v-col
-        :cols="field.cols"
-        v-for="field of fields"
-        :key="field.data"
-      >{{ header ? field.title : item[field.data] }}</v-col>
+    <v-row :class="rowClasses" dense no-gutters @click="clickHandler">
+      <v-col :cols="field.cols" v-for="field of fields" :key="field.data">{{
+        header ? field.title : item[field.data]
+      }}</v-col>
     </v-row>
   </v-container>
 </template>
@@ -27,7 +25,7 @@ export default {
   },
   methods: {
     clickHandler() {
-      console.log('click handler');
+      console.log('click handler')
     }
   }
 }

@@ -2,7 +2,12 @@
   <v-container class="spinner__container align-content-center pa-10">
     <v-layout row wrap>
       <v-flex xs12 class="text-center">
-        <v-progress-circular :size="90" :width="7" color="primary" indeterminate />
+        <v-progress-circular
+          :size="90"
+          :width="7"
+          color="primary"
+          indeterminate
+        />
       </v-flex>
     </v-layout>
   </v-container>
@@ -10,7 +15,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       dialog: true
     }

@@ -3,33 +3,23 @@ export default {
     loading: false,
     loadingApp: false,
     error: null,
-    phoneTypes: [
-      'Личный',
-      'Рабочий'
-    ]
+    phoneTypes: ['Личный', 'Рабочий']
   },
   mutations: {
-    setLoading ( state, payload )
-    {
+    setLoading(state, payload) {
       state.loading = payload
     },
-    setLoadingApp ( state, payload )
-    {
+    setLoadingApp(state, payload) {
       state.loadingApp = payload
     },
-    setError ( state, payload )
-    {
+    setError(state, payload) {
       state.error = payload
     },
-    clearError ( state )
-    {
+    clearError(state) {
       state.error = null
     }
-
   },
-  actions: {
-
-  },
+  actions: {},
   getters: {
     loading: state => state.loading,
     loadingApp: state => state.loadingApp,

@@ -6,7 +6,10 @@
           <v-subheader>Телефоны:</v-subheader>
         </v-col>
         <v-spacer />
-        <app-edit-phone-modal :newPhone="true" v-on:phone-number-added="updatePhoneList" />
+        <app-edit-phone-modal
+          :newPhone="true"
+          v-on:phone-number-added="updatePhoneList"
+        />
       </v-row>
     </v-container>
     <div v-if="!$apollo.queries.userPhones.loading">
@@ -14,7 +17,11 @@
         <v-list two-line dense class="pt-0 pb-0">
           <v-list-item v-for="phone of userPhones" :key="phone._id">
             <v-list-item-content class="pl-3">
-              <v-list-item-title :class="{title: phone.isMain}" class="pa-1">{{ phone.number }}</v-list-item-title>
+              <v-list-item-title
+                :class="{ title: phone.isMain }"
+                class="pa-1"
+                >{{ phone.number }}</v-list-item-title
+              >
               <v-list-item-subtitle>
                 <span>{{ phone.type }}</span>
               </v-list-item-subtitle>
@@ -79,5 +86,4 @@ export default {
   }
 }
 </script>
-<style scoped>
-</style>
+<style scoped></style>
