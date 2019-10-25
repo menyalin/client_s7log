@@ -4,6 +4,8 @@
       <v-col cols="12" class="pa-0 ma-0">
         <app-not-confirmed-orders />
         <app-car-row v-for="car in cars" :key="car._id" :car="car" />
+
+        <app-car-row-v2 />
       </v-col>
     </v-row>
   </v-container>
@@ -11,6 +13,7 @@
 
 <script>
 import appCarRow from './carRow'
+import appCarRowV2 from './carRow_2'
 import appNotConfirmedOrders from './notConfirmedOrders'
 import { mapGetters } from 'vuex'
 
@@ -21,6 +24,7 @@ export default {
   },
   components: {
     appCarRow,
+    appCarRowV2,
     appNotConfirmedOrders
   },
   data: () => ({})

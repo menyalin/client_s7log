@@ -23,7 +23,7 @@ export default {
       { id: '04', title: '18-24' }
     ],
     cars: [
-      { id: '778', number: 'к778вс799' },
+      { id: '778', number: '778' },
       { id: '222', number: '222' },
       { id: '333', number: '333' },
       { id: '444', number: '444' }
@@ -34,10 +34,10 @@ export default {
         shipper: 'Крекшино',
         consignee: 'Д. Внуково',
         shippingDate: '2019-10-21',
-        shippingTime: '08:00',
+        shippingTime: '10:00',
         deliveryDate: '2019-10-21',
-        deliverytime: '15:00',
-        carId: null,
+        deliveryTime: '15:00',
+        carId: false,
         confirmedDate: null,
         confirmedTimeZone: null
       },
@@ -48,8 +48,8 @@ export default {
         shippingDate: '2019-10-22',
         shippingTime: '10:00',
         deliveryDate: '2019-10-22',
-        deliverytime: '19:00',
-        carId: null,
+        deliveryTime: '19:00',
+        carId: false,
         confirmedDate: null,
         confirmedTimeZone: null
       },
@@ -60,10 +60,10 @@ export default {
         shippingDate: '2019-10-22',
         shippingTime: '10:00',
         deliveryDate: '2019-10-22',
-        deliverytime: '19:00',
-        carId: '333',
+        deliveryTime: '19:00',
+        carId: false,
         confirmedDate: '2019-10-22',
-        confirmedTimeZone: '01'
+        confirmedTimeZone: '03'
       },
       {
         _id: '00004',
@@ -72,10 +72,10 @@ export default {
         shippingDate: '2019-10-22',
         shippingTime: '10:00',
         deliveryDate: '2019-10-22',
-        deliverytime: '19:00',
+        deliveryTime: '19:00',
         carId: '222',
         confirmedDate: '2019-10-22',
-        confirmedTimeZone: '01'
+        confirmedTimeZone: '02'
       }
     ]
   },
@@ -93,13 +93,12 @@ export default {
       order.confirmedTimeZone = zoneId
     }
 
-
   },
   actions: {
     resetCarInOrder: ({ commit }, orderId) => {
       commit('resetCarInOrder', orderId)
     },
-    confirmOrder({ commit }, payload) {
+    confirmOrder ({ commit }, payload) {
       commit('confirmOrder', payload)
     }
   },
@@ -112,9 +111,9 @@ export default {
     },
     vehicleType: state => state.vehicleType,
     cars: state => state.cars,
-    notConfirmedOrders: state => state.orders.filter(item => !item.carId),
+    notConfirmedOrders: (state) => state.orders.filter(item => !(item.carId)),
     ordersByCarAndConfirmDateZone: (state) => (carId, confirmedDate, zone) =>
-      state.orders.filter(item => item.carId === carId && item.confirmedDate === confirmedDate && item.confirmedTimeZone === zone)[0],
+      state.orders.filter(item => item.carId === carId && item.confirmedDate === confirmedDate && item.confirmedTimeZone === zone)[ 0 ],
     timeZones: (state) => state.timeZones
   }
 }

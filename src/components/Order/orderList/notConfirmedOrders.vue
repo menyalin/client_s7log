@@ -7,14 +7,18 @@
         @drop="dropHandler($event)"
         @dragover="dragOver"
       >
-        <div class="order-item-wrapper" v-if="notConfirmedOrders.length">
-          <app-order-item
-            v-for="item of notConfirmedOrders"
-            :order="item"
-            :key="item._id"
-          />
+        <div v-if="notConfirmedOrders.length > 0">
+          <div class="order-item-wrapper">
+            <app-order-item
+              v-for="item in notConfirmedOrders"
+              :order="item"
+              :key="item._id"
+            />
+          </div>
         </div>
-        <div v-else><small>Заказы не найдены</small></div>
+        <div v-else class="empty-container">
+          <small>Заказы не найдены</small>
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -56,5 +60,8 @@ export default {
 .order-item-wrapper {
   display: flex;
   flex-direction: row;
+}
+.empty-container {
+  height: 2rem;
 }
 </style>
