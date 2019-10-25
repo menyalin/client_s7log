@@ -16,11 +16,17 @@ export default {
       { value: '10tn', text: '10тн' },
       { value: '20tn', text: '20тн' }
     ],
+    timeZones: [
+      { id: '01', title: '00-06' },
+      { id: '02', title: '06-12' },
+      { id: '03', title: '12-18' },
+      { id: '04', title: '18-24' }
+    ],
     cars: [
-      { id: '0001', number: '778' },
-      { id: '0002', number: '222' },
-      { id: '0003', number: '333' },
-      { id: '0004', number: '444' }
+      { id: '778', number: 'к778вс799' },
+      { id: '222', number: '222' },
+      { id: '333', number: '333' },
+      { id: '444', number: '444' }
     ],
     orders: [
       {
@@ -46,6 +52,30 @@ export default {
         carId: null,
         confirmedDate: null,
         confirmedTimeZone: null
+      },
+      {
+        _id: '00003',
+        shipper: 'Константиново',
+        consignee: 'Т Брянск',
+        shippingDate: '2019-10-22',
+        shippingTime: '10:00',
+        deliveryDate: '2019-10-22',
+        deliverytime: '19:00',
+        carId: '0001',
+        confirmedDate: '2019-10-22',
+        confirmedTimeZone: '1'
+      },
+      {
+        _id: '00004',
+        shipper: 'Кр.Октябрь',
+        consignee: 'Д Ногинск',
+        shippingDate: '2019-10-22',
+        shippingTime: '10:00',
+        deliveryDate: '2019-10-22',
+        deliverytime: '19:00',
+        carId: '222',
+        confirmedDate: '2019-10-22',
+        confirmedTimeZone: '01'
       }
     ]
   },
@@ -53,14 +83,24 @@ export default {
     resetCarInOrder: (state, orderId) => {
       let order = state.orders.find(item => item._id === orderId)
       order.carId = null
-      order.confirmedDate= null
+      order.confirmedDate = null
       order.confirmedTimeZone = null
+    },
+    confirmOrder: (state, { orderId, carId, date, zoneId }) => {
+      let order = state.orders.find(item => item._id === orderId)
+      order.carId = carId
+      order.confirmedDate = date
+      order.confirmedTimeZone = zoneId
     }
+
 
   },
   actions: {
     resetCarInOrder: ({ commit }, orderId) => {
       commit('resetCarInOrder', orderId)
+    },
+    confirmOrder ({ commit }, payload) {
+      commit('confirmOrder', payload)
     }
   },
   getters: {
@@ -71,7 +111,10 @@ export default {
       }))
     },
     vehicleType: state => state.vehicleType,
-    cars: state => state,
-    notConfirmedOrders: state => state.orders.filter(item => !item.carId)
+    cars: state => state.cars,
+    notConfirmedOrders: state => state.orders.filter(item => !item.carId),
+    ordersByCarAndConfirmDateZone: (state) => (carId, confirmedDate, zone) =>
+      state.orders.filter(item => item.carId === carId && item.confirmedDate === confirmedDate && item.confirmedTimeZone === zone)[ 0 ],
+    timeZones: (state) => state.timeZones
   }
 }
