@@ -55,15 +55,15 @@ export default {
       },
       {
         _id: '00003',
-        shipper: 'Константиново',
+        shipper: 'Констант',
         consignee: 'Т Брянск',
         shippingDate: '2019-10-22',
         shippingTime: '10:00',
         deliveryDate: '2019-10-22',
         deliverytime: '19:00',
-        carId: '0001',
+        carId: '333',
         confirmedDate: '2019-10-22',
-        confirmedTimeZone: '1'
+        confirmedTimeZone: '01'
       },
       {
         _id: '00004',
@@ -99,7 +99,7 @@ export default {
     resetCarInOrder: ({ commit }, orderId) => {
       commit('resetCarInOrder', orderId)
     },
-    confirmOrder ({ commit }, payload) {
+    confirmOrder({ commit }, payload) {
       commit('confirmOrder', payload)
     }
   },
@@ -114,7 +114,7 @@ export default {
     cars: state => state.cars,
     notConfirmedOrders: state => state.orders.filter(item => !item.carId),
     ordersByCarAndConfirmDateZone: (state) => (carId, confirmedDate, zone) =>
-      state.orders.filter(item => item.carId === carId && item.confirmedDate === confirmedDate && item.confirmedTimeZone === zone)[ 0 ],
+      state.orders.filter(item => item.carId === carId && item.confirmedDate === confirmedDate && item.confirmedTimeZone === zone)[0],
     timeZones: (state) => state.timeZones
   }
 }

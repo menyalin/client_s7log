@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card
+    <div
       class="order-container ma-1"
       :draggable="true"
       @dragstart="dragStartHandler($event, JSON.stringify(order))"
@@ -14,7 +14,7 @@
         {{ order.consignee }}
         <small>{{ '23' }}</small>
       </div>
-    </v-card>
+    </div>
   </div>
 </template>
 
@@ -47,9 +47,10 @@ export default {
   font-size: 0.7rem;
   width: 6rem;
   height: 2.6rem;
-  border-radius: 0.5em;
+  border-radius: 0.2em;
   display: flex;
   flex-direction: row;
+  border: 1px grey solid;
 }
 .order-container:hover {
   box-shadow: 1px 1px 1px 1px rgba(5, 5, 5, 0.2);

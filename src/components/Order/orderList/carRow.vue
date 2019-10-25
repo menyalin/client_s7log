@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid class="pa-0 ma-0 pb-1">
     <v-row no-gutters class="car-row">
       <v-col cols="auto" class="row-car-title">{{ car.number }}</v-col>
       <v-col cols="3">
@@ -14,7 +14,7 @@
               @dragover="dragOver"
               class="empty--zone"
             >
-              <small>{{ zone.title }} </small>
+              <small>{{ zone.title }}</small>
             </div>
           </div>
         </div>
