@@ -4,6 +4,7 @@
     :draggable="true"
     @dragstart="dragStartHandler($event, JSON.stringify(order))"
     @dblclick="dblClickHandler"
+    :class="classes"
   >
     <div class="row-wrapper">
       <div class="col-title">{{ order.shipper }}</div>
@@ -35,6 +36,23 @@ export default {
   data: () => ({
     dialog: false
   }),
+  computed: {
+    classes() {
+      let resArr = []
+      switch (this.order.status) {
+        case 'Проблема': {
+          resArr.push('problems')
+          break
+        }
+        case 'На погрузке': {
+          resArr.push('in-process')
+          break
+        }
+      }
+
+      return resArr
+    }
+  },
   methods: {
     dragStartHandler(event, item) {
       event.dataTransfer.dropEffect = 'move'
@@ -52,7 +70,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .order-container {
   background-color: white;
   font-size: 0.7rem;
@@ -81,5 +99,11 @@ export default {
   display: flex;
   justify-content: space-around;
   justify-items: center;
+}
+.problems {
+  background-color: rgba(248, 93, 21, 0.452);
+}
+.in-process {
+  background-color: rgba(8, 153, 8, 0.596);
 }
 </style>

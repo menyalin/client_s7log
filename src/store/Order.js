@@ -40,7 +40,9 @@ export default {
         deliveryTime: '15:00',
         carId: false,
         confirmedDate: null,
-        confirmedTimeZone: null
+        confirmedTimeZone: null,
+        status: 'Новый'
+
       },
       {
         _id: '00002',
@@ -52,7 +54,8 @@ export default {
         deliveryTime: '19:00',
         carId: false,
         confirmedDate: null,
-        confirmedTimeZone: null
+        confirmedTimeZone: null,
+        status: 'Новый'
       },
       {
         _id: '00003',
@@ -62,9 +65,10 @@ export default {
         shippingTime: '10:00',
         deliveryDate: '2019-10-22',
         deliveryTime: '19:00',
-        carId: false,
-        confirmedDate: null,
-        confirmedTimeZone: null
+        carId: '222',
+        confirmedDate: '2019-10-26',
+        confirmedTimeZone: '03',
+        status: 'Проблема'
       },
       {
         _id: '00004',
@@ -75,7 +79,7 @@ export default {
         deliveryDate: '2019-10-22',
         deliveryTime: '19:00',
         carId: '222',
-        confirmedDate: '2019-10-22',
+        confirmedDate: '2019-10-27',
         confirmedTimeZone: '02',
         status: 'На погрузке'
       }
@@ -96,14 +100,21 @@ export default {
     },
     setCurrentDate: (state, payload) => {
       state.currentDate = payload
+    },
+    updateOrder: (state, { id, status }) => {
+      let order = state.orders.find(item => item._id === id)
+      order = { ...status }
     }
-
   },
   actions: {
+    updateOrder: ({ commit }, payload) => {
+      commit('updateOrder', payload)
+    },
+
     resetCarInOrder: ({ commit }, orderId) => {
       commit('resetCarInOrder', orderId)
     },
-    confirmOrder({ commit }, payload) {
+    confirmOrder ({ commit }, payload) {
       commit('confirmOrder', payload)
     }
   },
@@ -119,7 +130,7 @@ export default {
     cars: state => state.cars,
     notConfirmedOrders: (state) => state.orders.filter(item => !(item.carId)),
     ordersByCarAndConfirmDateZone: (state) => (carId, confirmedDate, zone) =>
-      state.orders.filter(item => item.carId === carId && item.confirmedDate === confirmedDate && item.confirmedTimeZone === zone)[0],
+      state.orders.filter(item => item.carId === carId && item.confirmedDate === confirmedDate && item.confirmedTimeZone === zone)[ 0 ],
     timeZones: (state) => state.timeZones
   }
 }

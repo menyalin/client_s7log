@@ -6,7 +6,11 @@
         <v-container fluid fill-height class="pa-0 ma-0">
           <v-row>
             <v-col>
-              <v-autocomplete label="Статус" :items="orderStatus" />
+              <v-autocomplete
+                label="Статус"
+                v-model="status"
+                :items="orderStatuses"
+              />
             </v-col>
           </v-row>
         </v-container>
@@ -24,10 +28,18 @@
 export default {
   props: ['dialog', 'order'],
   data: () => ({
-    orderStatus: ['Новый', 'На погрузке', 'Выполнен', 'Проблемы']
+    status: null,
+    orderStatuses: ['Новый', 'На погрузке', 'Выполнен', 'Проблема']
   }),
+  created() {
+    this.status = this.order.status
+  },
   methods: {
     acceptHandler() {
+      this.$store.dispatch('updateOrder', {
+        id: this.order._id,
+        status: this.status
+      })
       this.$emit('change', false)
     },
     cancelHandler() {
@@ -41,5 +53,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>
