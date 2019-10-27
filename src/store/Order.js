@@ -1,5 +1,6 @@
 export default {
   state: {
+    currentDate: null,
     partners: [
       { _id: '0001', name: 'ООО Конфеты', address: 'МО, Крекшино' },
       { _id: '0002', name: 'ООО Конфеты', address: 'МО, Ногинск' },
@@ -62,8 +63,8 @@ export default {
         deliveryDate: '2019-10-22',
         deliveryTime: '19:00',
         carId: false,
-        confirmedDate: '2019-10-22',
-        confirmedTimeZone: '03'
+        confirmedDate: null,
+        confirmedTimeZone: null
       },
       {
         _id: '00004',
@@ -75,7 +76,8 @@ export default {
         deliveryTime: '19:00',
         carId: '222',
         confirmedDate: '2019-10-22',
-        confirmedTimeZone: '02'
+        confirmedTimeZone: '02',
+        status: 'На погрузке'
       }
     ]
   },
@@ -91,6 +93,9 @@ export default {
       order.carId = carId
       order.confirmedDate = date
       order.confirmedTimeZone = zoneId
+    },
+    setCurrentDate: (state, payload) => {
+      state.currentDate = payload
     }
 
   },
@@ -98,11 +103,12 @@ export default {
     resetCarInOrder: ({ commit }, orderId) => {
       commit('resetCarInOrder', orderId)
     },
-    confirmOrder ({ commit }, payload) {
+    confirmOrder({ commit }, payload) {
       commit('confirmOrder', payload)
     }
   },
   getters: {
+    currentDate: (state) => state.currentDate,
     partnersForAutocomplite: ({ partners }) => {
       return partners.map(item => ({
         value: item._id,
@@ -113,7 +119,7 @@ export default {
     cars: state => state.cars,
     notConfirmedOrders: (state) => state.orders.filter(item => !(item.carId)),
     ordersByCarAndConfirmDateZone: (state) => (carId, confirmedDate, zone) =>
-      state.orders.filter(item => item.carId === carId && item.confirmedDate === confirmedDate && item.confirmedTimeZone === zone)[ 0 ],
+      state.orders.filter(item => item.carId === carId && item.confirmedDate === confirmedDate && item.confirmedTimeZone === zone)[0],
     timeZones: (state) => state.timeZones
   }
 }

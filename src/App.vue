@@ -23,26 +23,11 @@
       <v-app-bar app color="primary" dark dense>
         <v-app-bar-nav-icon @click="toggleDrawer" class="hidden-md-and-up" />
         <v-toolbar-title class="hidden-sm-and-down">
-          <router-link to="/" tag="span" class="main__title"
-            >Vue Share</router-link
-          >
+          <router-link to="/" tag="span" class="main__title">Vue Share</router-link>
         </v-toolbar-title>
         <v-spacer />
-        <v-text-field
-          dark
-          prepend-icon="mdi-magnify"
-          single-line
-          hide-details
-          placeholder="Search post"
-        />
-        <v-spacer />
         <v-toolbar-items class="hidden-xs-only">
-          <v-btn
-            v-for="item in itemsForRender"
-            text
-            :key="item.id"
-            :to="item.url"
-          >
+          <v-btn v-for="item in itemsForRender" text :key="item.id" :to="item.url">
             <v-icon left class="hidden-sm-only">{{ item.icon }}</v-icon>
             {{ item.title }}
           </v-btn>
