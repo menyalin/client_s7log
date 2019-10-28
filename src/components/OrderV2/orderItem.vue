@@ -7,14 +7,14 @@
     :class="classes"
   >
     <div class="row-wrapper">
-      <div class="col-title">{{ order.shipper }}</div>
+      <div class="col-title">{{ partnersById(order.shipper).shortName }}</div>
       <div class="col-time">
         <small>{{ order.shippingTime.slice(0, 2) }}</small>
       </div>
     </div>
     <div>
       <div class="row-wrapper">
-        <div class="col-title">{{ order.consignee }}</div>
+        <div class="col-title">{{ partnersById(order.consignee).shortName }}</div>
         <div class="col-time">
           <small>{{ order.deliveryTime.slice(0, 2) }}</small>
         </div>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import appOrderItemModal from './orderItemModal'
 
 export default {
@@ -37,6 +38,7 @@ export default {
     dialog: false
   }),
   computed: {
+    ...mapGetters(['partnersById']),
     classes() {
       let resArr = []
       switch (this.order.status) {
@@ -48,8 +50,11 @@ export default {
           resArr.push('in-process')
           break
         }
+        case 'Выполнен': {
+          resArr.push('finished')
+          break
+        }
       }
-
       return resArr
     }
   },
@@ -93,7 +98,7 @@ export default {
   flex: 1;
 }
 .order-container:hover {
-  box-shadow: 1px 1px 1px 1px rgba(5, 5, 5, 0.2);
+  box-shadow: 2px 2px 2px 2px rgba(5, 5, 5, 0.3);
 }
 .row-wrapper {
   display: flex;
@@ -105,5 +110,8 @@ export default {
 }
 .in-process {
   background-color: rgba(8, 153, 8, 0.596);
+}
+.finished {
+  background-color: rgba(169, 169, 169, 0.349);
 }
 </style>

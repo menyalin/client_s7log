@@ -50,6 +50,4 @@ export default {
   height: 2.5em;
   align-items: center;
 }
-.car-title {
-}
 </style>
