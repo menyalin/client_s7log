@@ -101,9 +101,9 @@ export default {
     setCurrentDate: (state, payload) => {
       state.currentDate = payload
     },
-    updateOrder: (state, { id, status, shipper }) => {
+    updateOrder: (state, { id, status, shipper, consignee }) => {
       let order = state.orders.find(item => item._id === id)
-      Object.assign(order, { status, shipper })
+      Object.assign(order, { status, shipper, consignee })
     }
   },
   actions: {
@@ -114,7 +114,7 @@ export default {
     resetCarInOrder: ({ commit }, orderId) => {
       commit('resetCarInOrder', orderId)
     },
-    confirmOrder({ commit }, payload) {
+    confirmOrder ({ commit }, payload) {
       commit('confirmOrder', payload)
     }
   },
@@ -131,7 +131,7 @@ export default {
     cars: state => state.cars,
     notConfirmedOrders: (state) => state.orders.filter(item => !(item.carId)),
     ordersByCarAndConfirmDateZone: (state) => (carId, confirmedDate, zone) =>
-      state.orders.filter(item => item.carId === carId && item.confirmedDate === confirmedDate && item.confirmedTimeZone === zone)[0],
+      state.orders.filter(item => item.carId === carId && item.confirmedDate === confirmedDate && item.confirmedTimeZone === zone)[ 0 ],
     timeZones: (state) => state.timeZones
   }
 }
