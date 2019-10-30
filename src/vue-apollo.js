@@ -14,7 +14,7 @@ const AUTH_TOKEN = 'token'
 // Http endpoint
 const httpEndpoint =
   process.env.VUE_APP_GRAPHQL_HTTP || 'http://localhost:3000/graphql'
-
+console.log(httpEndpoint)
 // Config
 const defaultOptions = {
   // You can use `https` for secure connection (recommended in production)
@@ -48,7 +48,7 @@ const { apolloClient, wsClient } = createApolloClient({
 
 // apolloClient.wsClient = wsClient
 
-function createProvider() {
+function createProvider () {
   // Create apollo client
 
   // Create vue apollo provider
@@ -64,7 +64,7 @@ function createProvider() {
 }
 
 // Manually call this when user log in
-async function onLogin(apolloClient, token) {
+async function onLogin (apolloClient, token) {
   if (typeof localStorage !== 'undefined' && token) {
     localStorage.setItem(AUTH_TOKEN, token)
   }
@@ -78,7 +78,7 @@ async function onLogin(apolloClient, token) {
 }
 
 // Manually call this when user log out
-async function onLogout(apolloClient) {
+async function onLogout (apolloClient) {
   if (typeof localStorage !== 'undefined') {
     localStorage.setItem(AUTH_TOKEN, '')
   }
