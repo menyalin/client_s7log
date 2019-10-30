@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="pa-0 ma-0">
     <v-row no-gutters class="car--row">
-      <v-col class="title-car-col" cols="1" sm="1">
+      <v-col class="title-car-col" cols="auto">
         <app-car-title-header v-if="header" />
         <div v-else class="car-title">{{ car.number }}</div>
       </v-col>
@@ -41,13 +41,13 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  width: 4em;
 }
 .day-car-cols {
   height: 100%;
 }
 .car--row {
-  height: 2.5em;
+  height: 2rem;
   align-items: center;
 }
 </style>

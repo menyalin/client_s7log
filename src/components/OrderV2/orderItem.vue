@@ -80,8 +80,8 @@ export default {
   background-color: white;
   font-size: 0.7rem;
   color: black;
-  width: 5.5rem;
-  height: 2.1rem;
+  width: 4.7rem;
+  height: 2rem;
   border-radius: 0.2em;
   display: flex;
   flex-direction: column;
@@ -90,7 +90,7 @@ export default {
   z-index: 4;
 }
 .col-title {
-  flex: 6;
+  flex: 5;
   padding-left: 2px;
   overflow: hidden;
 }
@@ -98,7 +98,7 @@ export default {
   flex: 1;
 }
 .order-container:hover {
-  box-shadow: 2px 2px 2px 2px rgba(5, 5, 5, 0.3);
+  box-shadow: 1px 1px 1px 1px rgba(5, 5, 5, 0.3);
 }
 .row-wrapper {
   display: flex;

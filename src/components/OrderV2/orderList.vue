@@ -60,6 +60,9 @@ export default {
               tmpDate,
               moment(tmpDate)
                 .add(1, 'd')
+                .format('YYYY-MM-DD'),
+              moment(tmpDate)
+                .add(2, 'd')
                 .format('YYYY-MM-DD')
             ]
           case 'xl':
@@ -73,6 +76,9 @@ export default {
               tmpDate,
               moment(tmpDate)
                 .add(1, 'd')
+                .format('YYYY-MM-DD'),
+              moment(tmpDate)
+                .add(2, 'd')
                 .format('YYYY-MM-DD')
             ]
         }
