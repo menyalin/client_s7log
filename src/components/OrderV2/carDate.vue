@@ -10,9 +10,7 @@
         @drop="dropHandler($event, car.id, date, zone.id)"
         @dragover="dragOver"
         class="empty--zone"
-      >
-        <small>{{ zone.title }}</small>
-      </div>
+      ></div>
     </div>
   </div>
 </template>

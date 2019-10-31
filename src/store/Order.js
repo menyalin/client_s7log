@@ -1,6 +1,21 @@
 export default {
   state: {
     currentDate: null,
+    schedule: [
+      { 'date': '2019-10-29', 'manager': "Логист1" },
+      { 'date': '2019-10-30', 'manager': "Логист1" },
+      { 'date': '2019-10-31', 'manager': "Логист2" },
+      { 'date': '2019-11-01', 'manager': "Логист2" },
+      { 'date': '2019-11-02', 'manager': "Логист1" },
+      { 'date': '2019-11-03', 'manager': "Логист1" },
+      { 'date': '2019-11-04', 'manager': "Логист2" },
+      { 'date': '2019-11-05', 'manager': "Логист2" },
+      { 'date': '2019-11-06', 'manager': "Логист1" },
+      { 'date': '2019-11-07', 'manager': "Логист1" },
+      { 'date': '2019-11-08', 'manager': "Логист2" },
+      { 'date': '2019-11-09', 'manager': "Логист2" },
+    ],
+
     partners: [
       { _id: '0001', name: 'ООО Конфеты', address: 'МО, Крекшино', shortName: 'Крекшино' },
       { _id: '0002', name: 'ООО Конфеты', address: 'МО, Ногинск', shortName: 'Ногинск' },
@@ -53,7 +68,7 @@ export default {
         _id: '00001',
         shipper: '0001',
         consignee: '0009',
-        shippingDate: '2019-10-21',
+        shippingDate: '2019-11-03',
         shippingTime: '10:00',
         deliveryDate: '2019-10-21',
         deliveryTime: '15:00',
@@ -67,7 +82,7 @@ export default {
         _id: '00002',
         shipper: '0002',
         consignee: '0010',
-        shippingDate: '2019-10-22',
+        shippingDate: '2019-11-01',
         shippingTime: '10:00',
         deliveryDate: '2019-10-22',
         deliveryTime: '19:00',
@@ -80,12 +95,12 @@ export default {
         _id: '00003',
         shipper: '0005',
         consignee: '0009',
-        shippingDate: '2019-10-22',
+        shippingDate: '2019-11-02',
         shippingTime: '10:00',
         deliveryDate: '2019-10-22',
         deliveryTime: '19:00',
         carId: '222',
-        confirmedDate: '2019-10-26',
+        confirmedDate: '2019-11-02',
         confirmedTimeZone: '03',
         status: 'Проблема'
       },
@@ -93,12 +108,12 @@ export default {
         _id: '00004',
         shipper: '0003',
         consignee: '0007',
-        shippingDate: '2019-10-22',
+        shippingDate: '2019-11-01',
         shippingTime: '10:00',
         deliveryDate: '2019-10-22',
         deliveryTime: '19:00',
         carId: '222',
-        confirmedDate: '2019-10-27',
+        confirmedDate: '2019-11-01',
         confirmedTimeZone: '02',
         status: 'На погрузке'
       }
@@ -129,7 +144,6 @@ export default {
     updateOrder: ({ commit }, payload) => {
       commit('updateOrder', payload)
     },
-
     resetCarInOrder: ({ commit }, orderId) => {
       commit('resetCarInOrder', orderId)
     },
@@ -139,6 +153,7 @@ export default {
   },
   getters: {
     currentDate: (state) => state.currentDate,
+    personOnDuty: ({ schedule }) => (date) => schedule.find(item => item.date === date) || 'не задан',
     partnersForAutocomplite: ({ partners }) => {
       return partners.map(item => ({
         value: item._id,

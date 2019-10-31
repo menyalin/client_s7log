@@ -2,11 +2,11 @@
   <v-container fluid class="pa-0 ma-0" fill-height>
     <v-row no-gutters>
       <v-col cols="12">
-        <app-not-confirmed-orders />
-        <app-car-row :header="true" :dates="dates" />
+        <app-car-row :header="true" :dates="dates" class="pt-2" />
         <div class="car-row-wrapper">
           <app-car-row v-for="car in cars" :car="car" :key="car.id" :header="false" :dates="dates" />
         </div>
+        <app-not-confirmed-orders />
       </v-col>
     </v-row>
   </v-container>
@@ -68,6 +68,9 @@ export default {
           case 'xl':
             return [
               moment(tmpDate)
+                .add(-3, 'd')
+                .format('YYYY-MM-DD'),
+              moment(tmpDate)
                 .add(-2, 'd')
                 .format('YYYY-MM-DD'),
               moment(tmpDate)
@@ -79,6 +82,9 @@ export default {
                 .format('YYYY-MM-DD'),
               moment(tmpDate)
                 .add(2, 'd')
+                .format('YYYY-MM-DD'),
+              moment(tmpDate)
+                .add(3, 'd')
                 .format('YYYY-MM-DD')
             ]
         }
@@ -94,7 +100,7 @@ export default {
 <style scoped>
 .car-row-wrapper {
   overflow: auto;
-  max-height: 65vh;
+  max-height: 75vh;
 }
 .car-row-wrapper div:nth-child(2n-1) {
   background-color: rgba(189, 236, 255, 0.2);

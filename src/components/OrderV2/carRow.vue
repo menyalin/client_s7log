@@ -47,7 +47,7 @@ export default {
   height: 100%;
 }
 .car--row {
-  height: 2rem;
+  height: 1.8em;
   align-items: center;
 }
 </style>

@@ -3,6 +3,7 @@
     class="order-container"
     :draggable="true"
     @dragstart="dragStartHandler($event, JSON.stringify(order))"
+    @touchmove="dragStartHandler($event, JSON.stringify(order))"
     @dblclick="dblClickHandler"
     :class="classes"
   >
@@ -80,7 +81,8 @@ export default {
   background-color: white;
   font-size: 0.7rem;
   color: black;
-  width: 4.7rem;
+  width: 100%;
+  max-width: 9em;
   height: 2rem;
   border-radius: 0.2em;
   display: flex;
