@@ -8,6 +8,6 @@ export default {}
 
 <style>
 .car-title-header {
-  min-height: 30px;
+  height: 100%;
 }
 </style>

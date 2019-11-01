@@ -1,28 +1,37 @@
 <template>
-  <div
-    class="order-container"
-    :draggable="true"
-    @dragstart="dragStartHandler($event, JSON.stringify(order))"
-    @touchmove="dragStartHandler($event, JSON.stringify(order))"
-    @dblclick="dblClickHandler"
-    :class="classes"
-  >
-    <div class="row-wrapper">
-      <div class="col-title">{{ partnersById(order.shipper).shortName }}</div>
-      <div class="col-time">
-        <small>{{ order.shippingTime.slice(0, 2) }}</small>
-      </div>
-    </div>
-    <div>
-      <div class="row-wrapper">
-        <div class="col-title">{{ partnersById(order.consignee).shortName }}</div>
-        <div class="col-time">
-          <small>{{ order.deliveryTime.slice(0, 2) }}</small>
+  <v-tooltip bottom>
+    <template v-slot:activator="{ on }">
+      <div
+        class="order-container"
+        :draggable="true"
+        @dragstart="dragStartHandler($event, JSON.stringify(order))"
+        @touchmove="dragStartHandler($event, JSON.stringify(order))"
+        @dblclick="dblClickHandler"
+        :class="classes"
+        v-on="on"
+      >
+        <div class="row-wrapper">
+          <div class="col-title">{{ partnersById(order.shipper).shortName }}</div>
+          <div class="col-time">
+            <small>{{ order.shippingTime.slice(0, 2) }}</small>
+          </div>
+        </div>
+        <div>
+          <div class="row-wrapper">
+            <div class="col-title">{{ partnersById(order.consignee).shortName }}</div>
+            <div class="col-time">
+              <small>{{ order.deliveryTime.slice(0, 2) }}</small>
+            </div>
+          </div>
+          <app-order-item-modal v-model="dialog" :order="order" />
         </div>
       </div>
-      <app-order-item-modal v-model="dialog" :order="order" />
+    </template>
+    <div class="tooltip-information">
+      <div>{{ partnersById(order.shipper).shortName }} - {{ order.shippingDate }} {{ order.shippingTime}}</div>
+      <div>{{ partnersById(order.consignee).shortName }} - {{order.deliveryDate}} {{ order.deliveryTime }}</div>
     </div>
-  </div>
+  </v-tooltip>
 </template>
 
 <script>
@@ -115,5 +124,10 @@ export default {
 }
 .finished {
   background-color: rgba(169, 169, 169, 0.349);
+}
+.tooltip-information {
+  display: flex;
+  font-size: 1.5em;
+  flex-direction: column;
 }
 </style>

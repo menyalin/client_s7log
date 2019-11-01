@@ -2,7 +2,7 @@
   <v-container fluid class="pa-0 ma-0" fill-height>
     <v-row no-gutters>
       <v-col cols="12">
-        <app-car-row :header="true" :dates="dates" class="pt-2" />
+        <app-car-row :header="true" :dates="dates" />
         <div class="car-row-wrapper">
           <app-car-row v-for="car in cars" :car="car" :key="car.id" :header="false" :dates="dates" />
         </div>

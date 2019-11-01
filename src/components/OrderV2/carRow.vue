@@ -2,14 +2,14 @@
   <v-container fluid class="pa-0 ma-0">
     <v-row no-gutters class="car--row">
       <v-col class="title-car-col" cols="auto">
-        <app-car-title-header v-if="header" />
+        <app-car-title-header v-if="header" class="row--header" />
         <div v-else class="car-title">{{ car.number }}</div>
       </v-col>
       <v-col class="day-car-cols">
         <v-container fluid class="pa-0 ma-0" fill-height>
           <v-row no-gutters justify="center">
             <v-col v-for="date in dates" :cols="12/dates.lenght" :key="date" class="car-column">
-              <app-car-dates-header v-if="header" :date="date" />
+              <app-car-dates-header v-if="header" :date="date" class="row--header" />
               <app-car-date v-else :date="date" :car="car" />
             </v-col>
           </v-row>
@@ -47,7 +47,6 @@ export default {
   height: 100%;
 }
 .car--row {
-  height: 1.8em;
   align-items: center;
 }
 </style>
