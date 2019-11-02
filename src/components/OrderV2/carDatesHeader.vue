@@ -29,7 +29,7 @@ export default {
     ...mapGetters(['currentDate', 'timeZones', 'personOnDuty']),
     displayDate() {
       moment.locale('ru')
-      return moment(this.date).format('DD MMM YYYY, dddd')
+      return moment(this.date).format('DD MMM YYYY, ddd')
     }
   },
   methods: {

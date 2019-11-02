@@ -4,7 +4,13 @@
       <v-col cols="12">
         <app-car-row :header="true" :dates="dates" />
         <div class="car-row-wrapper">
-          <app-car-row v-for="car in cars" :car="car" :key="car.id" :header="false" :dates="dates" />
+          <app-car-row
+            v-for="car in cars"
+            :car="car"
+            :key="car.id"
+            :header="false"
+            :dates="dates"
+          />
         </div>
         <app-not-confirmed-orders />
       </v-col>
@@ -21,6 +27,7 @@ export default {
   created() {
     this.$store.commit('setCurrentDate', moment().format('YYYY-MM-DD'))
   },
+  props: ['carType'],
   components: {
     appCarRow,
     appNotConfirmedOrders
