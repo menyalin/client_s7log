@@ -29,6 +29,7 @@
     </template>
     <div class="tooltip-information">
       <div>{{ partnersById(order.shipper).shortName }} - {{ order.shippingDate }} {{ order.shippingTime}}</div>
+      <v-divider dark />
       <div>{{ partnersById(order.consignee).shortName }} - {{order.deliveryDate}} {{ order.deliveryTime }}</div>
     </div>
   </v-tooltip>

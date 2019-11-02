@@ -1,6 +1,5 @@
 import newOrder from '@/components/Order/newOrder/index.vue'
-import orderList from '@/components/Order/orderList/index.vue'
-
+import orderList from '@/components/OrderV2/orderList'
 
 export default [
   {
@@ -8,8 +7,17 @@ export default [
     component: newOrder
   },
   {
-    path: 'orderList',
-    component: orderList
+    path: '10tn',
+    component: orderList,
+    props: {
+      carType: '10tn'
+    }
+  },
+  {
+    path: '20tn',
+    component: orderList,
+    props: {
+      carType: '20tn'
+    }
   }
-  
 ]

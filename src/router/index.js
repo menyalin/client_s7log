@@ -10,7 +10,7 @@ import Company from '@/components/Company'
 import CompanyInfo from '@/components/Company/companyInfo'
 import orderLayout from '@/components/Order/index.vue'
 import orderRoutes from './orderRoutes'
-import orderList2 from '@/components/OrderV2/orderList.vue'
+
 
 Vue.use(Router)
 
@@ -61,10 +61,6 @@ export default new Router({
       path: '/orders',
       component: orderLayout,
       children: orderRoutes
-    },
-    {
-      path: '/orderList2',
-      component: orderList2
     }
   ]
 })

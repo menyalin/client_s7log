@@ -70,7 +70,7 @@ export default {
       if (this.isLoggedIn) {
         visibleItems = [1, 2, 5, 6, 8]
       } else {
-        visibleItems = [3, 4, 8]
+        visibleItems = [3, 4, 6, 8]
       }
       return this.items.filter(item => visibleItems.indexOf(item.id) !== -1)
     }
@@ -78,8 +78,8 @@ export default {
   data: () => ({
     drawer: false,
     items: [
-      { id: 6, title: 'Orders2', icon: 'mdi-dump-truck', url: '/orderList2' },
-      { id: 8, title: 'Orders', icon: 'mdi-dump-truck', url: '/orders' },
+      { id: 6, title: '10_tn', icon: 'mdi-dump-truck', url: '/orders/10tn' },
+      { id: 8, title: '20_tn', icon: 'mdi-dump-truck', url: '/orders/20tn' },
       { id: 1, title: 'Company', icon: 'mdi-domain', url: '/company' },
       { id: 2, title: 'Profile', icon: 'mdi-account-details', url: '/profile' },
       { id: 3, title: 'Sign In', icon: 'mdi-account', url: '/signin' },
