@@ -15,19 +15,6 @@ export default {
       { 'date': '2019-11-08', 'manager': "Логист2" },
       { 'date': '2019-11-09', 'manager': "Логист2" },
     ],
-
-    partners: [
-      { _id: '0001', name: 'ООО Конфеты', address: 'МО, Крекшино', shortName: 'Крекшино' },
-      { _id: '0002', name: 'ООО Конфеты', address: 'МО, Ногинск', shortName: 'Ногинск' },
-      { _id: '0003', name: 'ООО Конфеты', address: 'МО, Химки, адрес склада', shortName: 'Химки' },
-      { _id: '0004', name: 'ООО Конфеты', address: 'МО, Крекер, адрес склада', shortName: 'Крекер' },
-      { _id: '0005', name: 'ООО Конфеты', address: 'Москва, Красный октябрь', shortName: 'Кр.октябрь' },
-      { _id: '0006', name: 'ООО Курица', address: 'МО, Константиново', shortName: 'Константиново' },
-      { _id: '0007', name: 'ООО Курица', address: 'МО, Часцы', shortName: 'Часцы' },
-      { _id: '0008', name: 'ООО Дикси', address: 'МО, Всходы', shortName: 'Д.Всходы' },
-      { _id: '0009', name: 'ООО Дикси', address: 'МО, Внуково', shortName: 'Д.Внуково' },
-      { _id: '0010', name: 'Перекресток', address: 'МО, Видное', shortName: 'П.Видное' }
-    ],
     vehicleType: [
       { value: '10tn', text: '10тн' },
       { value: '20tn', text: '20тн' }
