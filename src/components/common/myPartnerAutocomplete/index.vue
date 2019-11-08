@@ -6,20 +6,20 @@
       @change="onChangeHandler"
       :value="propValue"
       hide-no-data
+      clearable
       hide-selected
       :items="items"
       color="primary"
       :label="label"
-      return-object
     />
   </div>
 </template>
 
 <script>
 import gql from 'graphql-tag'
-const query = gql`
-  query filteredAddresses($filter: String, $type: String) {
-    filteredAddresses(filter: $filter, type: $type) {
+const filteredAddressesQuery = gql`
+  query filteredAddresses($filter: String, $type: String, $id: ID) {
+    filteredAddresses(filter: $filter, type: $type, id: $id) {
       id
       shortName
       address
@@ -27,6 +27,22 @@ const query = gql`
     }
   }
 `
+const addressByIdQuery = gql`
+  query addressById($id: String) {
+    addressById(id: $id) {
+      id
+      shortName
+      address
+      partner
+    }
+  }
+`
+function addressTransform(item) {
+  return {
+    text: `${item.shortName} - ${item.partner} - ${item.address}`,
+    value: item.id
+  }
+}
 
 export default {
   model: {
@@ -41,33 +57,39 @@ export default {
   props: ['label', 'propValue', 'placeType'],
   data: () => ({
     filteredAddresses: [],
-    filter: '',
-    model: null
+    filter: ''
   }),
   computed: {
     items() {
-      return this.filteredAddresses.map(item => ({
-        text: `${item.shortName} - ${item.partner} - ${item.address}`,
-        value: item.id
-      }))
+      return this.filteredAddresses.map(addressTransform)
     }
   },
-  // watch: {
-  //   filter: function(val) {
-  //     this.filter = val
-  //   }
-  // },
+  watch: {
+    filter(val, prev) {
+      if (!val && prev && this.propValue) {
+        this.$emit('change', null)
+      }
+    }
+  },
   apollo: {
     filteredAddresses: {
-      query,
+      query() {
+        if (this.propValue) return addressByIdQuery
+        else return filteredAddressesQuery
+      },
       variables() {
         return {
+          id: this.propValue,
           filter: this.filter,
           type: this.placeType
         }
       },
-      skip() {
-        return !this.filter
+      update: data => {
+        if (data.addressById) {
+          let arr = []
+          arr.push(data.addressById)
+          return arr
+        } else return data.filteredAddresses
       }
     }
   }

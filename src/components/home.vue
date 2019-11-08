@@ -17,7 +17,7 @@ export default {
     myPartnerAutocomplete
   },
   data: () => ({
-    shipper: ''
+    shipper: null
   })
 }
 </script>
