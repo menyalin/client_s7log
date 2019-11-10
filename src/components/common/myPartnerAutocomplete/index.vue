@@ -90,6 +90,9 @@ export default {
           arr.push(data.addressById)
           return arr
         } else return data.filteredAddresses
+      },
+      skip() {
+        return !this.filter && !this.propValue
       }
     }
   }
