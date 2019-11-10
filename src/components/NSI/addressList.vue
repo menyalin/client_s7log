@@ -1,15 +1,5 @@
 <template>
   <v-container>
-    <v-row class="filter--block">
-      <v-col>
-        <v-container fluid>
-          <v-row>
-            <v-col> </v-col>
-          </v-row>
-        </v-container>
-      </v-col>
-    </v-row>
-    <v-divider />
     <v-row class="data--block">
       <v-col cols="12">
         <v-data-table
@@ -21,7 +11,22 @@
           :page.sync="page"
           class="elevation-1"
           hide-default-footer
-        />
+          @click:row="rowClickHandler($event)"
+        >
+          <template v-slot:top>
+            <h2>table header</h2>
+          </template>
+          <template v-slot:item.isShippingPlace="{ item }">
+            <v-icon v-if="item.isShippingPlace" small color="green"
+              >mdi-check</v-icon
+            >
+          </template>
+          <template v-slot:item.isDeliveryPlace="{ item }">
+            <v-icon v-if="item.isDeliveryPlace" small color="green"
+              >mdi-check</v-icon
+            >
+          </template>
+        </v-data-table>
         <div class="text-center">
           <v-pagination
             v-model="page"
@@ -53,6 +58,11 @@ const query = gql`
   }
 `
 export default {
+  methods: {
+    rowClickHandler(e) {
+      console.log(e.id)
+    }
+  },
   data() {
     return {
       page: 1,
@@ -64,7 +74,19 @@ export default {
         { text: 'Контрагент', value: 'partner', sortable: false },
         { text: 'shortName', sortable: false, value: 'shortName' },
         { text: 'address', value: 'address', sortable: false },
-        { text: 'Примечание', value: 'note', sortable: false }
+        { text: 'Примечание', value: 'note', sortable: false },
+        {
+          text: 'Погрузка',
+          value: 'isShippingPlace',
+          sortable: false,
+          align: 'center'
+        },
+        {
+          text: 'Разгрузка',
+          value: 'isDeliveryPlace',
+          sortable: false,
+          align: 'center'
+        }
       ]
     }
   },
