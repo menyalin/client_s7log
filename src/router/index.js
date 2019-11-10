@@ -10,6 +10,8 @@ import Company from '@/components/Company'
 import CompanyInfo from '@/components/Company/companyInfo'
 import orderLayout from '@/components/Order/index.vue'
 import orderRoutes from './orderRoutes'
+import nsiLayout from '@/components/NSI/index'
+import nsiRoutes from './nsi'
 
 
 Vue.use(Router)
@@ -61,6 +63,12 @@ export default new Router({
       path: '/orders',
       component: orderLayout,
       children: orderRoutes
+    },
+    {
+      path: '/nsi',
+      component: nsiLayout,
+      children: nsiRoutes
     }
+
   ]
 })
