@@ -5,7 +5,7 @@ import ru from 'vuetify/es5/locale/ru'
 
 Vue.use(Vuetify)
 
-export default new Vuetify({
+const vuetify =  new Vuetify({
   theme: {
     themes: {
       light: {
@@ -27,3 +27,7 @@ export default new Vuetify({
     iconfont: 'mdi'
   }
 })
+
+
+
+export default vuetify

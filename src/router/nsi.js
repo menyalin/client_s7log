@@ -1,4 +1,4 @@
-import addressList from '@/components/NSI/addressList'
+import addressList from '@/components/NSI/addressList/index.vue'
 
 export default [
   {
