@@ -13,8 +13,13 @@
           hide-default-footer
         >
           <template v-slot:top>
-            <v-dialog v-model="dialog" max-width="600px">
-              <address-edit-form @closedialog="cancelHandler" />
+            {{ editedAddress }}
+            <v-dialog v-model="dialog" max-width="1280px">
+              <address-edit-form
+                @closedialog="cancelHandler"
+                @saveitem="saveItemHandler"
+                v-model="editedAddress"
+              />
             </v-dialog>
           </template>
           <template v-slot:item.isShippingPlace="{ item }">
@@ -66,15 +71,39 @@ const query = gql`
   }
 `
 export default {
+  created() {
+    this.resetEditedAddress()
+  },
   components: {
     addressEditForm
   },
   methods: {
+    resetEditedAddress() {
+      this.editedAddress = {
+        id: null,
+        shortName: '',
+        address: '',
+        partner: '',
+        note: '',
+        isShippingPlace: false,
+        isDeliveryPlace: false
+      }
+    },
     editItem(item) {
-      console.log(item)
+      this.resetEditedAddress()
+      this.editedAddress = Object.assign({}, this.editedAddress, {
+        id: item.id,
+        address: item.address,
+        isShippingPlace: item.isShippingPlace
+      })
+      console.log(this.editedAddress)
       this.dialog = true
     },
+    saveItemHandler(item) {
+      console.log(item)
+    },
     cancelHandler() {
+      this.resetEditedAddress()
       this.dialog = false
     }
   },
@@ -82,14 +111,15 @@ export default {
     return {
       dialog: false,
       page: 1,
+      editedAddress: {},
       limit: 30,
       options: {},
       addressPages: {},
       headers: [
         { text: 'id', value: 'id', sortable: false },
         { text: 'Контрагент', value: 'partner', sortable: false },
-        { text: 'shortName', sortable: false, value: 'shortName' },
-        { text: 'address', value: 'address', sortable: false },
+        { text: 'Сокр.название', sortable: false, value: 'shortName' },
+        { text: 'Адрес', value: 'address', sortable: false },
         { text: 'Примечание', value: 'note', sortable: false },
         {
           text: 'Погрузка',
