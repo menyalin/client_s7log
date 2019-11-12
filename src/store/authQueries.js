@@ -21,11 +21,9 @@ export const SIGN_UP = gql`
 export const GET_CURRENT_USER = gql`
   query getCurrentUser {
     getCurrentUser {
-      _id
+      id
       email
       name
-      avatar
-      joinDate
     }
   }
 `
