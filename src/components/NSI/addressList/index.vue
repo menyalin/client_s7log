@@ -14,7 +14,7 @@
         >
           <template v-slot:top>
             {{ editedAddress }}
-            <v-dialog v-model="dialog" max-width="1280px">
+            <v-dialog v-model="dialog" max-width="960px">
               <address-edit-form
                 @closedialog="cancelHandler"
                 @saveitem="saveItemHandler"
@@ -71,47 +71,51 @@ const query = gql`
   }
 `
 export default {
-  created() {
-    this.resetEditedAddress()
-  },
   components: {
     addressEditForm
   },
   methods: {
     resetEditedAddress() {
-      this.editedAddress = {
-        id: null,
-        shortName: '',
-        address: '',
-        partner: '',
-        note: '',
-        isShippingPlace: false,
-        isDeliveryPlace: false
-      }
+      this.editedAddress = Object.assign(
+        {},
+        {
+          id: null,
+          shortName: '',
+          address: '',
+          partner: '',
+          note: '',
+          isShippingPlace: false,
+          isDeliveryPlace: false
+        }
+      )
     },
     editItem(item) {
-      this.resetEditedAddress()
-      this.editedAddress = Object.assign({}, this.editedAddress, {
-        id: item.id,
-        address: item.address,
-        isShippingPlace: item.isShippingPlace
-      })
-      console.log(this.editedAddress)
       this.dialog = true
+      this.$nextTick(() => {
+        this.editedAddress = Object.assign({}, this.editedAddress, item)
+      })
     },
     saveItemHandler(item) {
       console.log(item)
     },
     cancelHandler() {
-      this.resetEditedAddress()
       this.dialog = false
+      this.resetEditedAddress()
     }
   },
   data() {
     return {
       dialog: false,
       page: 1,
-      editedAddress: {},
+      editedAddress: {
+        id: null,
+        address: '',
+        shortName: '',
+        partner: '',
+        note: '',
+        isShippingPlace: false,
+        isDeliveryPlace: false
+      },
       limit: 30,
       options: {},
       addressPages: {},
