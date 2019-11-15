@@ -12,7 +12,15 @@ import '@mdi/font/css/materialdesignicons.css'
 Vue.config.productionTip = false
 
 Vue.use(Vuelidate)
-Vue.use(VuetifyConfirm, { vuetify })
+Vue.use(VuetifyConfirm, {
+  vuetify,
+  buttonTrueText: 'Да',
+  buttonFalseText: 'Нет',
+  color: 'info',
+  icon: 'mdi-alert-octagram',
+  title: 'Warning',
+  width: 350,
+})
 
 new Vue({
   router,

@@ -13,30 +13,67 @@
           hide-default-footer
         >
           <template v-slot:top>
-            {{ editedAddress }}
-            <v-dialog v-model="dialog" max-width="960px">
+            <v-dialog v-model="dialog" max-width="800px">
               <address-edit-form
                 @closedialog="cancelHandler"
                 @saveitem="saveItemHandler"
+                @newitem="newItemHandler"
                 v-model="editedAddress"
+                :isModified="isModified"
+                @modify="isModified = true"
               />
             </v-dialog>
+            <v-container fluid>
+              <v-row no-gutters align="center">
+                <v-col cols="auto" class="pl-2 pr-2">
+                  <v-btn color="secondary" @click="addAddress" fab small dark
+                    ><v-icon>mdi-plus</v-icon></v-btn
+                  >
+                </v-col>
+
+                <v-col cols="auto">
+                  <v-checkbox
+                    label="Разгрузка"
+                    v-model="isDeliveryPlace"
+                    hide-details
+                    color="primary"
+                    class="pr-2"
+                  />
+                </v-col>
+                <v-col cols="auto">
+                  <v-checkbox
+                    label="Погрузка"
+                    v-model="isShippingPlace"
+                    hide-details
+                    color="primary"
+                    class="pr-2"
+                  />
+                </v-col>
+                <v-col>
+                  <v-text-field
+                    label="Поиск"
+                    v-model="searchText"
+                    hide-details
+                  />
+                </v-col>
+              </v-row>
+            </v-container>
           </template>
-          <template v-slot:item.isShippingPlace="{ item }">
+          <template v-slot:item.isShippingPlace="{item}">
             <v-icon v-if="item.isShippingPlace" small color="green"
               >mdi-check</v-icon
             >
           </template>
-          <template v-slot:item.isDeliveryPlace="{ item }">
+          <template v-slot:item.isDeliveryPlace="{item}">
             <v-icon v-if="item.isDeliveryPlace" small color="green"
               >mdi-check</v-icon
             >
           </template>
-          <template v-slot:item.action="{ item }">
+          <template v-slot:item.action="{item}">
             <v-icon small class="mr-2" @click="editItem(item)"
               >mdi-pencil</v-icon
             >
-            <v-icon small>mdi-delete</v-icon>
+            <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
           </template>
         </v-data-table>
         <div class="text-center">
@@ -55,8 +92,8 @@
 import gql from 'graphql-tag'
 import addressEditForm from './addressEditForm'
 const query = gql`
-  query addressPages($offset: Int, $limit: Int) {
-    addressPages(offset: $offset, limit: $limit) {
+  query addressPages($offset: Int, $limit: Int, $search: String, $isShippingPlace: Boolean, $isDeliveryPlace: Boolean) {
+    addressPages(offset: $offset, limit: $limit, search: $search, isShippingPlace: $isShippingPlace, isDeliveryPlace: $isDeliveryPlace) {
       addresses {
         id
         partner
@@ -70,6 +107,68 @@ const query = gql`
     }
   }
 `
+const updateAddressMutation = gql`
+  mutation updateAddress(
+    $id: ID
+    $address: String
+    $partner: String
+    $shortName: String
+    $note: String
+    $isShippingPlace: Boolean
+    $isDeliveryPlace: Boolean
+  ) {
+    updateAddress(
+      id: $id
+      address: $address
+      partner: $partner
+      shortName: $shortName
+      note: $note
+      isShippingPlace: $isShippingPlace
+      isDeliveryPlace: $isDeliveryPlace
+    ) {
+      id
+      shortName
+      address
+      partner
+      note
+      isShippingPlace
+      isDeliveryPlace
+    }
+  }
+`
+const blockAddressMutation = gql`
+  mutation blockAddress($id: ID) {
+    blockAddress(id: $id)
+  }
+`
+const createAddressMutation = gql`
+  mutation createAddress(
+    $address: String
+    $partner: String
+    $shortName: String
+    $note: String
+    $isShippingPlace: Boolean
+    $isDeliveryPlace: Boolean
+  ) {
+    createAddress(
+      address: $address
+      partner: $partner
+      shortName: $shortName
+      note: $note
+      isShippingPlace: $isShippingPlace
+      isDeliveryPlace: $isDeliveryPlace
+    ) {
+      id
+      shortName
+      address
+      partner
+      note
+      isShippingPlace
+      isDeliveryPlace
+    }
+  }
+`
+
 export default {
   components: {
     addressEditForm
@@ -90,15 +189,130 @@ export default {
       )
     },
     editItem(item) {
+      this.isModified = false
       this.dialog = true
       this.$nextTick(() => {
         this.editedAddress = Object.assign({}, this.editedAddress, item)
       })
     },
-    saveItemHandler(item) {
-      console.log(item)
+    addAddress() {
+      this.isModified = false
+      this.dialog = true
+      this.resetEditedAddress()
+      this.$nextTick(() => {
+        this.editedAddress = Object.assign({}, this.editedAddress)
+      })
+    },
+    newItemHandler() {
+      this.$store.commit('setLoading', true)
+      this.$apollo
+        .mutate({
+          mutation: createAddressMutation,
+          variables: {
+            address: this.editedAddress.address,
+            partner: this.editedAddress.partner,
+            shortName: this.editedAddress.shortName,
+            note: this.editedAddress.note,
+            isShippingPlace: this.editedAddress.isShippingPlace,
+            isDeliveryPlace: this.editedAddress.isDeliveryPlace
+          },
+          update: (store, {data: {createAddress}}) => {
+            const data = store.readQuery({
+              query,
+              variables: {
+                offset: (this.page - 1) * this.limit,
+                limit: this.limit
+              }
+            })
+            data.addressPages.addresses.push(createAddress)
+            store.writeQuery({
+              query,
+              variables: () => ({
+                offset: (this.page - 1) * this.limit,
+                limit: this.limit
+              }),
+              data
+            })
+          }
+        })
+        .then(({data: {createAddress}}) => {
+          this.addressPages.addresses.unshift(createAddress)
+          this.$store.commit('setLoading', false)
+          this.cancelHandler()
+        })
+        .catch(e => {
+          this.$store.commit('setLoading', false)
+          this.$store.commit('setError', e.message)
+          this.cancelHandler()
+        })
+    },
+    async deleteItem(item) {
+      const res = await this.$confirm(
+        `Подтверждаете удаление записи ${item.partner} - ${item.shortName}?`,
+        {
+          title: 'Удаление записи'
+        }
+      )
+      if (res) {
+        this.$apollo
+          .mutate({
+            mutation: blockAddressMutation,
+            variables: {
+              id: item.id
+            },
+            update: store => {
+              const data = store.readQuery({
+                query,
+                variables: {
+                  offset: (this.page - 1) * this.limit,
+                  limit: this.limit
+                }
+              })
+              data.addressPages.addresses.splice(
+                data.addressPages.addresses.findIndex(i => i.id === item.id),
+                1
+              )
+              store.writeQuery({
+                query,
+                variables: () => ({
+                  offset: (this.page - 1) * this.limit,
+                  limit: this.limit
+                }),
+                data
+              })
+            }
+          })
+          .then(({data: blockAddress}) => {
+            if (blockAddress) {
+            }
+          })
+      }
+    },
+    saveItemHandler() {
+      this.$store.commit('setLoading', true)
+      this.$apollo
+        .mutate({
+          mutation: updateAddressMutation,
+          variables: {
+            id: this.editedAddress.id,
+            address: this.editedAddress.address,
+            partner: this.editedAddress.partner,
+            shortName: this.editedAddress.shortName,
+            note: this.editedAddress.note,
+            isShippingPlace: this.editedAddress.isShippingPlace,
+            isDeliveryPlace: this.editedAddress.isDeliveryPlace
+          }
+        })
+        .then(({data: {updateAddress}}) => {
+          this.cancelHandler()
+        })
+        .catch(e => {
+          this.$store.commit('setError', e.message)
+          this.cancelHandler()
+        })
     },
     cancelHandler() {
+      this.$store.commit('setLoading', false)
       this.dialog = false
       this.resetEditedAddress()
     }
@@ -106,6 +320,10 @@ export default {
   data() {
     return {
       dialog: false,
+      isDeliveryPlace: true,
+      isShippingPlace: true,
+      searchText: '',
+      isModified: false,
       page: 1,
       editedAddress: {
         id: null,
@@ -116,15 +334,14 @@ export default {
         isShippingPlace: false,
         isDeliveryPlace: false
       },
-      limit: 30,
+      limit: 20,
       options: {},
       addressPages: {},
       headers: [
-        { text: 'id', value: 'id', sortable: false },
-        { text: 'Контрагент', value: 'partner', sortable: false },
-        { text: 'Сокр.название', sortable: false, value: 'shortName' },
-        { text: 'Адрес', value: 'address', sortable: false },
-        { text: 'Примечание', value: 'note', sortable: false },
+        {text: 'Контрагент', value: 'partner', sortable: false},
+        {text: 'Сокр.название', sortable: false, value: 'shortName'},
+        {text: 'Адрес', value: 'address', sortable: false},
+        {text: 'Примечание', value: 'note', sortable: false},
         {
           text: 'Погрузка',
           value: 'isShippingPlace',
@@ -137,7 +354,7 @@ export default {
           sortable: false,
           align: 'center'
         },
-        { text: 'Actions', value: 'action', sortable: false }
+        {text: 'Actions', value: 'action', sortable: false}
       ]
     }
   },
@@ -147,12 +364,12 @@ export default {
       variables() {
         return {
           offset: (this.page - 1) * this.limit,
-          limit: this.limit
+          limit: this.limit,
+          search: this.searchText
         }
       }
     }
   }
 }
 </script>
-
 <style></style>

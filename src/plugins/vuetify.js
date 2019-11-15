@@ -5,12 +5,12 @@ import ru from 'vuetify/es5/locale/ru'
 
 Vue.use(Vuetify)
 
-const vuetify =  new Vuetify({
+const vuetify = new Vuetify({
   theme: {
     themes: {
       light: {
         primary: '#414770',
-        secondary: '#424242',
+        secondary: '#5b9279',
         accent: '#82B1FF',
         error: '#FF5252',
         info: '#2196F3',

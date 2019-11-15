@@ -10,16 +10,16 @@
         <v-row no-gutters>
           <v-col cols="12" md="6">
             <v-text-field
-              label="Сокращенное название"
-              :value="editedAddress.shortName"
-              @input="change($event, 'shortName')"
+              label="Контрагент"
+              :value="editedAddress.partner"
+              @input="change($event, 'partner')"
             />
           </v-col>
           <v-col cols="12" md="6">
             <v-text-field
-              label="Партнер"
-              :value="editedAddress.partner"
-              @input="change($event, 'partner')"
+              label="Сокращенное название"
+              :value="editedAddress.shortName"
+              @input="change($event, 'shortName')"
             />
           </v-col>
           <v-col cols="12">
@@ -39,7 +39,7 @@
           <v-col cols="6">
             <v-checkbox
               label="Погрузка"
-              :value="editedAddress.isShippingPlace"
+              :value="!!editedAddress.isShippingPlace"
               @change="change($event, 'isShippingPlace')"
               hide-details
               color="primary"
@@ -48,7 +48,7 @@
           <v-col cols="6">
             <v-checkbox
               label="Разгрузка"
-              :value="editedAddress.isDeliveryPlace"
+              :value="!!editedAddress.isDeliveryPlace"
               @change="change($event, 'isDeliveryPlace')"
               hide-details
               color="primary"
@@ -60,33 +60,47 @@
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn color="primary" @click="cancel">Отмена</v-btn>
-      <v-btn color="primary" @click="save">Сохранить</v-btn>
+      <v-btn
+        color="primary"
+        @click="save"
+        :loading="loading"
+        :disabled="!isModified"
+        >{{ isNewItem ? 'Создать' : 'Сохранить' }}</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+
 export default {
   model: {
     prop: 'editedAddress',
     event: 'change'
   },
-  props: ['editedAddress'],
+  props: ['editedAddress', 'isModified'],
   methods: {
     change(val, field) {
       this.$emit(
         'change',
-        Object.assign({}, this.editedAddress, { [field]: val })
+        Object.assign({}, this.editedAddress, {[field]: val})
       )
+      this.$emit('modify')
     },
     cancel() {
       this.$emit('closedialog')
     },
     save() {
-      this.$emit('saveitem')
+      if (this.isNewItem) {
+        this.$emit('newitem')
+      } else {
+        this.$emit('saveitem')
+      }
     }
   },
   computed: {
+    ...mapGetters(['loading']),
     isNewItem() {
       return !!!this.editedAddress.id
     }
