@@ -26,15 +26,16 @@
             <v-container fluid>
               <v-row no-gutters align="center">
                 <v-col cols="auto" class="pl-2 pr-2">
-                  <v-btn color="secondary" @click="addAddress" fab small dark
-                    ><v-icon>mdi-plus</v-icon></v-btn
-                  >
+                  <v-btn color="secondary" @click="addAddress" fab small dark>
+                    <v-icon>mdi-plus</v-icon>
+                  </v-btn>
                 </v-col>
 
                 <v-col cols="auto">
                   <v-checkbox
                     label="Разгрузка"
                     v-model="isDeliveryPlace"
+                    @change="editFilters"
                     hide-details
                     color="primary"
                     class="pr-2"
@@ -44,6 +45,7 @@
                   <v-checkbox
                     label="Погрузка"
                     v-model="isShippingPlace"
+                    @change="editFilters"
                     hide-details
                     color="primary"
                     class="pr-2"
@@ -54,25 +56,20 @@
                     label="Поиск"
                     v-model="searchText"
                     hide-details
+                    @input="editFilters"
                   />
                 </v-col>
               </v-row>
             </v-container>
           </template>
           <template v-slot:item.isShippingPlace="{item}">
-            <v-icon v-if="item.isShippingPlace" small color="green"
-              >mdi-check</v-icon
-            >
+            <v-icon v-if="item.isShippingPlace" small color="green">mdi-check</v-icon>
           </template>
           <template v-slot:item.isDeliveryPlace="{item}">
-            <v-icon v-if="item.isDeliveryPlace" small color="green"
-              >mdi-check</v-icon
-            >
+            <v-icon v-if="item.isDeliveryPlace" small color="green">mdi-check</v-icon>
           </template>
           <template v-slot:item.action="{item}">
-            <v-icon small class="mr-2" @click="editItem(item)"
-              >mdi-pencil</v-icon
-            >
+            <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
             <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
           </template>
         </v-data-table>
@@ -92,8 +89,20 @@
 import gql from 'graphql-tag'
 import addressEditForm from './addressEditForm'
 const query = gql`
-  query addressPages($offset: Int, $limit: Int, $search: String, $isShippingPlace: Boolean, $isDeliveryPlace: Boolean) {
-    addressPages(offset: $offset, limit: $limit, search: $search, isShippingPlace: $isShippingPlace, isDeliveryPlace: $isDeliveryPlace) {
+  query addressPages(
+    $offset: Int
+    $limit: Int
+    $search: String
+    $isShippingPlace: Boolean
+    $isDeliveryPlace: Boolean
+  ) {
+    addressPages(
+      offset: $offset
+      limit: $limit
+      search: $search
+      isShippingPlace: $isShippingPlace
+      isDeliveryPlace: $isDeliveryPlace
+    ) {
       addresses {
         id
         partner
@@ -173,7 +182,21 @@ export default {
   components: {
     addressEditForm
   },
+  computed: {
+    queryVariables() {
+      return {
+        offset: (this.page - 1) * this.limit,
+        limit: this.limit,
+        search: this.searchText,
+        isDeliveryPlace: this.isDeliveryPlace,
+        isShippingPlace: this.isShippingPlace
+      }
+    }
+  },
   methods: {
+    editFilters() {
+      this.page = 1
+    },
     resetEditedAddress() {
       this.editedAddress = Object.assign(
         {},
@@ -216,26 +239,20 @@ export default {
             isShippingPlace: this.editedAddress.isShippingPlace,
             isDeliveryPlace: this.editedAddress.isDeliveryPlace
           },
-          update: (store, {data: {createAddress}}) => {
+          update: (store, { data: { createAddress } }) => {
             const data = store.readQuery({
               query,
-              variables: {
-                offset: (this.page - 1) * this.limit,
-                limit: this.limit
-              }
+              variables: this.queryVariables
             })
             data.addressPages.addresses.push(createAddress)
             store.writeQuery({
               query,
-              variables: () => ({
-                offset: (this.page - 1) * this.limit,
-                limit: this.limit
-              }),
+              variables: this.queryVariables,
               data
             })
           }
         })
-        .then(({data: {createAddress}}) => {
+        .then(({ data: { createAddress } }) => {
           this.addressPages.addresses.unshift(createAddress)
           this.$store.commit('setLoading', false)
           this.cancelHandler()
@@ -263,10 +280,7 @@ export default {
             update: store => {
               const data = store.readQuery({
                 query,
-                variables: {
-                  offset: (this.page - 1) * this.limit,
-                  limit: this.limit
-                }
+                variables: this.queryVariables
               })
               data.addressPages.addresses.splice(
                 data.addressPages.addresses.findIndex(i => i.id === item.id),
@@ -274,15 +288,12 @@ export default {
               )
               store.writeQuery({
                 query,
-                variables: () => ({
-                  offset: (this.page - 1) * this.limit,
-                  limit: this.limit
-                }),
+                variables: this.queryVariables,
                 data
               })
             }
           })
-          .then(({data: blockAddress}) => {
+          .then(({ data: blockAddress }) => {
             if (blockAddress) {
             }
           })
@@ -303,7 +314,7 @@ export default {
             isDeliveryPlace: this.editedAddress.isDeliveryPlace
           }
         })
-        .then(({data: {updateAddress}}) => {
+        .then(({ data: { updateAddress } }) => {
           this.cancelHandler()
         })
         .catch(e => {
@@ -320,8 +331,8 @@ export default {
   data() {
     return {
       dialog: false,
-      isDeliveryPlace: true,
-      isShippingPlace: true,
+      isDeliveryPlace: false,
+      isShippingPlace: false,
       searchText: '',
       isModified: false,
       page: 1,
@@ -338,10 +349,10 @@ export default {
       options: {},
       addressPages: {},
       headers: [
-        {text: 'Контрагент', value: 'partner', sortable: false},
-        {text: 'Сокр.название', sortable: false, value: 'shortName'},
-        {text: 'Адрес', value: 'address', sortable: false},
-        {text: 'Примечание', value: 'note', sortable: false},
+        { text: 'Контрагент', value: 'partner', sortable: false },
+        { text: 'Сокр.название', sortable: false, value: 'shortName' },
+        { text: 'Адрес', value: 'address', sortable: false },
+        { text: 'Примечание', value: 'note', sortable: false },
         {
           text: 'Погрузка',
           value: 'isShippingPlace',
@@ -354,7 +365,7 @@ export default {
           sortable: false,
           align: 'center'
         },
-        {text: 'Actions', value: 'action', sortable: false}
+        { text: 'Actions', value: 'action', sortable: false }
       ]
     }
   },
@@ -362,12 +373,9 @@ export default {
     addressPages: {
       query,
       variables() {
-        return {
-          offset: (this.page - 1) * this.limit,
-          limit: this.limit,
-          search: this.searchText
-        }
-      }
+        return this.queryVariables
+      },
+      fetchPolicy: 'network-only'
     }
   }
 }
