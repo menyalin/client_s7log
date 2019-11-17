@@ -23,18 +23,11 @@
       <v-app-bar app color="primary" dark dense>
         <v-app-bar-nav-icon @click="toggleDrawer" class="hidden-md-and-up" />
         <v-toolbar-title class="hidden-sm-and-down">
-          <router-link to="/" tag="span" class="main__title"
-            >Vue Share</router-link
-          >
+          <router-link to="/" tag="span" class="main__title">Vue Share</router-link>
         </v-toolbar-title>
         <v-spacer />
         <v-toolbar-items class="hidden-xs-only">
-          <v-btn
-            v-for="item in itemsForRender"
-            text
-            :key="item.id"
-            :to="item.url"
-          >
+          <v-btn v-for="item in itemsForRender" text :key="item.id" :to="item.url">
             <v-icon left class="hidden-sm-only">{{ item.icon }}</v-icon>
             {{ item.title }}
           </v-btn>
@@ -42,7 +35,7 @@
       </v-app-bar>
       <v-content>
         <v-container fluid>
-          <transition name="fade">
+          <transition name="scale">
             <router-view />
           </transition>
         </v-container>

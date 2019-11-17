@@ -5,7 +5,9 @@
         <app-side-bar />
       </v-col>
       <v-col>
-        <router-view />
+        <transition name="fade">
+          <router-view />
+        </transition>
       </v-col>
     </v-row>
   </v-container>

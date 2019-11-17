@@ -24,10 +24,10 @@
               />
             </v-dialog>
             <v-container fluid>
-              <v-row no-gutters align="center">
-                <v-col cols="auto" class="pl-2 pr-2">
-                  <v-btn color="secondary" @click="addAddress" fab small dark>
-                    <v-icon>mdi-plus</v-icon>
+              <v-row align="center">
+                <v-col cols="auto">
+                  <v-btn color="secondary" @click="addAddress" dark>
+                    <v-icon>mdi-plus</v-icon>Новый
                   </v-btn>
                 </v-col>
 
@@ -57,6 +57,15 @@
                     v-model="searchText"
                     hide-details
                     @input="editFilters"
+                  />
+                </v-col>
+                <v-col cols="auto">
+                  <v-select
+                    :items="itemsOnPage"
+                    label="Кол-во строк"
+                    :value="limit"
+                    hide-details
+                    @change="changeLimit($event)"
                   />
                 </v-col>
               </v-row>
@@ -197,6 +206,11 @@ export default {
     editFilters() {
       this.page = 1
     },
+    changeLimit(val) {
+      this.limit = val
+      this.page = 1
+      localStorage.setItem('addressPageLimit', val)
+    },
     resetEditedAddress() {
       this.editedAddress = Object.assign(
         {},
@@ -330,6 +344,8 @@ export default {
   },
   data() {
     return {
+      itemsOnPage: [20, 50, 100],
+      limit: +localStorage.getItem('addressPageLimit') || 20,
       dialog: false,
       isDeliveryPlace: false,
       isShippingPlace: false,
@@ -345,7 +361,7 @@ export default {
         isShippingPlace: false,
         isDeliveryPlace: false
       },
-      limit: 20,
+
       options: {},
       addressPages: {},
       headers: [
