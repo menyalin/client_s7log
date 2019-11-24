@@ -75,6 +75,14 @@ export default {
         width: '8em'
       },
       {
+        text: 'Кол-во плт',
+        value: 'maxPltCount',
+        align: 'left',
+        sortable: false,
+        width: '8em'
+      },
+
+      {
         text: 'Гос.номер',
         value: 'reg',
         align: 'left',

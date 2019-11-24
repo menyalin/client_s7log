@@ -4,13 +4,7 @@
       <v-col cols="12">
         <app-car-row :header="true" :dates="dates" />
         <div class="car-row-wrapper">
-          <app-car-row
-            v-for="car in cars"
-            :car="car"
-            :key="car.id"
-            :header="false"
-            :dates="dates"
-          />
+          <app-car-row v-for="car in cars" :car="car" :key="car.id" :header="false" :dates="dates" />
         </div>
         <app-not-confirmed-orders />
       </v-col>
@@ -23,6 +17,19 @@ import appNotConfirmedOrders from './notConfirmedOrders'
 import moment from 'moment'
 import appCarRow from './carRow'
 import { mapGetters } from 'vuex'
+import gql from 'graphql-tag'
+const carsQuery = gql`
+  query cars($type: String) {
+    cars(type: $type) {
+      id
+      title
+      isOwned
+      maxPltCount
+      note
+    }
+  }
+`
+
 export default {
   created() {
     this.$store.commit('setCurrentDate', moment().format('YYYY-MM-DD'))
@@ -32,6 +39,9 @@ export default {
     appCarRow,
     appNotConfirmedOrders
   },
+  data: () => ({
+    cars: []
+  }),
   computed: {
     dates() {
       if (this.currentDate) {
@@ -99,7 +109,17 @@ export default {
         return null
       }
     },
-    ...mapGetters(['currentDate', 'cars'])
+    ...mapGetters(['currentDate'])
+  },
+  apollo: {
+    cars: {
+      query: carsQuery,
+      variables() {
+        return {
+          type: this.carType
+        }
+      }
+    }
   }
 }
 </script>

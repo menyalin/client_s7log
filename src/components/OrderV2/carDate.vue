@@ -10,6 +10,7 @@
         @drop="dropHandler($event, car.id, date, zone.id)"
         @dragover="dragOver"
         class="empty--zone"
+        @click="test"
       ></div>
     </div>
   </div>
@@ -31,6 +32,9 @@ export default {
     })
   },
   methods: {
+    test() {
+      console.log(this.car)
+    },
     dropHandler(event, carId, date, zoneId) {
       const order = JSON.parse(event.dataTransfer.getData('order'))
       this.$store.dispatch('confirmOrder', {

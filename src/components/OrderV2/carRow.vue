@@ -3,7 +3,7 @@
     <v-row no-gutters class="car--row">
       <v-col class="title-car-col" cols="auto">
         <app-car-title-header v-if="header" class="row--header" />
-        <div v-else class="car-title">{{ car.number }}</div>
+        <div v-else class="car-title">{{ car.title }}</div>
       </v-col>
       <v-col class="day-car-cols">
         <v-container fluid class="pa-0 ma-0" fill-height>
