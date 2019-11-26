@@ -2,7 +2,6 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        {{ carPage.totalCar }}
         <v-data-table
           class="elevation-1"
           hide-default-footer

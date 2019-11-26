@@ -25,31 +25,6 @@ export default {
       { id: '03', title: '12-18' },
       { id: '04', title: '18-24' }
     ],
-    cars: [
-      { id: '778', number: '778' },
-      { id: '222', number: '222' },
-      { id: '333', number: '333' },
-      { id: '444', number: '444' },
-      { id: '555', number: '555' },
-      { id: '666', number: '666' },
-      { id: '888', number: '888' },
-      { id: '777', number: '777' },
-      { id: '999', number: '999' },
-      { id: '001', number: '001' },
-      { id: '002', number: '002' },
-      { id: '003', number: '003' },
-      { id: '004', number: '004' },
-      { id: '005', number: '005' },
-      { id: '006', number: '006' },
-      { id: '007', number: '007' },
-      { id: '008', number: '008' },
-      { id: '009', number: '009' },
-      { id: '010', number: '010' },
-      { id: '011', number: '011' },
-      { id: '012', number: '012' },
-      { id: '013', number: '013' },
-
-    ],
     orders: [
       {
         _id: '00001',

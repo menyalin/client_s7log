@@ -1,7 +1,12 @@
 import newOrder from '@/components/Order/newOrder/index.vue'
 import orderList from '@/components/OrderV2/orderList'
+import allOrders from '@/components/OrderV2/allOrders/index.vue'
 
 export default [
+  {
+    path: 'list',
+    component: allOrders
+  },
   {
     path: 'newOrder',
     component: newOrder

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <template v-if="loadingApp">
-      <AppSpinner />
+      <AppSpinner class="mt-6" />
     </template>
     <template v-else>
       <v-navigation-drawer app temporary fixed v-model="drawer">
@@ -23,11 +23,18 @@
       <v-app-bar app color="primary" dark dense>
         <v-app-bar-nav-icon @click="toggleDrawer" class="hidden-md-and-up" />
         <v-toolbar-title class="hidden-sm-and-down">
-          <router-link to="/" tag="span" class="main__title">Vue Share</router-link>
+          <router-link to="/" tag="span" class="main__title"
+            >Vue Share</router-link
+          >
         </v-toolbar-title>
         <v-spacer />
         <v-toolbar-items class="hidden-xs-only">
-          <v-btn v-for="item in itemsForRender" text :key="item.id" :to="item.url">
+          <v-btn
+            v-for="item in itemsForRender"
+            text
+            :key="item.id"
+            :to="item.url"
+          >
             <v-icon left class="hidden-sm-only">{{ item.icon }}</v-icon>
             {{ item.title }}
           </v-btn>
@@ -39,6 +46,7 @@
             <router-view />
           </transition>
         </v-container>
+        <app-data />
       </v-content>
       <v-footer app></v-footer>
     </template>
@@ -51,6 +59,7 @@
 import ErrorSnackbar from './components/common/ErrorSnackbar'
 import { mapGetters } from 'vuex'
 import AppSpinner from './components/common/AppSpinner'
+import appData from './data'
 
 export default {
   name: 'App',
@@ -61,14 +70,15 @@ export default {
   },
   components: {
     AppSpinner,
-    ErrorSnackbar
+    ErrorSnackbar,
+    appData
   },
   computed: {
     ...mapGetters(['user', 'isLoggedIn', 'loadingApp', 'error']),
     itemsForRender() {
       let visibleItems = []
       if (this.isLoggedIn) {
-        visibleItems = [1, 2, 5, 6, 8, 9]
+        visibleItems = [1, 2, 5, 6, 8, 9, 10]
       } else {
         visibleItems = [3, 4, 6, 8]
       }
@@ -78,6 +88,7 @@ export default {
   data: () => ({
     drawer: false,
     items: [
+      { id: 10, title: 'Заявки', icon: 'mdi-view-list', url: '/orders/list' },
       { id: 9, title: 'НСИ', icon: 'mdi-view-list', url: '/nsi' },
       { id: 6, title: '10_tn', icon: 'mdi-dump-truck', url: '/orders/10tn' },
       { id: 8, title: '20_tn', icon: 'mdi-dump-truck', url: '/orders/20tn' },
