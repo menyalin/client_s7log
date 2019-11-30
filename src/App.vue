@@ -89,7 +89,7 @@ export default {
     drawer: false,
     items: [
       { id: 10, title: 'Заявки', icon: 'mdi-view-list', url: '/orders/list' },
-      { id: 9, title: 'НСИ', icon: 'mdi-view-list', url: '/nsi' },
+      { id: 9, title: 'НСИ', icon: 'mdi-book-open-page-variant', url: '/nsi' },
       { id: 6, title: '10_tn', icon: 'mdi-dump-truck', url: '/orders/10tn' },
       { id: 8, title: '20_tn', icon: 'mdi-dump-truck', url: '/orders/20tn' },
       { id: 1, title: 'Company', icon: 'mdi-domain', url: '/company' },

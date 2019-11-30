@@ -71,14 +71,20 @@
               </v-row>
             </v-container>
           </template>
-          <template v-slot:item.isShippingPlace="{item}">
-            <v-icon v-if="item.isShippingPlace" small color="green">mdi-check</v-icon>
+          <template v-slot:item.isShippingPlace="{ item }">
+            <v-icon v-if="item.isShippingPlace" small color="green"
+              >mdi-check</v-icon
+            >
           </template>
-          <template v-slot:item.isDeliveryPlace="{item}">
-            <v-icon v-if="item.isDeliveryPlace" small color="green">mdi-check</v-icon>
+          <template v-slot:item.isDeliveryPlace="{ item }">
+            <v-icon v-if="item.isDeliveryPlace" small color="green"
+              >mdi-check</v-icon
+            >
           </template>
-          <template v-slot:item.action="{item}">
-            <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+          <template v-slot:item.action="{ item }">
+            <v-icon small class="mr-2" @click="editItem(item)"
+              >mdi-pencil</v-icon
+            >
             <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
           </template>
         </v-data-table>
@@ -320,12 +326,12 @@ export default {
           mutation: updateAddressMutation,
           variables: {
             id: this.editedAddress.id,
-            address: this.editedAddress.address,
-            partner: this.editedAddress.partner,
-            shortName: this.editedAddress.shortName,
-            note: this.editedAddress.note,
-            isShippingPlace: this.editedAddress.isShippingPlace,
-            isDeliveryPlace: this.editedAddress.isDeliveryPlace
+            address: this.editedAddress.address || null,
+            partner: this.editedAddress.partner || null,
+            shortName: this.editedAddress.shortName || null,
+            note: this.editedAddress.note || null,
+            isShippingPlace: this.editedAddress.isShippingPlace || null,
+            isDeliveryPlace: this.editedAddress.isDeliveryPlace || null
           }
         })
         .then(({ data: { updateAddress } }) => {

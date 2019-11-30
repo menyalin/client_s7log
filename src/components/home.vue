@@ -1,23 +1,19 @@
 <template>
   <div>
-    <my-partner-autocomplete
-      label="Погрузка"
-      v-model="shipper"
-      placeType="deliveryPlace"
-    />
+    <my-car-autocomplete label="Машина" v-model="shipper" />
     {{ shipper }}
   </div>
 </template>
 
 <script>
-import myPartnerAutocomplete from '@/components/common/myPartnerAutocomplete'
+import myCarAutocomplete from '@/components/common/myCarAutocomplete'
 
 export default {
   components: {
-    myPartnerAutocomplete
+    myCarAutocomplete
   },
   data: () => ({
-    shipper: null
+    shipper: ''
   })
 }
 </script>

@@ -1,6 +1,18 @@
 export default {
   state: {
     currentDate: null,
+    statuses: [
+      { id: '01', title: 'Надо получить' },
+      { id: '02', title: 'ОЧЕНЬ Надо получить' },
+      { id: '03', title: 'Получен' },
+      { id: '04', title: 'Сообщен водителю' },
+      { id: '05', title: 'Подтвержден клиенту' },
+      { id: '06', title: 'На погрузке' },
+      { id: '07', title: 'На выгрузке' },
+      { id: '08', title: 'Выполнен' },
+      { id: '09', title: 'Мы отказались' },
+      { id: '10', title: 'Клиент снял заказ' }
+    ],
     schedule: [
       { 'date': '2019-10-29', 'manager': "Логист1" },
       { 'date': '2019-10-30', 'manager': "Логист1" },
@@ -109,7 +121,7 @@ export default {
     resetCarInOrder: ({ commit }, orderId) => {
       commit('resetCarInOrder', orderId)
     },
-    confirmOrder({ commit }, payload) {
+    confirmOrder ({ commit }, payload) {
       commit('confirmOrder', payload)
     }
   },
@@ -127,7 +139,9 @@ export default {
     cars: state => state.cars,
     notConfirmedOrders: (state) => state.orders.filter(item => !(item.carId)),
     ordersByCarAndConfirmDateZone: (state) => (carId, confirmedDate, zone) =>
-      state.orders.filter(item => item.carId === carId && item.confirmedDate === confirmedDate && item.confirmedTimeZone === zone)[0],
-    timeZones: (state) => state.timeZones
+      state.orders.filter(item => item.carId === carId && item.confirmedDate === confirmedDate && item.confirmedTimeZone === zone)[ 0 ],
+    timeZones: (state) => state.timeZones,
+    statuses: (state) => state.statuses,
+    statusTitleById: (state) => (id) => state.statuses.find(item => item.id === id)
   }
 }

@@ -12,6 +12,9 @@
         :label="label"
         :value="textFielValue"
         readonly
+        clearable
+        @click:clear="reset"
+        hide-details
         v-on="on"
         class="mt-0 pt-0"
         append-icon="mdi-calendar-text-outline"
@@ -42,6 +45,9 @@ export default {
     clickDateHandler(date) {
       this.$emit('change', date)
       this.menu = false
+    },
+    reset() {
+      this.$emit('change', undefined)
     }
   },
   computed: {

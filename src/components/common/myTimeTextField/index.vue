@@ -4,6 +4,7 @@
       :label="label"
       :items="clock"
       auto-select-first
+      clearable
       color="primary"
       :value="propTime"
       @change="inputHandler"

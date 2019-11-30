@@ -7,7 +7,6 @@
       :value="propValue"
       hide-no-data
       clearable
-      @click:clear="resetHandler"
       hide-selected
       :items="items"
       color="primary"
@@ -18,30 +17,31 @@
 
 <script>
 import gql from 'graphql-tag'
-const filteredAddressesQuery = gql`
-  query filteredAddresses($filter: String, $type: String) {
-    filteredAddresses(filter: $filter, type: $type) {
+const filteredCarsQuery = gql`
+  query filteredCars($filter: String) {
+    filteredCars(filter: $filter) {
       id
-      shortName
-      address
-      partner
+      isOwned
+      title
+      type
+      maxPltCount
     }
   }
 `
-const addressByIdQuery = gql`
-  query addressById($id: ID) {
-    addressById(id: $id) {
+const carByIdQuery = gql`
+  query carById($id: ID) {
+    carById(id: $id) {
       id
-      shortName
-      address
-      partner
+      isOwned
+      title
+      type
+      maxPltCount
     }
   }
 `
-function addressTransform(item) {
+function carTransform(item) {
   return {
-    text: `${item.shortName} - ${item.partner} - ${item.address ||
-      'адрес не указан'}`,
+    text: `${item.title} (${item.type} - ${item.maxPltCount || '_'}плт)`,
     value: item.id
   }
 }
@@ -54,19 +54,16 @@ export default {
   methods: {
     onChangeHandler(val) {
       this.$emit('change', val)
-    },
-    resetHandler() {
-      this.$emit('change', '')
     }
   },
-  props: ['label', 'propValue', 'placeType'],
+  props: ['label', 'propValue'],
   data: () => ({
-    filteredAddresses: [],
+    filteredCars: [],
     filter: ''
   }),
   computed: {
     items() {
-      return this.filteredAddresses.map(addressTransform)
+      return this.filteredCars.map(carTransform)
     }
   },
   watch: {
@@ -77,24 +74,23 @@ export default {
     }
   },
   apollo: {
-    filteredAddresses: {
+    filteredCars: {
       query() {
-        if (this.propValue) return addressByIdQuery
-        else return filteredAddressesQuery
+        if (this.propValue) return carByIdQuery
+        else return filteredCarsQuery
       },
       variables() {
         return {
           id: this.propValue,
-          filter: this.filter,
-          type: this.placeType
+          filter: this.filter
         }
       },
       update: data => {
-        if (data.addressById) {
+        if (data.carById) {
           let arr = []
-          arr.push(data.addressById)
+          arr.push(data.carById)
           return arr
-        } else return data.filteredAddresses
+        } else return data.filteredCars
       },
       skip() {
         return !this.filter && !this.propValue
