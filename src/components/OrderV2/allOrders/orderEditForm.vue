@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>
-      {{ isNewOrder ? 'Новый заказ' : 'Старый' }}
+      {{ isNewOrder ? 'Новый заказ' : `Заказ №${editedOrder.number}` }}
     </v-card-title>
     <v-card-text>
       <v-container>
@@ -141,7 +141,7 @@ export default {
   computed: {
     ...mapGetters(['timeZones', 'statuses', 'currentUser']),
     isNewOrder() {
-      return !!this.editedOrder.id
+      return !this.editedOrder.id
     }
   },
   components: {
@@ -163,9 +163,9 @@ export default {
     },
     save() {
       if (this.isNewOrder) {
-        this.$emit('updateOrder')
-      } else {
         this.$emit('createOrder')
+      } else {
+        this.$emit('updateOrder')
       }
     }
   }

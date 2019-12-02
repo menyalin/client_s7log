@@ -44,6 +44,16 @@ export default {
     setAddresses: (state, payload) => {
       state.addresses = payload
     },
+    addAddress: (state, payload) => {
+      state.addresses.push(payload)
+    },
+    updateAddress: (state, updatedAddress) => {
+      let adr = state.addresses.find(item => item.id === updatedAddress.id)
+      adr = Object.assign(adr, updatedAddress)
+    },
+    addOrder: (state, orderAdded) => {
+      state.orders.push(orderAdded)
+    },
     resetCarInOrder: (state, orderId) => {
       let order = state.orders.find(item => item.id === orderId)
       order.confirmedCarId = null
@@ -59,6 +69,7 @@ export default {
     setCurrentDate: (state, payload) => {
       state.currentDate = payload
     },
+
     _updateOrder: (state, { id, status, shipper, consignee }) => {
       let order = state.orders.find(item => item._id === id)
       Object.assign(order, { status, shipper, consignee })
