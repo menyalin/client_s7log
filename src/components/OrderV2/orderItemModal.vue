@@ -15,18 +15,10 @@
           </v-row>
           <v-row dense>
             <v-col cols="6">
-              <my-partner-autocomplete
-                label="Грузоотправитель"
-                :items="partnersForAutocomplite"
-                v-model="shipper"
-              />
+
             </v-col>
             <v-col cols="6">
-              <my-partner-autocomplete
-                label="Грузополучатель"
-                :items="partnersForAutocomplite"
-                v-model="consignee"
-              />
+             
               <v-container fluid class="pa-0">
                 <v-row no-gutters>
                   <v-col cols="6" md="7">
@@ -59,13 +51,11 @@
 <script>
 import myDatePicker from '@/components/common/myDatePicker'
 import myTimeTextField from '@/components/common/myTimeTextField'
-import myPartnerAutocomplete from '@/components/common/myPartnerAutocomplete'
 import { mapGetters } from 'vuex'
 
 export default {
   props: ['dialog', 'order'],
   components: {
-    myPartnerAutocomplete,
     myDatePicker,
     myTimeTextField
   },
@@ -99,9 +89,6 @@ export default {
     cancelHandler() {
       this.$emit('change', false)
     }
-  },
-  computed: {
-    ...mapGetters(['partnersForAutocomplite'])
   },
   model: {
     prop: 'dialog',

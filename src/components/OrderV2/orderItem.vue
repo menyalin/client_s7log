@@ -1,55 +1,64 @@
 <template>
-  <v-tooltip bottom>
-    <template v-slot:activator="{ on }">
-      <div
-        class="order-container"
-        :draggable="true"
-        @dragstart="dragStartHandler($event, JSON.stringify(order))"
-        @touchmove="dragStartHandler($event, JSON.stringify(order))"
-        @dblclick="dblClickHandler"
-        :class="classes"
-        v-on="on"
-      >
-        <div class="row-wrapper">
-          <div class="col-title">{{ partnersById(order.shipper).shortName }}</div>
-          <div class="col-time">
-            <small>{{ order.shippingTime.slice(0, 2) }}</small>
-          </div>
-        </div>
-        <div>
-          <div class="row-wrapper">
-            <div class="col-title">{{ partnersById(order.consignee).shortName }}</div>
-            <div class="col-time">
-              <small>{{ order.deliveryTime.slice(0, 2) }}</small>
-            </div>
-          </div>
-          <app-order-item-modal v-model="dialog" :order="order" />
-        </div>
+  <div
+    class="order-container"
+    :draggable="true"
+    @dragstart="dragStartHandler($event, JSON.stringify(order))"
+    @dblclick="dblClickHandler"
+    :class="classes"
+  >
+    <v-dialog v-model="dialog" max-width="1024px" persistent>
+      <order-edit-form
+        v-model="order"
+        @cancelEdit="cancelFormHandler"
+        @createOrder="createOrderHandler"
+        @updateOrder="updateOrderHandler"
+      />
+    </v-dialog>
+
+    <div class="row-wrapper">
+      <div class="col-title">
+        <small>
+          {{
+            order.shipperId && isAddressesUpload
+              ? addressById(order.shipperId).shortName
+              : null
+          }}
+        </small>
       </div>
-    </template>
-    <div class="tooltip-information">
-      <div>{{ partnersById(order.shipper).shortName }} - {{ order.shippingDate }} {{ order.shippingTime}}</div>
-      <v-divider dark />
-      <div>{{ partnersById(order.consignee).shortName }} - {{order.deliveryDate}} {{ order.deliveryTime }}</div>
+      <div class="col-time"></div>
     </div>
-  </v-tooltip>
+    <div>
+      <div class="row-wrapper">
+        <div class="col-title">
+          <small>
+            {{
+              order.shipperId && isAddressesUpload
+                ? addressById(order.consigneeId).shortName
+                : null
+            }}
+          </small>
+        </div>
+        <div class="col-time"></div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import appOrderItemModal from './orderItemModal'
+import orderEditForm from './allOrders/orderEditForm.vue'
 
 export default {
   name: 'orderItem',
   props: ['order'],
   components: {
-    appOrderItemModal
+    orderEditForm
   },
   data: () => ({
     dialog: false
   }),
   computed: {
-    ...mapGetters(['partnersById']),
+    ...mapGetters(['addressById', 'isAddressesUpload']),
     classes() {
       let resArr = []
       switch (this.order.status) {
@@ -75,9 +84,8 @@ export default {
       event.dataTransfer.effectAllowed = 'move'
       event.dataTransfer.setData('order', item)
     },
-    dropHandler(event, num) {
-      const order = JSON.parse(event.dataTransfer.getData('order'))
-      event.preventDefault()
+    cancelFormHandler() {
+      this.dialog = false
     },
     dblClickHandler() {
       this.dialog = true

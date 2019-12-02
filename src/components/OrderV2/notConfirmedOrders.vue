@@ -12,7 +12,7 @@
             <app-order-item
               v-for="item in notConfirmedOrders"
               :order="item"
-              :key="item._id"
+              :key="item.id"
             />
           </div>
         </div>
@@ -30,16 +30,20 @@ import appOrderItem from './orderItem'
 
 export default {
   computed: {
-    ...mapGetters(['notConfirmedOrders'])
+    notConfirmedOrders() {
+      return this.$store.getters.notConfirmedOrders(this.carType)
+    }
   },
+  props: ['carType'],
   components: {
     appOrderItem
   },
   methods: {
     dropHandler(event, num) {
       event.preventDefault()
+      console.log(num)
       const order = JSON.parse(event.dataTransfer.getData('order'))
-      this.$store.dispatch('resetCarInOrder', order._id)
+      this.$store.dispatch('resetCarInOrder', order.id)
       event.preventDefault()
     },
     dragOver(event) {

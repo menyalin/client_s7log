@@ -1,6 +1,8 @@
 <template>
   <v-card>
-    <v-card-title>Новый заказ</v-card-title>
+    <v-card-title>
+      {{ isNewOrder ? 'Новый заказ' : 'Старый' }}
+    </v-card-title>
     <v-card-text>
       <v-container>
         <v-row align="center">

@@ -31,8 +31,7 @@ export default {
     appCarTitleHeader,
     appCarDatesHeader,
     appCarDate
-  },
-  computed: {}
+  }
 }
 </script>
 

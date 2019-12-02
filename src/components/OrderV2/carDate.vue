@@ -10,7 +10,6 @@
         @drop="dropHandler($event, car.id, date, zone.id)"
         @dragover="dragOver"
         class="empty--zone"
-        @click="test"
       ></div>
     </div>
   </div>
@@ -21,6 +20,7 @@ import { mapGetters } from 'vuex'
 import appOrderItem from './orderItem'
 
 export default {
+  name: 'Car-date',
   props: ['car', 'date'],
   components: {
     appOrderItem
@@ -32,16 +32,13 @@ export default {
     })
   },
   methods: {
-    test() {
-      console.log(this.car)
-    },
     dropHandler(event, carId, date, zoneId) {
       const order = JSON.parse(event.dataTransfer.getData('order'))
       this.$store.dispatch('confirmOrder', {
-        orderId: order._id,
-        carId,
-        date,
-        zoneId
+        id: order.id,
+        confirmedCarId: carId,
+        confirmDate: date,
+        confirmTime: zoneId
       })
       event.preventDefault()
       return false

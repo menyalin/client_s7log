@@ -1,6 +1,7 @@
 export default {
   state: {
     currentDate: null,
+    addresses: [],
     statuses: [
       { id: '01', title: 'Надо получить' },
       { id: '02', title: 'ОЧЕНЬ Надо получить' },
@@ -37,85 +38,37 @@ export default {
       { id: '03', title: '12-18' },
       { id: '04', title: '18-24' }
     ],
-    orders: [
-      {
-        _id: '00001',
-        shipper: '0001',
-        consignee: '0009',
-        shippingDate: '2019-11-03',
-        shippingTime: '10:00',
-        deliveryDate: '2019-10-21',
-        deliveryTime: '15:00',
-        carId: false,
-        confirmedDate: null,
-        confirmedTimeZone: null,
-        status: 'Новый'
-
-      },
-      {
-        _id: '00002',
-        shipper: '0002',
-        consignee: '0010',
-        shippingDate: '2019-11-01',
-        shippingTime: '10:00',
-        deliveryDate: '2019-10-22',
-        deliveryTime: '19:00',
-        carId: false,
-        confirmedDate: null,
-        confirmedTimeZone: null,
-        status: 'Новый'
-      },
-      {
-        _id: '00003',
-        shipper: '0005',
-        consignee: '0009',
-        shippingDate: '2019-11-02',
-        shippingTime: '10:00',
-        deliveryDate: '2019-10-22',
-        deliveryTime: '19:00',
-        carId: '222',
-        confirmedDate: '2019-11-02',
-        confirmedTimeZone: '03',
-        status: 'Проблема'
-      },
-      {
-        _id: '00004',
-        shipper: '0003',
-        consignee: '0007',
-        shippingDate: '2019-11-01',
-        shippingTime: '10:00',
-        deliveryDate: '2019-10-22',
-        deliveryTime: '19:00',
-        carId: '222',
-        confirmedDate: '2019-11-01',
-        confirmedTimeZone: '02',
-        status: 'На погрузке'
-      }
-    ]
+    orders: []
   },
   mutations: {
-    resetCarInOrder: (state, orderId) => {
-      let order = state.orders.find(item => item._id === orderId)
-      order.carId = null
-      order.confirmedDate = null
-      order.confirmedTimeZone = null
+    setAddresses: (state, payload) => {
+      state.addresses = payload
     },
-    confirmOrder: (state, { orderId, carId, date, zoneId }) => {
-      let order = state.orders.find(item => item._id === orderId)
-      order.carId = carId
-      order.confirmedDate = date
-      order.confirmedTimeZone = zoneId
+    resetCarInOrder: (state, orderId) => {
+      let order = state.orders.find(item => item.id === orderId)
+      order.confirmedCarId = null
+      order.confirmDate = null
+      order.confirmTime = null
+    },
+    confirmOrder: (state, { id, confirmedCarId, confirmDate, confirmTime }) => {
+      let order = state.orders.find(item => item.id === id)
+      order.confirmedCarId = confirmedCarId
+      order.confirmDate = confirmDate
+      order.confirmTime = confirmTime
     },
     setCurrentDate: (state, payload) => {
       state.currentDate = payload
     },
-    updateOrder: (state, { id, status, shipper, consignee }) => {
+    _updateOrder: (state, { id, status, shipper, consignee }) => {
       let order = state.orders.find(item => item._id === id)
       Object.assign(order, { status, shipper, consignee })
+    },
+    setOrders: (state, payload) => {
+      state.orders = payload
     }
   },
   actions: {
-    updateOrder: ({ commit }, payload) => {
+    _updateOrder: ({ commit }, payload) => {
       commit('updateOrder', payload)
     },
     resetCarInOrder: ({ commit }, orderId) => {
@@ -128,20 +81,20 @@ export default {
   getters: {
     currentDate: (state) => state.currentDate,
     personOnDuty: ({ schedule }) => (date) => schedule.find(item => item.date === date) || 'не задан',
-    partnersForAutocomplite: ({ partners }) => {
-      return partners.map(item => ({
-        value: item._id,
-        text: item.address + ' - <' + item.name + '>'
-      }))
-    },
-    partnersById: ({ partners }) => (id) => partners.find(item => item._id === id),
     vehicleType: state => state.vehicleType,
     cars: state => state.cars,
-    notConfirmedOrders: (state) => state.orders.filter(item => !(item.carId)),
-    ordersByCarAndConfirmDateZone: (state) => (carId, confirmedDate, zone) =>
-      state.orders.filter(item => item.carId === carId && item.confirmedDate === confirmedDate && item.confirmedTimeZone === zone)[ 0 ],
+    notConfirmedOrders: (state) => (carType) => state.orders.filter(item => ((!item.confirmedCarId || !item.confirmTime) && item.carType === carType)),
+    ordersByCarAndConfirmDateZone: (state) => (confirmedCarId, confirmDate, confirmTime) =>
+      state.orders.filter(item => item.confirmedCarId === confirmedCarId && item.confirmDate === confirmDate && item.confirmTime === confirmTime)[ 0 ],
     timeZones: (state) => state.timeZones,
     statuses: (state) => state.statuses,
-    statusTitleById: (state) => (id) => state.statuses.find(item => item.id === id)
+    statusTitleById: (state) => (id) => state.statuses.find(item => item.id === id),
+    isAddressesUpload: (state) => !!state.addresses.length,
+    addressById: (state) => (id) => {
+      if (state.addresses.length && id)
+        return state.addresses.find(item => item.id === id)
+      else return null
+    }
+
   }
 }
