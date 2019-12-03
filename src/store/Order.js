@@ -1,7 +1,57 @@
+import { apolloClient } from '../vue-apollo'
+import gql from 'graphql-tag'
+
+const updateOrderMutation = gql`
+  mutation updateOrder(
+    $id: ID
+    $carType: String
+    $confirmDate: String
+    $confirmTime: String
+    $shipperId: String
+    $consigneeId: String
+    $status: String
+    $note: String
+    $shippingDate: String
+    $shippingTime: String
+    $deliveryDate: String
+    $deliveryTime: String
+    $confirmedCarId: String
+    $isDriverNotified: Boolean
+    $isClientNotified: Boolean
+  ) {
+    updateOrder(
+      id: $id
+      carType: $carType
+      confirmDate: $confirmDate
+      confirmTime: $confirmTime
+      shipperId: $shipperId
+      consigneeId: $consigneeId
+      status: $status
+      note: $note
+      shippingDate: $shippingDate
+      shippingTime: $shippingTime
+      deliveryDate: $deliveryDate
+      deliveryTime: $deliveryTime
+      confirmedCarId: $confirmedCarId
+      isDriverNotified: $isDriverNotified
+      isClientNotified: $isClientNotified
+    ) {
+      id
+      number
+      carType
+      confirmDate
+      confirmTime
+      confirmedCarId
+    }
+  }
+`
+
+
 export default {
   state: {
     currentDate: null,
     addresses: [],
+    cars: [],
     statuses: [
       { id: '01', title: 'Надо получить' },
       { id: '02', title: 'ОЧЕНЬ Надо получить' },
@@ -44,6 +94,9 @@ export default {
     setAddresses: (state, payload) => {
       state.addresses = payload
     },
+    setCars: (state, payload) => {
+      state.cars = payload
+    },
     addAddress: (state, payload) => {
       state.addresses.push(payload)
     },
@@ -53,6 +106,10 @@ export default {
     },
     addOrder: (state, orderAdded) => {
       state.orders.push(orderAdded)
+    },
+    updateOrder: (state, orderUpdated) => {
+      let order = state.orders.find(item => item.id === orderUpdated.id)
+      Object.assign(order, orderUpdated)
     },
     resetCarInOrder: (state, orderId) => {
       let order = state.orders.find(item => item.id === orderId)
@@ -69,23 +126,38 @@ export default {
     setCurrentDate: (state, payload) => {
       state.currentDate = payload
     },
-
-    _updateOrder: (state, { id, status, shipper, consignee }) => {
-      let order = state.orders.find(item => item._id === id)
-      Object.assign(order, { status, shipper, consignee })
-    },
     setOrders: (state, payload) => {
       state.orders = payload
     }
   },
   actions: {
-    _updateOrder: ({ commit }, payload) => {
+    updateOrder: ({ commit }, payload) => {
       commit('updateOrder', payload)
     },
     resetCarInOrder: ({ commit }, orderId) => {
+      apolloClient.mutate({
+        mutation: updateOrderMutation,
+        variables: {
+          id: orderId,
+          confirmDate: null,
+          confirmTime: null,
+          confirmedCarId: null
+        }
+      })
       commit('resetCarInOrder', orderId)
+
     },
     confirmOrder ({ commit }, payload) {
+      const { id, confirmedCarId, confirmDate, confirmTime } = payload
+      apolloClient.mutate({
+        mutation: updateOrderMutation,
+        variables: {
+          id,
+          confirmDate,
+          confirmTime,
+          confirmedCarId
+        }
+      })
       commit('confirmOrder', payload)
     }
   },
@@ -101,6 +173,11 @@ export default {
     statuses: (state) => state.statuses,
     statusTitleById: (state) => (id) => state.statuses.find(item => item.id === id),
     isAddressesUpload: (state) => !!state.addresses.length,
+    carsForAutocomplete: (state) => state.cars,
+    addressesForAutocomplete: (state) => (type) => {
+      console.log(type) // Надо добавить фильтрацию адресов по типу адреса
+      return state.addresses
+    },
     addressById: (state) => (id) => {
       if (state.addresses.length && id)
         return state.addresses.find(item => item.id === id)

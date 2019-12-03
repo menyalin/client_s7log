@@ -46,143 +46,13 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
+
 import orderEditForm from './orderEditForm'
 import { mapGetters } from 'vuex'
-const orderPageQuery = gql`
-  query orderPage($limit: Int, $offset: Int) {
-    orderPage(offset: $offset, limit: $limit) {
-      orders {
-        id
-        carType
-        number
-        status
-        confirmDate
-        confirmTime
-        note
-        shippingDate
-        shippingTime
-        deliveryDate
-        deliveryTime
-        shipperId
-        shipper {
-          id
-          shortName
-          address
-          note
-          partner
-        }
-        consigneeId
-        consignee {
-          id
-          shortName
-          address
-          note
-          partner
-        }
-        managerId
-        manager {
-          id
-          name
-        }
-        confirmedCarId
-        confirmedCar {
-          id
-          title
-          isOwned
-          type
-          maxPltCount
-        }
-        isDriverNotified
-        isClientNotified
-      }
-      orderCount
-    }
-  }
-`
-const createOrderMutation = gql`
-  mutation createOrder(
-    $carType: String!
-    $confirmDate: String
-    $confirmTime: String
-    $shipperId: String
-    $consigneeId: String
-    $status: String
-    $note: String
-    $shippingDate: String
-    $shippingTime: String
-    $deliveryDate: String
-    $deliveryTime: String
-    $confirmedCarId: String
-    $isDriverNotified: Boolean
-    $isClientNotified: Boolean
-  ) {
-    createOrder(
-      carType: $carType
-      confirmDate: $confirmDate
-      confirmTime: $confirmTime
-      shipperId: $shipperId
-      consigneeId: $consigneeId
-      status: $status
-      note: $note
-      shippingDate: $shippingDate
-      shippingTime: $shippingTime
-      deliveryDate: $deliveryDate
-      deliveryTime: $deliveryTime
-      confirmedCarId: $confirmedCarId
-      isDriverNotified: $isDriverNotified
-      isClientNotified: $isClientNotified
-    ) {
-      id
-      number
-      manager {
-        id
-        name
-      }
-      managerId
-    }
-  }
-`
-const updateOrderMutation = gql`
-  mutation updateOrder(
-    $id: ID
-    $carType: String
-    $confirmDate: String
-    $confirmTime: String
-    $shipperId: String
-    $consigneeId: String
-    $status: String
-    $note: String
-    $shippingDate: String
-    $shippingTime: String
-    $deliveryDate: String
-    $deliveryTime: String
-    $confirmedCarId: String
-    $isDriverNotified: Boolean
-    $isClientNotified: Boolean
-  ) {
-    updateOrder(
-      id: $id
-      carType: $carType
-      confirmDate: $confirmDate
-      confirmTime: $confirmTime
-      shipperId: $shipperId
-      consigneeId: $consigneeId
-      status: $status
-      note: $note
-      shippingDate: $shippingDate
-      shippingTime: $shippingTime
-      deliveryDate: $deliveryDate
-      deliveryTime: $deliveryTime
-      confirmedCarId: $confirmedCarId
-      isDriverNotified: $isDriverNotified
-      isClientNotified: $isClientNotified
-    ) {
-      id
-      number
-    }
-  }
-`
+import { updateOrderMutation, orderPageQuery, createOrderMutation} from '../gql'
+
+
+
 
 export default {
   name: 'allOrders',
@@ -236,7 +106,6 @@ export default {
               variables: this.queryFilters
             })
             let newOrder = Object.assign({}, createOrder, this.editedOrder)
-            console.log(newOrder)
             data.orderPage.orders.unshift(newOrder)
             store.writeQuery({
               query: orderPageQuery,

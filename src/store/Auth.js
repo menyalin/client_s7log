@@ -7,19 +7,19 @@ export default {
     user: null
   },
   mutations: {
-    setCurrentUser(state, payload) {
+    setCurrentUser (state, payload) {
       state.user = payload
     }
   },
   actions: {
-    async signOut({ commit }) {
+    async signOut ({ commit }) {
       commit('setLoadingApp', true)
       commit('setCurrentUser', null)
       await onLogout(apolloClient)
       router.push('/')
       commit('setLoadingApp', false)
     },
-    getCurrentUser({ commit }) {
+    getCurrentUser ({ commit }) {
       commit('clearError')
       commit('setLoadingApp', true)
       apolloClient
@@ -37,12 +37,11 @@ export default {
             localStorage.setItem('token', '')
             router.push('/signin')
           } else {
-            commit('setError', err)
-            console.log(err.message)
+            commit('setError', err.message)
           }
         })
     },
-    signIn({ commit, dispatch }, payload) {
+    signIn ({ commit, dispatch }, payload) {
       localStorage.setItem('token', '')
       commit('clearError')
       commit('setLoading', true)
@@ -62,7 +61,7 @@ export default {
           commit('setError', err)
         })
     },
-    signUp({ commit, dispatch }, payload) {
+    signUp ({ commit, dispatch }, payload) {
       localStorage.setItem('token', '')
       commit('clearError')
       commit('setLoading', true)

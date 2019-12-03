@@ -10,49 +10,35 @@
       <order-edit-form
         v-model="order"
         @cancelEdit="cancelFormHandler"
-        @createOrder="createOrderHandler"
         @updateOrder="updateOrderHandler"
       />
     </v-dialog>
 
-    <div class="row-wrapper">
-      <div class="col-title">
-        <small>
-          {{
-            order.shipperId && isAddressesUpload
-              ? addressById(order.shipperId).shortName
-              : null
-          }}
-        </small>
-      </div>
-      <div class="col-time"></div>
-    </div>
-    <div>
-      <div class="row-wrapper">
-        <div class="col-title">
-          <small>
-            {{
-              order.shipperId && isAddressesUpload
-                ? addressById(order.consigneeId).shortName
-                : null
-            }}
-          </small>
-        </div>
-        <div class="col-time"></div>
-      </div>
-    </div>
+    <order-item-row
+      :partnerId="order.shipperId"
+      :time="order.shippingTime"
+      :date="order.shippingDate"
+    />
+    <order-item-row
+      :partnerId="order.consigneeId"
+      :time="order.deliveryTime"
+      :date="order.deliveryDate"
+    />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import orderEditForm from './allOrders/orderEditForm.vue'
+import orderItemRow from './orderItemRow'
+import { updateOrderMutation } from './gql'
 
 export default {
   name: 'orderItem',
   props: ['order'],
   components: {
-    orderEditForm
+    orderEditForm,
+    orderItemRow
   },
   data: () => ({
     dialog: false
@@ -87,6 +73,29 @@ export default {
     cancelFormHandler() {
       this.dialog = false
     },
+    updateOrderHandler() {
+      this.$apollo.mutate({
+        mutation: updateOrderMutation,
+        variables: {
+          id: this.order.id,
+          status: this.order.status || null,
+          carType: this.order.carType,
+          confirmDate: this.order.confirmDate || null,
+          confirmTime: this.order.confirmTime || null,
+          shipperId: this.order.shipperId || null,
+          consigneeId: this.order.consigneeId || null,
+          note: this.order.note || null,
+          shippingDate: this.order.shippingDate || null,
+          shippingTime: this.order.shippingTime || null,
+          deliveryDate: this.order.deliveryDate || null,
+          deliveryTime: this.order.deliveryTime || null,
+          confirmedCarId: this.order.confirmedCarId || null,
+          isDriverNotified: this.order.isDriverNotified || null,
+          isClientNotified: this.order.isClientNotified || null
+        }
+      })
+      this.dialog = false
+    },
     dblClickHandler() {
       this.dialog = true
     }
@@ -97,7 +106,7 @@ export default {
 <style scoped>
 .order-container {
   background-color: white;
-  font-size: 0.7rem;
+  font-size: 0.58rem;
   color: black;
   width: 100%;
   max-width: 9em;
@@ -109,21 +118,8 @@ export default {
   overflow: hidden;
   z-index: 4;
 }
-.col-title {
-  flex: 5;
-  padding-left: 2px;
-  overflow: hidden;
-}
-.col-time {
-  flex: 1;
-}
 .order-container:hover {
   box-shadow: 1px 1px 1px 1px rgba(5, 5, 5, 0.3);
-}
-.row-wrapper {
-  display: flex;
-  justify-content: space-around;
-  justify-items: center;
 }
 .problems {
   background-color: rgba(248, 93, 21, 0.452);

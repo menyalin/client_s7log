@@ -96,6 +96,44 @@ const orderAddedSubscription = gql`
     }
   }
 `
+const orderUpdatedSubscription = gql`
+  subscription orderUpdated {
+    orderUpdated {
+      id
+      number
+      carType
+      status
+      shipperId
+      consigneeId
+      note
+      confirmDate
+      confirmTime
+      managerId
+      shippingDate
+      shippingTime
+      deliveryDate
+      deliveryTime
+      isDriverNotified
+      isClientNotified
+      confirmedCarId
+    }
+  }
+`
+const carsForVuexQuery = gql`
+  query allCars {
+    carsForVuex {
+      id
+      title
+      reg
+      pts
+      isOwned
+      type
+      maxPltCount
+      note
+      isActive
+    }
+  }
+`
 
 export default {
   name: 'dataComponent',
@@ -122,12 +160,28 @@ export default {
         result({ data: { orderAdded } }) {
           store.commit('addOrder', orderAdded)
         }
+      },
+      orderUpdated: {
+        query: orderUpdatedSubscription,
+        result({ data: { orderUpdated } }) {
+          store.commit('updateOrder', orderUpdated)
+        }
+      }
+    },
+    carsForVuex: {
+      query: carsForVuexQuery,
+      fetchPolicy: 'no-cache',
+      error(error) {
+        store.commit('setError', error.message)
+      },
+      update: ({ carsForVuex }) => {
+        store.commit('setCars', carsForVuex)
       }
     },
     ordersForVuex: {
       query: ordersForVuexQuery,
       variables: {
-        startDate: '2019-11-30',
+        startDate: '2019-10-01',
         endDate: '2019-12-31'
       },
       fetchPolicy: 'no-cache',

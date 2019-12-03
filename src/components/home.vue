@@ -1,16 +1,16 @@
 <template>
   <div>
-    <my-car-autocomplete label="Машина" v-model="shipper" />
+    <test-component label="Машины" v-model="shipper" />
     {{ shipper }}
   </div>
 </template>
 
 <script>
-import myCarAutocomplete from '@/components/common/myCarAutocomplete'
+import testComponent from '@/components/common/myCarAutocomplete/index.vue'
 
 export default {
   components: {
-    myCarAutocomplete
+    testComponent
   },
   data: () => ({
     shipper: ''

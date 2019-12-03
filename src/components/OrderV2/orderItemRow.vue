@@ -1,0 +1,60 @@
+<template>
+  <v-tooltip bottom>
+    <template v-slot:activator="{ on }">
+      <div class="row-wrapper" v-on="on">
+        <div class="col-title">
+          {{
+            partnerId && isAddressesUpload
+              ? addressById(partnerId).shortName
+              : null
+          }}
+        </div>
+        <div class="col-time">
+          {{ time ? time.slice(0, 2) : '' }}
+        </div>
+      </div>
+    </template>
+    <div class="tooltip--row">
+      {{ tooltipText }}
+    </div>
+  </v-tooltip>
+</template>
+
+<script>
+import { mapGetters } from 'vuex'
+export default {
+  props: ['partnerId', 'time', 'date'],
+  computed: {
+    ...mapGetters(['isAddressesUpload', 'addressById']),
+    tooltipText() {
+      if (this.partnerId && this.isAddressesUpload)
+        return `${this.addressById(this.partnerId).shortName} - ${
+          this.addressById(this.partnerId).address
+        }`
+    }
+  }
+}
+</script>
+
+<style scoped>
+.row-wrapper {
+  display: flex;
+  min-height: 1rem;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  justify-items: center;
+}
+.col-title {
+  flex: 8;
+  padding-left: 1px;
+  overflow: hidden;
+}
+.col-time {
+  flex: 1;
+  padding-right: 1px;
+}
+.tooltip--row {
+  font-size: 1rem;
+  min-width: 150px;
+}
+</style>
