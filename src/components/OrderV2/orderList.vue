@@ -5,7 +5,7 @@
         <app-car-row :header="true" :dates="dates" />
         <div class="car-row-wrapper">
           <app-car-row
-            v-for="car in cars"
+            v-for="car in carsByType(carType)"
             :car="car"
             :key="car.id"
             :header="false"
@@ -23,18 +23,6 @@ import appNotConfirmedOrders from './notConfirmedOrders'
 import moment from 'moment'
 import appCarRow from './carRow'
 import { mapGetters } from 'vuex'
-import gql from 'graphql-tag'
-const carsQuery = gql`
-  query cars($type: String) {
-    cars(type: $type) {
-      id
-      title
-      isOwned
-      maxPltCount
-      note
-    }
-  }
-`
 
 export default {
   created() {
@@ -45,9 +33,6 @@ export default {
     appCarRow,
     appNotConfirmedOrders
   },
-  data: () => ({
-    cars: []
-  }),
   computed: {
     dates() {
       if (this.currentDate) {
@@ -115,17 +100,7 @@ export default {
         return null
       }
     },
-    ...mapGetters(['currentDate'])
-  },
-  apollo: {
-    cars: {
-      query: carsQuery,
-      variables() {
-        return {
-          type: this.carType
-        }
-      }
-    }
+    ...mapGetters(['currentDate', 'carsByType'])
   }
 }
 </script>

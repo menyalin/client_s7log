@@ -85,6 +85,7 @@
           <v-col>
             <my-car-autocomplete
               label="Машина"
+              :type='editedOrder.carType'
               v-model="editedOrder.confirmedCarId"
             />
           </v-col>

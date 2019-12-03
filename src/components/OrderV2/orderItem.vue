@@ -8,7 +8,7 @@
   >
     <v-dialog v-model="dialog" max-width="1024px" persistent>
       <order-edit-form
-        v-model="order"
+        v-model="editedOrder"
         @cancelEdit="cancelFormHandler"
         @updateOrder="updateOrderHandler"
       />
@@ -41,7 +41,8 @@ export default {
     orderItemRow
   },
   data: () => ({
-    dialog: false
+    dialog: false,
+    editedOrder: {}
   }),
   computed: {
     ...mapGetters(['addressById', 'isAddressesUpload']),
@@ -72,32 +73,39 @@ export default {
     },
     cancelFormHandler() {
       this.dialog = false
+      this.editedOrder = Object.assign({})
     },
     updateOrderHandler() {
       this.$apollo.mutate({
         mutation: updateOrderMutation,
         variables: {
-          id: this.order.id,
-          status: this.order.status || null,
-          carType: this.order.carType,
-          confirmDate: this.order.confirmDate || null,
-          confirmTime: this.order.confirmTime || null,
-          shipperId: this.order.shipperId || null,
-          consigneeId: this.order.consigneeId || null,
-          note: this.order.note || null,
-          shippingDate: this.order.shippingDate || null,
-          shippingTime: this.order.shippingTime || null,
-          deliveryDate: this.order.deliveryDate || null,
-          deliveryTime: this.order.deliveryTime || null,
-          confirmedCarId: this.order.confirmedCarId || null,
-          isDriverNotified: this.order.isDriverNotified || null,
-          isClientNotified: this.order.isClientNotified || null
+          id: this.editedOrder.id,
+          status: this.editedOrder.status || null,
+          carType: this.editedOrder.carType,
+          confirmDate: this.editedOrder.confirmDate || null,
+          confirmTime: this.editedOrder.confirmTime || null,
+          shipperId: this.editedOrder.shipperId || null,
+          consigneeId: this.editedOrder.consigneeId || null,
+          note: this.editedOrder.note || null,
+          shippingDate: this.editedOrder.shippingDate || null,
+          shippingTime: this.editedOrder.shippingTime || null,
+          deliveryDate: this.editedOrder.deliveryDate || null,
+          deliveryTime: this.editedOrder.deliveryTime || null,
+          confirmedCarId: this.editedOrder.confirmedCarId || null,
+          isDriverNotified: this.editedOrder.isDriverNotified || null,
+          isClientNotified: this.editedOrder.isClientNotified || null
         }
       })
-      this.dialog = false
+      this.$nextTick(() => {
+        this.dialog = false
+        this.editedOrder = Object.assign({})
+      })
     },
     dblClickHandler() {
       this.dialog = true
+      this.$nextTick(() => {
+        this.editedOrder = Object.assign({}, this.order)
+      })
     }
   }
 }

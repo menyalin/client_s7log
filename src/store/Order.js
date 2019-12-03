@@ -173,10 +173,16 @@ export default {
     statuses: (state) => state.statuses,
     statusTitleById: (state) => (id) => state.statuses.find(item => item.id === id),
     isAddressesUpload: (state) => !!state.addresses.length,
-    carsForAutocomplete: (state) => state.cars,
+    carsForAutocomplete: (state) => (type) => state.cars.filter(item => item.type === type),
+    carsByType: (state) => (type) => state.cars.filter(item => item.type === type),
     addressesForAutocomplete: (state) => (type) => {
-      console.log(type) // Надо добавить фильтрацию адресов по типу адреса
-      return state.addresses
+      if (type === 'shippingPlace') {
+        return state.addresses.filter(item => item.isShippingPlace)
+      } else if (type === 'deliveryPlace') {
+        return state.addresses.filter(item => item.isDeliveryPlace)
+      } else {
+        return state.addresses
+      }
     },
     addressById: (state) => (id) => {
       if (state.addresses.length && id)

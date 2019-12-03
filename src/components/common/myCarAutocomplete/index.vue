@@ -5,7 +5,8 @@
       :value="propValue"
       hide-no-data
       clearable
-      @click:clear="resetHandler"  
+      :disabled="!type"
+      @click:clear="resetHandler"
       hide-selected
       :items="itemsForSelect"
       color="primary"
@@ -23,14 +24,14 @@ function carTransform(item) {
 }
 
 export default {
-    model: {
+  model: {
     prop: 'propValue',
     event: 'change'
   },
   computed: {
     itemsForSelect() {
       return this.$store.getters
-        .carsForAutocomplete
+        .carsForAutocomplete(this.type)
         .map(carTransform)
     }
   },
@@ -42,11 +43,8 @@ export default {
       this.$emit('change', val)
     }
   },
-  props: ['label', 'propValue']
-
+  props: ['label', 'propValue', 'type']
 }
 </script>
 
-<style>
-
-</style>
+<style></style>
