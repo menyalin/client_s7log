@@ -78,7 +78,7 @@ export default {
     itemsForRender() {
       let visibleItems = []
       if (this.isLoggedIn) {
-        visibleItems = [1, 2, 5, 6, 8, 9, 10]
+        visibleItems = [5, 6, 8, 9, 10]
       } else {
         visibleItems = [3, 4, 6, 8]
       }
@@ -88,7 +88,7 @@ export default {
   data: () => ({
     drawer: false,
     items: [
-      { id: 10, title: 'Заявки', icon: 'mdi-view-list', url: '/orders/list' },
+      { id: 10, title: 'Заказы', icon: 'mdi-view-list', url: '/orders/list' },
       { id: 9, title: 'НСИ', icon: 'mdi-book-open-page-variant', url: '/nsi' },
       { id: 6, title: '10_tn', icon: 'mdi-dump-truck', url: '/orders/10tn' },
       { id: 8, title: '20_tn', icon: 'mdi-dump-truck', url: '/orders/20tn' },
