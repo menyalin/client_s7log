@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import moment from 'moment'
 
 const updateOrderMutation = gql`
-  mutation updateOrder(
+   mutation updateOrder(
     $id: ID
     $carType: String
     $confirmDate: String
@@ -53,6 +53,7 @@ export default {
     currentDate: null,
     addresses: [],
     cars: [],
+    staff: [],
     statuses: [
       { id: '01', title: 'Надо получить' },
       { id: '02', title: 'ОЧЕНЬ Надо получить' },
@@ -133,6 +134,9 @@ export default {
     },
     setOrders: (state, payload) => {
       state.orders = payload
+    },
+    setStaff: (state, payload) => {
+      state.staff = payload
     }
   },
   actions: {
@@ -197,6 +201,7 @@ export default {
       if (state.addresses.length && id)
         return state.addresses.find(item => item.id === id)
       else return null
-    }
+    },
+    dispatchersStaff: (state) => state.staff.filter(item => item.role === 'dispatcher').map(item => ({ userId: item.userId, userName: item.user.name, userEmail: item.user.email }))
   }
 }

@@ -137,6 +137,18 @@ const carsForVuexQuery = gql`
     }
   }
 `
+const staffQuery = gql`
+  query staff {
+    staff {
+      userId
+      role
+      user {
+        name
+        email
+      }
+    }
+  }
+`
 
 export default {
   name: 'dataComponent',
@@ -206,6 +218,13 @@ export default {
       },
       update: ({ addressesForVuex }) => {
         store.commit('setAddresses', addressesForVuex)
+      }
+    },
+    staff: {
+      query: staffQuery,
+      fetchPolicy: 'no-cache',
+      update: ({ staff }) => {
+        store.commit('setStaff', staff)
       }
     }
   }
