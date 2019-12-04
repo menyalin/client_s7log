@@ -25,9 +25,6 @@ import appCarRow from './carRow'
 import { mapGetters } from 'vuex'
 
 export default {
-  created() {
-    this.$store.commit('setCurrentDate', moment().format('YYYY-MM-DD'))
-  },
   props: ['carType'],
   components: {
     appCarRow,

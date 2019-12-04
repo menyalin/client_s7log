@@ -4,8 +4,11 @@
 
 <script>
 /* eslint-disable */
+import moment from 'moment'
 import gql from 'graphql-tag'
 import store from './store/index'
+
+import { mapGetters } from 'vuex'
 
 const addressesForVuexQuery = gql`
   query addressesForVuex {
@@ -137,6 +140,12 @@ const carsForVuexQuery = gql`
 
 export default {
   name: 'dataComponent',
+  computed: {
+    ...mapGetters(['dateRange'])
+  },
+  created() {
+    this.$store.commit('setCurrentDate', moment().format('YYYY-MM-DD'))
+  },
   data: () => ({
     ordersForVuex: [],
     addressesForVuex: []
@@ -180,10 +189,7 @@ export default {
     },
     ordersForVuex: {
       query: ordersForVuexQuery,
-      variables: {
-        startDate: '2019-10-01',
-        endDate: '2019-12-31'
-      },
+      variables: () => store.getters.dateRange,
       fetchPolicy: 'no-cache',
       error(error) {
         store.commit('setError', error.message)

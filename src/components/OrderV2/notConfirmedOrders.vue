@@ -39,9 +39,8 @@ export default {
     appOrderItem
   },
   methods: {
-    dropHandler(event, num) {
+    dropHandler(event) {
       event.preventDefault()
-      console.log(num)
       const order = JSON.parse(event.dataTransfer.getData('order'))
       this.$store.dispatch('resetCarInOrder', order.id)
       event.preventDefault()
@@ -57,8 +56,8 @@ export default {
 <style>
 .not-confirmed-orders-container {
   justify-content: flex-start;
-  border: 2px grey dotted;
-  border-radius: 0.5em;
+  border: 3px grey dotted;
+  border-radius: 0.3em;
 }
 
 .order-item-wrapper {

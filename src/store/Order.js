@@ -1,5 +1,6 @@
 import { apolloClient } from '../vue-apollo'
 import gql from 'graphql-tag'
+import moment from 'moment'
 
 const updateOrderMutation = gql`
   mutation updateOrder(
@@ -109,7 +110,11 @@ export default {
     },
     updateOrder: (state, orderUpdated) => {
       let order = state.orders.find(item => item.id === orderUpdated.id)
-      Object.assign(order, orderUpdated)
+      if (order) {
+        Object.assign(order, orderUpdated)
+      } else {
+        state.orders.push(orderUpdated)
+      }
     },
     resetCarInOrder: (state, orderId) => {
       let order = state.orders.find(item => item.id === orderId)
@@ -184,11 +189,14 @@ export default {
         return state.addresses
       }
     },
+    dateRange: (state) => ({
+      startDate: moment(state.currentDate).add(-4, 'd').format('YYYY-MM-DD'),
+      endDate: moment(state.currentDate).add(+4, 'd').format('YYYY-MM-DD')
+    }),
     addressById: (state) => (id) => {
       if (state.addresses.length && id)
         return state.addresses.find(item => item.id === id)
       else return null
     }
-
   }
 }
