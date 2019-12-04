@@ -66,20 +66,7 @@ export default {
       { id: '09', title: 'Мы отказались' },
       { id: '10', title: 'Клиент снял заказ' }
     ],
-    schedule: [
-      { 'date': '2019-10-29', 'manager': "Логист1" },
-      { 'date': '2019-10-30', 'manager': "Логист1" },
-      { 'date': '2019-10-31', 'manager': "Логист2" },
-      { 'date': '2019-11-01', 'manager': "Логист2" },
-      { 'date': '2019-11-02', 'manager': "Логист1" },
-      { 'date': '2019-11-03', 'manager': "Логист1" },
-      { 'date': '2019-11-04', 'manager': "Логист2" },
-      { 'date': '2019-11-05', 'manager': "Логист2" },
-      { 'date': '2019-11-06', 'manager': "Логист1" },
-      { 'date': '2019-11-07', 'manager': "Логист1" },
-      { 'date': '2019-11-08', 'manager': "Логист2" },
-      { 'date': '2019-11-09', 'manager': "Логист2" },
-    ],
+    schedule: [],
     vehicleType: [
       { value: '10tn', text: '10тн' },
       { value: '20tn', text: '20тн' }
@@ -137,6 +124,9 @@ export default {
     },
     setStaff: (state, payload) => {
       state.staff = payload
+    },
+    setSchedule: (state, payload) => {
+      state.schedule = payload
     }
   },
   actions: {

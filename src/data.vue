@@ -149,6 +149,16 @@ const staffQuery = gql`
     }
   }
 `
+const scheduleForVuexQuery = gql`
+  query scheduleForVuex($startDate: String, $endDate: String) {
+    scheduleForVuex(startDate: $startDate, endDate: $endDate) {
+      id
+      type
+      date
+      userId
+    }
+  }
+`
 
 export default {
   name: 'dataComponent',
@@ -226,6 +236,18 @@ export default {
       update: ({ staff }) => {
         store.commit('setStaff', staff)
       }
+    },
+    scheduleForVuex: {
+      query: scheduleForVuexQuery,
+      variables: () => store.getters.dateRange,
+      fetchPolicy: 'no-cache',
+      error(error) {
+        store.commit('setError', error.message)
+      },
+      update: ({ scheduleForVuex }) => {
+        store.commit('setSchedule', scheduleForVuex)
+      }
+
     }
   }
 }
