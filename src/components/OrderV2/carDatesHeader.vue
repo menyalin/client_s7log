@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="date-header-column-wrapper">
-      <div v-if="date===currentDate">
+      <div v-if="date === currentDate">
         <v-icon @click="prevDate">mdi-arrow-left-circle</v-icon>
         <span class="current-date">
           <strong>{{ displayDate }}</strong>
@@ -10,11 +10,11 @@
       </div>
       <div v-else>{{ displayDate }}</div>
     </div>
-    <div class="personOnDuty">
-      <small>{{ personOnDuty(date).manager || 'не задан' }}</small>
-    </div>
+    <duty-dispatcher :date="date" />
     <div class="time--zone--container">
-      <div v-for="zone of timeZones" :key="zone.title" class="time--zone">{{ zone.title }}</div>
+      <div v-for="zone of timeZones" :key="zone.title" class="time--zone">
+        {{ zone.title }}
+      </div>
     </div>
   </div>
 </template>
@@ -22,11 +22,15 @@
 <script>
 import { mapGetters } from 'vuex'
 import moment from 'moment'
+import dutyDispatcher from './dutyDispatcher'
 
 export default {
   props: ['date', 'header'],
+  components: {
+    dutyDispatcher
+  },
   computed: {
-    ...mapGetters(['currentDate', 'timeZones', 'personOnDuty']),
+    ...mapGetters(['currentDate', 'timeZones']),
     displayDate() {
       moment.locale('ru')
       return moment(this.date).format('DD MMM YYYY, ddd')
@@ -77,5 +81,5 @@ export default {
 }
 .personOnDuty {
   text-align: center;
-}
-</style>>
+}</style
+>>

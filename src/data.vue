@@ -155,7 +155,23 @@ const scheduleForVuexQuery = gql`
       id
       type
       date
-      userId
+      user {
+        id
+        name
+      }
+    }
+  }
+`
+const scheduleUpdatedSubscription = gql`
+  subscription scheduleUpdated {
+    scheduleUpdated {
+      id
+      type
+      date
+      user {
+        id
+        name
+      }
     }
   }
 `
@@ -196,6 +212,12 @@ export default {
         query: orderUpdatedSubscription,
         result({ data: { orderUpdated } }) {
           store.commit('updateOrder', orderUpdated)
+        }
+      },
+      scheduleUpdatedSubscription: {
+        query: scheduleUpdatedSubscription,
+        result({ data: { scheduleUpdated } }) {
+          store.commit('scheduleUpdated', scheduleUpdated)
         }
       }
     },
@@ -247,7 +269,6 @@ export default {
       update: ({ scheduleForVuex }) => {
         store.commit('setSchedule', scheduleForVuex)
       }
-
     }
   }
 }
