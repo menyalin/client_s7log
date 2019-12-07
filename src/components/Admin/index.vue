@@ -1,15 +1,28 @@
 <template>
   <v-container>
-    <v-layout row>
-      <h3>Admin component</h3>
-    </v-layout>
+    <v-row>
+      <v-col cols="12">
+        <user-management />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
+import userManagement from './userManagement'
 export default {
   name: 'Admin',
-  created() {}
+  components: {
+    userManagement
+  },
+  created() {},
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (!vm.$store.getters.isAdmin) {
+        vm.$router.push('/signin')
+      }
+    })
+  }
 }
 </script>
 

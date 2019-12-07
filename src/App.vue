@@ -74,11 +74,13 @@ export default {
     appData
   },
   computed: {
-    ...mapGetters(['user', 'isLoggedIn', 'loadingApp', 'error']),
+    ...mapGetters(['user', 'isLoggedIn', 'loadingApp', 'error', 'isAdmin']),
     itemsForRender() {
       let visibleItems = []
       if (this.isLoggedIn) {
         visibleItems = [5, 6, 8, 9, 10]
+        if (this.isAdmin) visibleItems.push(7)
+        
       } else {
         visibleItems = [3, 4, 6, 8]
       }

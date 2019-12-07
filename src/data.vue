@@ -140,8 +140,10 @@ const carsForVuexQuery = gql`
 const staffQuery = gql`
   query staff {
     staff {
+      id
       userId
       role
+      isActive
       user {
         name
         email
@@ -175,6 +177,21 @@ const scheduleUpdatedSubscription = gql`
     }
   }
 `
+const staffUpdatedSubscription = gql`
+  subscription staffUpdated {
+    staffUpdated {
+       id
+      userId
+      role
+      isActive
+      user {
+        name
+        email
+      }
+    }
+  }
+`
+
 
 export default {
   name: 'dataComponent',
@@ -214,10 +231,16 @@ export default {
           store.commit('updateOrder', orderUpdated)
         }
       },
-      scheduleUpdatedSubscription: {
+      scheduleUpdated: {
         query: scheduleUpdatedSubscription,
         result({ data: { scheduleUpdated } }) {
           store.commit('scheduleUpdated', scheduleUpdated)
+        }
+      },
+      staffUpdated : {
+        query: staffUpdatedSubscription,
+        result({data : { staffUpdated }}) {
+          store.commit('updateStaff', staffUpdated )
         }
       }
     },

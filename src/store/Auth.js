@@ -84,6 +84,11 @@ export default {
   },
   getters: {
     currentUser: state => state.user,
-    isLoggedIn: state => !!state.user
+    isLoggedIn: state => !!state.user,
+    isAdmin: state => {
+      if (!!state.user) {
+        return state.user.roles.indexOf('admin') !== -1
+      }
+    }
   }
 }

@@ -1,8 +1,8 @@
 <template>
-  <v-tooltip bottom>
+  <v-tooltip bottom open-delay="350" color="blue-grey darken-3">
     <template v-slot:activator="{ on }">
-      <div class="row-wrapper" v-on="on">
-        <div class="col-title">
+      <div class="row-wrapper">
+        <div class="col-title" v-on="on">
           {{
             partnerId && isAddressesUpload
               ? addressById(partnerId).shortName

@@ -130,11 +130,14 @@ export default {
     },
     scheduleUpdated: (state, payload) => {
       let scheduleItem = state.schedule.find(item => item.id === payload.id)
-      if (scheduleItem) {
-        scheduleItem = Object.assign(scheduleItem, payload)
-      } else {
-        state.schedule.push(payload)
-      }
+      if (scheduleItem) scheduleItem = Object.assign(scheduleItem, payload)
+      else state.schedule.push(payload)
+
+    },
+    updateStaff: (state, role) => {
+      let staffItem = state.staff.find(item => item.id === role.id)
+      if (staffItem) staffItem = Object.assign(staffItem, role)
+      else state.staff.push(role)
     }
   },
   actions: {
@@ -200,7 +203,7 @@ export default {
         return state.addresses.find(item => item.id === id)
       else return null
     },
-    dispatchersStaff: (state) => state.staff.filter(item => item.role === 'dispatcher').map(item => ({ userId: item.userId, userName: item.user.name, userEmail: item.user.email })),
+    dispatchersStaff: (state) => state.staff.filter(item => (item.role === 'dispatcher' && item.isActive)).map(item => ({ userId: item.userId, userName: item.user.name, userEmail: item.user.email })),
     dutyDispatcher: (state) => (date) => state.schedule.find(item => item.date === date)
   }
 }
