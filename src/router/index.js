@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store'
 import Home from '@/components/home'
 import Profile from '@/components/Auth/Profile/index.vue'
 import SignIn from '@/components/Auth/SignIn'
@@ -13,10 +14,9 @@ import orderRoutes from './orderRoutes'
 import nsiLayout from '@/components/NSI/index'
 import nsiRoutes from './nsi'
 
-
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -62,13 +62,28 @@ export default new Router({
     {
       path: '/orders',
       component: orderLayout,
-      children: orderRoutes
+      children: orderRoutes,
+      meta: {
+        forActiveUsers: true
+      }
     },
     {
       path: '/nsi',
       component: nsiLayout,
-      children: nsiRoutes
+      children: nsiRoutes,
+      meta: {
+        forActiveUsers: true
+      }
     }
-
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(item => item.meta.forActiveUsers)) {
+    if (store.getters.isActiveUser) next()
+    else next('/')
+  } else next()
+})
+
+
+export default router
