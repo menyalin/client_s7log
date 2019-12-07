@@ -85,7 +85,7 @@ export default {
   getters: {
     currentUser: state => state.user,
     isLoggedIn: state => !!state.user,
-    isActiveUser: state => state.user.isActive,
+    isActiveUser: state => !!state.user && state.user.isActive,
     isAdmin: state => {
       if (!!state.user) {
         return state.user.roles.indexOf('admin') !== -1

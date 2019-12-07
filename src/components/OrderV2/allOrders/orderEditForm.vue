@@ -85,7 +85,7 @@
           <v-col>
             <my-car-autocomplete
               label="Машина"
-              :type='editedOrder.carType'
+              :type="editedOrder.carType"
               v-model="editedOrder.confirmedCarId"
             />
           </v-col>
@@ -117,13 +117,39 @@
       </v-container>
     </v-card-text>
     <v-card-actions>
-      <v-subheader>{{ currentUser.name }}</v-subheader>
-      <v-spacer />
-      <v-btn color="primary" @click="save" :loading="$apollo.loading"
-        >Сохранить</v-btn
+      <v-btn text color="primary" @click="openTemplateModal">
+        Сохранить как шаблон</v-btn
       >
+      <v-spacer />
+      <v-btn color="primary" @click="save" :loading="$apollo.loading">
+        Сохранить
+      </v-btn>
       <v-btn color="primary" @click="cancel">Отмена</v-btn>
     </v-card-actions>
+    <v-dialog v-model="templateModal" max-width="350">
+      <v-card>
+        <v-card-title class="headline">
+          Сохранить новый шаблон
+        </v-card-title>
+        <v-card-text>
+          <v-text-field v-model="templateName" label="Название шаблона" />
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-3" text @click="templateModalCancel">
+            Отмена
+          </v-btn>
+          <v-btn
+            color="green darken-3"
+            text
+            @click="templateModalSave"
+            :disabled="!templateName"
+          >
+            Сохранить
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -132,7 +158,7 @@ import myDatePicker from '@/components/common/myDatePicker/index.vue'
 import myPartnerAutocomplete from '@/components/common/myPartnerAutocomplete/index.vue'
 import myTimeTextField from '@/components/common/myTimeTextField/index.vue'
 import myCarAutocomplete from '@/components/common/myCarAutocomplete/index.vue'
-
+import { createOrderTemplateMutation } from '../gql'
 import { mapGetters } from 'vuex'
 export default {
   model: {
@@ -152,6 +178,8 @@ export default {
     myCarAutocomplete
   },
   data: () => ({
+    templateModal: false,
+    templateName: '',
     carTypes: [
       { id: '20tn', title: '20 тн' },
       { id: '10tn', title: '10 тн' }
@@ -168,6 +196,34 @@ export default {
       } else {
         this.$emit('updateOrder')
       }
+    },
+    openTemplateModal() {
+      this.templateModal = true
+    },
+    templateModalCancel() {
+      this.templateName = ''
+      this.templateModal = false
+    },
+    templateModalSave() {
+      this.$apollo
+        .mutate({
+          mutation: createOrderTemplateMutation,
+          variables: {
+            carType: this.editedOrder.carType,
+            status: this.editedOrder.status,
+            shipperId: this.editedOrder.shipperId,
+            consigneeId: this.editedOrder.consigneeId,
+            note: this.editedOrder.note,
+            templateName: this.templateName
+          }
+        })
+        .then(() => {
+          this.templateName = ''
+          this.templateModal = false
+        })
+        .catch(e => {
+          this.$store.commit('setError', e.message)
+        })
     }
   }
 }

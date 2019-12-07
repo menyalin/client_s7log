@@ -5,12 +5,13 @@
         v-if="filteredOrders(car.id, date, zone.id)"
         :order="filteredOrders(car.id, date, zone.id)"
       />
-      <div
+      <empty-cell
         v-else
-        @drop="dropHandler($event, car.id, date, zone.id)"
-        @dragover="dragOver"
-        class="empty--zone"
-      ></div>
+        :carId="car.id"
+        :date="date"
+        :zoneId="zone.id"
+        :carType="carType"
+      />
     </div>
   </div>
 </template>
@@ -18,12 +19,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import appOrderItem from './orderItem'
+import emptyCell from './emptyCell'
 
 export default {
   name: 'Car-date',
-  props: ['car', 'date'],
+  props: ['car', 'date', 'carType'],
   components: {
-    appOrderItem
+    appOrderItem,
+    emptyCell
   },
   computed: {
     ...mapGetters({

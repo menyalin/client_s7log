@@ -51,6 +51,7 @@ const updateOrderMutation = gql`
 export default {
   state: {
     currentDate: null,
+    orderTemplates: [],
     addresses: [],
     cars: [],
     staff: [],
@@ -80,6 +81,9 @@ export default {
     orders: []
   },
   mutations: {
+    setOrderTemplates: (state, payload) => {
+      state.orderTemplates = payload
+    },
     setAddresses: (state, payload) => {
       state.addresses = payload
     },
@@ -178,7 +182,7 @@ export default {
     cars: state => state.cars,
     notConfirmedOrders: (state) => (carType) => state.orders.filter(item => ((!item.confirmedCarId || !item.confirmTime) && item.carType === carType)),
     ordersByCarAndConfirmDateZone: (state) => (confirmedCarId, confirmDate, confirmTime) =>
-      state.orders.filter(item => item.confirmedCarId === confirmedCarId && item.confirmDate === confirmDate && item.confirmTime === confirmTime)[ 0 ],
+      state.orders.filter(item => item.confirmedCarId === confirmedCarId && item.confirmDate === confirmDate && item.confirmTime === confirmTime)[0],
     timeZones: (state) => state.timeZones,
     statuses: (state) => state.statuses,
     statusTitleById: (state) => (id) => state.statuses.find(item => item.id === id),
@@ -204,6 +208,8 @@ export default {
       else return null
     },
     dispatchersStaff: (state) => state.staff.filter(item => (item.role === 'dispatcher' && item.isActive)).map(item => ({ userId: item.userId, userName: item.user.name, userEmail: item.user.email })),
-    dutyDispatcher: (state) => (date) => state.schedule.find(item => item.date === date)
+    dutyDispatcher: (state) => (date) => state.schedule.find(item => item.date === date),
+    orderTemplates: (state) => (carType) => state.orderTemplates.filter(item => item.carType === carType)
   }
 }
+

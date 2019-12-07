@@ -180,7 +180,7 @@ const scheduleUpdatedSubscription = gql`
 const staffUpdatedSubscription = gql`
   subscription staffUpdated {
     staffUpdated {
-       id
+      id
       userId
       role
       isActive
@@ -191,7 +191,20 @@ const staffUpdatedSubscription = gql`
     }
   }
 `
-
+const orderTemplatesQuery = gql`
+  query orderTemplates {
+    orderTemplates {
+      id
+      templateName
+      carType
+      status
+      note
+      shipperId
+      consigneeId
+      showInMenu
+    }
+  }
+`
 
 export default {
   name: 'dataComponent',
@@ -237,10 +250,10 @@ export default {
           store.commit('scheduleUpdated', scheduleUpdated)
         }
       },
-      staffUpdated : {
+      staffUpdated: {
         query: staffUpdatedSubscription,
-        result({data : { staffUpdated }}) {
-          store.commit('updateStaff', staffUpdated )
+        result({ data: { staffUpdated } }) {
+          store.commit('updateStaff', staffUpdated)
         }
       }
     },
@@ -280,6 +293,16 @@ export default {
       fetchPolicy: 'no-cache',
       update: ({ staff }) => {
         store.commit('setStaff', staff)
+      }
+    },
+    orderTemplates: {
+      query: orderTemplatesQuery,
+      fetchPolicy: 'no-cache',
+      error(error) {
+        store.commit('setError', error.message)
+      },
+      update: ({ orderTemplates }) => {
+        store.commit('setOrderTemplates', orderTemplates)
       }
     },
     scheduleForVuex: {

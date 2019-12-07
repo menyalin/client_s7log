@@ -8,9 +8,18 @@
       <v-col class="day-car-cols">
         <v-container fluid class="pa-0 ma-0" fill-height>
           <v-row no-gutters justify="center">
-            <v-col v-for="date in dates" :cols="12/dates.lenght" :key="date" class="car-column">
-              <app-car-dates-header v-if="header" :date="date" class="row--header" />
-              <app-car-date v-else :date="date" :car="car" />
+            <v-col
+              v-for="date in dates"
+              :cols="12 / dates.lenght"
+              :key="date"
+              class="car-column"
+            >
+              <app-car-dates-header
+                v-if="header"
+                :date="date"
+                class="row--header"
+              />
+              <app-car-date v-else :date="date" :car="car" :carType="carType" />
             </v-col>
           </v-row>
         </v-container>
@@ -26,7 +35,7 @@ import appCarDate from './carDate'
 
 export default {
   name: 'carRow',
-  props: ['header', 'dates', 'car'],
+  props: ['header', 'dates', 'car', 'carType'],
   components: {
     appCarTitleHeader,
     appCarDatesHeader,

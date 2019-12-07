@@ -10,6 +10,7 @@
             :key="car.id"
             :header="false"
             :dates="dates"
+            :carType="carType"
           />
         </div>
         <app-not-confirmed-orders :carType="carType" />

@@ -133,3 +133,23 @@ export const createOrderMutation = gql`
     }
   }
 `
+export const createOrderTemplateMutation = gql`
+  mutation createOrderTemplate(
+    $carType: String!
+    $shipperId: String
+    $consigneeId: String
+    $status: String
+    $note: String
+    $templateName: String
+  ) {
+    createOrderTemplate(
+      carType: $carType
+      shipperId: $shipperId
+      consigneeId: $consigneeId
+      status: $status
+      note: $note
+      templateName: $templateName
+    ) {
+      id
+    }
+  }`
