@@ -205,6 +205,20 @@ const orderTemplatesQuery = gql`
     }
   }
 `
+const orderTemplateUpdatedSubscription = gql`
+  subscription orderTemplateUpdated {
+    orderTemplateUpdated {
+      id
+      templateName
+      carType
+      status
+      note
+      shipperId
+      consigneeId
+      showInMenu
+    }
+  }
+`
 
 export default {
   name: 'dataComponent',
@@ -254,6 +268,12 @@ export default {
         query: staffUpdatedSubscription,
         result({ data: { staffUpdated } }) {
           store.commit('updateStaff', staffUpdated)
+        }
+      },
+      orderTemplateUpdated: {
+        query: orderTemplateUpdatedSubscription,
+        result({ data: { orderTemplateUpdated } }) {
+          store.commit('updateOrderTemplate', orderTemplateUpdated)
         }
       }
     },

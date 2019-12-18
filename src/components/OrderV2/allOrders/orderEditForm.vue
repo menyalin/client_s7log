@@ -19,10 +19,10 @@
           </v-col>
           <v-col cols="2">
             <v-select
-              :items="carTypes"
+              :items="vehicleType"
               label="Тип ТС"
-              item-text="title"
-              item-value="id"
+              item-text="text"
+              item-value="value"
               hide-details
               class="pt-0 mt-0"
               v-model="editedOrder.carType"
@@ -166,7 +166,7 @@ export default {
     event: 'change'
   },
   computed: {
-    ...mapGetters(['timeZones', 'statuses', 'currentUser']),
+    ...mapGetters(['timeZones', 'statuses', 'currentUser', 'vehicleType']),
     isNewOrder() {
       return !this.editedOrder.id
     }

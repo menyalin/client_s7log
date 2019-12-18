@@ -17,7 +17,13 @@ export default {
   data: () => ({
     items: [
       { id: '01', title: 'Адреса', url: '/nsi/addresses', icon: '' },
-      { id: '02', title: 'Машины', url: '/nsi/cars', icon: '' }
+      { id: '02', title: 'Машины', url: '/nsi/cars', icon: '' },
+      {
+        id: '03',
+        title: 'Шаблоны заказов',
+        url: '/nsi/orderTemplates',
+        icon: ''
+      }
     ]
   })
 }

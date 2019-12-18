@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="pa-0 ma-0">
     <v-row no-gutters>
-      <v-col cols="12" sm="2" md="2" lg="1">
+      <v-col cols="12" sm="2" md="2" lg="2">
         <app-side-bar />
       </v-col>
       <v-col>
