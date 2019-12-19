@@ -1,55 +1,12 @@
 import { apolloClient } from '../vue-apollo'
 import gql from 'graphql-tag'
 import moment from 'moment'
-
-const updateOrderMutation = gql`
-   mutation updateOrder(
-    $id: ID
-    $carType: String
-    $confirmDate: String
-    $confirmTime: String
-    $shipperId: String
-    $consigneeId: String
-    $status: String
-    $note: String
-    $shippingDate: String
-    $shippingTime: String
-    $deliveryDate: String
-    $deliveryTime: String
-    $confirmedCarId: String
-    $isDriverNotified: Boolean
-    $isClientNotified: Boolean
-  ) {
-    updateOrder(
-      id: $id
-      carType: $carType
-      confirmDate: $confirmDate
-      confirmTime: $confirmTime
-      shipperId: $shipperId
-      consigneeId: $consigneeId
-      status: $status
-      note: $note
-      shippingDate: $shippingDate
-      shippingTime: $shippingTime
-      deliveryDate: $deliveryDate
-      deliveryTime: $deliveryTime
-      confirmedCarId: $confirmedCarId
-      isDriverNotified: $isDriverNotified
-      isClientNotified: $isClientNotified
-    ) {
-      id
-      number
-      carType
-      confirmDate
-      confirmTime
-      confirmedCarId
-    }
-  }
-`
-
+import { updateOrderMutation, createOrderMutation } from './orderGql'
 
 export default {
   state: {
+    showOrderDialog: false,
+    editedOrder: {},
     currentDate: null,
     orderTemplates: [],
     addresses: [],
@@ -81,6 +38,23 @@ export default {
     orders: []
   },
   mutations: {
+    fillByTemplate: (state, templateId) => {
+      const { shipperId, consigneeId, note, status } = state.orderTemplates.find(item => item.id === templateId)
+      state.editedOrder = Object.assign({}, state.editedOrder, {
+        shipperId,
+        consigneeId,
+        note,
+        status
+      })
+    },
+    openEditOrderForm: (state, editedOrder) => {
+      state.editedOrder = Object.assign({}, editedOrder, { templateId: null })
+      state.showOrderDialog = true;
+    },
+    cancelOrderEdit: (state) => {
+      state.showOrderDialog = false
+      state.editedOrder = Object.assign({})
+    },
     setOrderTemplates: (state, payload) => {
       state.orderTemplates = payload
     },
@@ -150,8 +124,17 @@ export default {
     }
   },
   actions: {
-    updateOrder: ({ commit }, payload) => {
-      commit('updateOrder', payload)
+    updateOrder: ({ commit, getters }) => {
+      apolloClient.mutate({
+        mutation: updateOrderMutation,
+        variables: getters.editedOrder
+      })
+        .then(() => {
+          commit('cancelOrderEdit')
+        })
+        .catch(e => {
+          commit('setError', e.message)
+        })
     },
     resetCarInOrder: ({ commit }, orderId) => {
       apolloClient.mutate({
@@ -178,6 +161,18 @@ export default {
         }
       })
       commit('confirmOrder', payload)
+    },
+    createNewOrder ({ commit, getters }) {
+      apolloClient.mutate({
+        mutation: createOrderMutation,
+        variables: getters.editedOrder
+      })
+        .then(() => {
+          commit('cancelOrderEdit')
+        })
+        .catch(e => {
+          commit('setError', e.message)
+        })
     }
   },
   getters: {
@@ -215,7 +210,9 @@ export default {
     dispatchersStaff: (state) => state.staff.filter(item => (item.role === 'dispatcher' && item.isActive)).map(item => ({ userId: item.userId, userName: item.user.name, userEmail: item.user.email })),
     dutyDispatcher: (state) => (date) => state.schedule.find(item => item.date === date),
     orderTemplates: (state) => (carType) => state.orderTemplates.filter(item => item.carType === carType),
-    allOrderTemplates: (state) => state.orderTemplates
+    allOrderTemplates: (state) => state.orderTemplates,
+    showOrderDialog: ({ showOrderDialog }) => showOrderDialog,
+    editedOrder: ({ editedOrder }) => editedOrder
   }
 }
 

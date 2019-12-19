@@ -2,6 +2,7 @@
   <v-container fluid class="pa-0 ma-0" fill-height>
     <v-row no-gutters>
       <v-col cols="12">
+        <order-edit-dialog />
         <app-car-row :header="true" :dates="dates" />
         <div class="car-row-wrapper">
           <app-car-row
@@ -21,6 +22,7 @@
 
 <script>
 import appNotConfirmedOrders from './notConfirmedOrders'
+import orderEditDialog from './orderEditDialog'
 import moment from 'moment'
 import appCarRow from './carRow'
 import { mapGetters } from 'vuex'
@@ -29,9 +31,11 @@ export default {
   props: ['carType'],
   components: {
     appCarRow,
-    appNotConfirmedOrders
+    appNotConfirmedOrders,
+    orderEditDialog
   },
   computed: {
+    // eslint-disable-next-line vue/return-in-computed-property
     dates() {
       if (this.currentDate) {
         let tmpDate = this.currentDate
@@ -98,7 +102,7 @@ export default {
         return null
       }
     },
-    ...mapGetters(['currentDate', 'carsByType'])
+    ...mapGetters(['currentDate', 'carsByType', 'showOrderDialog'])
   }
 }
 </script>

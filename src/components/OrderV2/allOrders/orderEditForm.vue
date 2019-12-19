@@ -2,6 +2,16 @@
   <v-card>
     <v-card-title>
       {{ isNewOrder ? 'Новый заказ' : `Заказ №${editedOrder.number}` }}
+      <v-spacer />
+      <v-select
+        label="Заполнить из шаблона"
+        :items="orderTemplates(editedOrder.carType)"
+        :disabled="!editedOrder.carType"
+        item-text="templateName"
+        item-value="id"
+        @change="changeTemplate"
+        :value="editedOrder.templateId"
+      />
     </v-card-title>
     <v-card-text>
       <v-container>
@@ -166,7 +176,13 @@ export default {
     event: 'change'
   },
   computed: {
-    ...mapGetters(['timeZones', 'statuses', 'currentUser', 'vehicleType']),
+    ...mapGetters([
+      'timeZones',
+      'statuses',
+      'currentUser',
+      'vehicleType',
+      'orderTemplates'
+    ]),
     isNewOrder() {
       return !this.editedOrder.id
     }
@@ -179,14 +195,13 @@ export default {
   },
   data: () => ({
     templateModal: false,
-    templateName: '',
-    carTypes: [
-      { id: '20tn', title: '20 тн' },
-      { id: '10tn', title: '10 тн' }
-    ]
+    templateName: ''
   }),
   props: ['editedOrder'],
   methods: {
+    changeTemplate(val) {
+      this.$store.commit('fillByTemplate', val)
+    },
     cancel() {
       this.$emit('cancelEdit')
     },
