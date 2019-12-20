@@ -199,8 +199,8 @@ export default {
       }
     },
     dateRange: (state) => ({
-      startDate: moment(state.currentDate).add(-4, 'd').format('YYYY-MM-DD'),
-      endDate: moment(state.currentDate).add(+4, 'd').format('YYYY-MM-DD')
+      startDate: moment(state.currentDate).add(-3, 'd').format('YYYY-MM-DD'),
+      endDate: moment(state.currentDate).add(+3, 'd').format('YYYY-MM-DD')
     }),
     addressById: (state) => (id) => {
       if (state.addresses.length && id)

@@ -19,7 +19,7 @@ export default {
       router.push('/')
       commit('setLoadingApp', false)
     },
-    getCurrentUser ({ commit }) {
+    getCurrentUser ({ commit, dispatch }) {
       commit('clearError')
       commit('setLoadingApp', true)
       apolloClient
@@ -27,8 +27,12 @@ export default {
           query: GET_CURRENT_USER
         })
         .then(({ data: { getCurrentUser } }) => {
-          commit('setCurrentUser', getCurrentUser)
           commit('setLoadingApp', false)
+          if (getCurrentUser) {
+            commit('setCurrentUser', getCurrentUser)
+          } else {
+            dispatch('signOut')
+          }
         })
         .catch(async err => {
           commit('setLoadingApp', false)

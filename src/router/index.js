@@ -80,7 +80,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(item => item.meta.forActiveUsers)) {
-    if (store.getters.isActiveUser) next()
+    if (!!localStorage.getItem('token')) next()
     else next('/')
   } else next()
 })

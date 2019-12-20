@@ -8,7 +8,12 @@
         <v-card class="mx-auto" max-width="300" tile>
           <v-list class="mt-3">
             <v-list-item-group color="primary">
-              <v-list-item ripple v-for="item in itemsForRender" :key="item.id">
+              <v-list-item
+                ripple
+                v-for="item in itemsForRender"
+                :key="item.id"
+                :to="item.url"
+              >
                 <v-list-item-icon>
                   <v-icon v-text="item.icon" />
                 </v-list-item-icon>
@@ -28,7 +33,7 @@
           >
         </v-toolbar-title>
         <v-spacer />
-        <v-toolbar-items class="hidden-xs-only">
+        <v-toolbar-items class="hidden-sm-and-down">
           <v-btn
             v-for="item in itemsForRender"
             text
@@ -80,7 +85,6 @@ export default {
       if (this.isLoggedIn) {
         visibleItems = [5, 6, 8, 9, 10]
         if (this.isAdmin) visibleItems.push(7)
-        
       } else {
         visibleItems = [3, 4, 6, 8]
       }
