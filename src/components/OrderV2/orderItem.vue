@@ -3,7 +3,7 @@
     class="order-container"
     :draggable="true"
     @dragstart="dragStartHandler($event, JSON.stringify(order))"
-    @dblclick="dblClickHandler"
+    @click="clickHandler"
     :class="classes"
   >
     <order-item-row
@@ -56,7 +56,7 @@ export default {
       event.dataTransfer.effectAllowed = 'move'
       event.dataTransfer.setData('order', item)
     },
-    dblClickHandler() {
+    clickHandler() {
       this.$store.commit('openEditOrderForm', this.order)
     }
   }

@@ -3,9 +3,21 @@
     <div class="date-header-column-wrapper">
       <div v-if="date === currentDate">
         <v-icon @click="prevDate">mdi-arrow-left-circle</v-icon>
-        <span class="current-date">
-          <strong>{{ displayDate }}</strong>
-        </span>
+        <v-menu v-model="menu" :close-on-content-click="false" max-width="290">
+          <template v-slot:activator="{ on }">
+            <span class="current-date" v-on="on">
+              <strong>{{ displayDate }}</strong>
+            </span>
+          </template>
+          <v-date-picker
+            :value="date"
+            @change="changeCurrentDate"
+            first-day-of-week="1"
+            color="primary"
+            no-title
+          ></v-date-picker>
+        </v-menu>
+
         <v-icon @click="nextDate">mdi-arrow-right-circle</v-icon>
       </div>
       <div v-else>{{ displayDate }}</div>
@@ -26,6 +38,9 @@ import dutyDispatcher from './dutyDispatcher'
 
 export default {
   props: ['date', 'header'],
+  data: () => ({
+    menu: false
+  }),
   components: {
     dutyDispatcher
   },
@@ -37,6 +52,10 @@ export default {
     }
   },
   methods: {
+    changeCurrentDate(val) {
+      // this.menu = false
+      this.$store.commit('setCurrentDate', val)
+    },
     prevDate() {
       this.$store.commit(
         'setCurrentDate',
