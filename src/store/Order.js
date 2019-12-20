@@ -48,7 +48,7 @@ export default {
       })
     },
     openEditOrderForm: (state, editedOrder) => {
-      state.editedOrder = Object.assign({}, editedOrder, { templateId: null })
+      state.editedOrder = Object.assign({}, editedOrder)
       state.showOrderDialog = true;
     },
     cancelOrderEdit: (state) => {

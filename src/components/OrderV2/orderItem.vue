@@ -6,14 +6,6 @@
     @dblclick="dblClickHandler"
     :class="classes"
   >
-    <v-dialog v-model="dialog" max-width="1024px" persistent>
-      <order-edit-form
-        v-model="editedOrder"
-        @cancelEdit="cancelFormHandler"
-        @updateOrder="updateOrderHandler"
-      />
-    </v-dialog>
-
     <order-item-row
       :partnerId="order.shipperId"
       :time="order.shippingTime"
@@ -29,21 +21,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import orderEditForm from './allOrders/orderEditForm.vue'
 import orderItemRow from './orderItemRow'
-import { updateOrderMutation } from './gql'
 
 export default {
   name: 'orderItem',
   props: ['order'],
   components: {
-    orderEditForm,
     orderItemRow
   },
-  data: () => ({
-    dialog: false,
-    editedOrder: {}
-  }),
   computed: {
     ...mapGetters(['addressById', 'isAddressesUpload']),
     classes() {
@@ -71,41 +56,8 @@ export default {
       event.dataTransfer.effectAllowed = 'move'
       event.dataTransfer.setData('order', item)
     },
-    cancelFormHandler() {
-      this.dialog = false
-      this.editedOrder = Object.assign({})
-    },
-    updateOrderHandler() {
-      this.$apollo.mutate({
-        mutation: updateOrderMutation,
-        variables: {
-          id: this.editedOrder.id,
-          status: this.editedOrder.status || null,
-          carType: this.editedOrder.carType,
-          confirmDate: this.editedOrder.confirmDate || null,
-          confirmTime: this.editedOrder.confirmTime || null,
-          shipperId: this.editedOrder.shipperId || null,
-          consigneeId: this.editedOrder.consigneeId || null,
-          note: this.editedOrder.note || null,
-          shippingDate: this.editedOrder.shippingDate || null,
-          shippingTime: this.editedOrder.shippingTime || null,
-          deliveryDate: this.editedOrder.deliveryDate || null,
-          deliveryTime: this.editedOrder.deliveryTime || null,
-          confirmedCarId: this.editedOrder.confirmedCarId || null,
-          isDriverNotified: this.editedOrder.isDriverNotified || null,
-          isClientNotified: this.editedOrder.isClientNotified || null
-        }
-      })
-      this.$nextTick(() => {
-        this.dialog = false
-        this.editedOrder = Object.assign({})
-      })
-    },
     dblClickHandler() {
-      this.dialog = true
-      this.$nextTick(() => {
-        this.editedOrder = Object.assign({}, this.order)
-      })
+      this.$store.commit('openEditOrderForm', this.order)
     }
   }
 }

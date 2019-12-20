@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <div сlass="pb-3">
     <v-autocomplete
       @change="onChangeHandler"
       :value="propValue"
       hide-no-data
       clearable
       @click:clear="resetHandler"
-      hide-selected
       :items="itemsForSelect"
       color="primary"
       :label="label"
+      :messages="note"
     />
   </div>
 </template>
@@ -33,6 +33,15 @@ export default {
       return this.$store.getters
         .addressesForAutocomplete(this.placeType)
         .map(addressTransform)
+    },
+    note() {
+      const res =
+        this.$store.getters.isAddressesUpload &&
+        !!this.propValue &&
+        !!this.$store.getters.addressById(this.propValue)
+      return res
+        ? this.$store.getters.addressById(this.propValue).note || []
+        : []
     }
   },
   methods: {

@@ -11,6 +11,7 @@
         item-value="id"
         @change="changeTemplate"
         :value="editedOrder.templateId"
+        clearable
       />
     </v-card-title>
     <v-card-text>
@@ -63,6 +64,7 @@
               label="Погрузка"
               v-model="editedOrder.shipperId"
               placeType="shippingPlace"
+              class="pb-3"
             />
             <my-date-picker
               v-model="editedOrder.shippingDate"
@@ -79,6 +81,7 @@
               label="Доставка"
               v-model="editedOrder.consigneeId"
               placeType="deliveryPlace"
+              class="pb-3"
             />
             <my-date-picker
               v-model="editedOrder.deliveryDate"
@@ -200,7 +203,9 @@ export default {
   props: ['editedOrder'],
   methods: {
     changeTemplate(val) {
-      this.$store.commit('fillByTemplate', val)
+      if (val) {
+        this.$store.commit('fillByTemplate', val)
+      }
     },
     cancel() {
       this.$emit('cancelEdit')
