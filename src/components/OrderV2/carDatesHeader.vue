@@ -86,6 +86,7 @@ export default {
 .current-date {
   padding-left: 1em;
   padding-right: 1em;
+  cursor: pointer;
 }
 .time--zone--container {
   display: flex;

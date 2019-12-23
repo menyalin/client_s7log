@@ -56,6 +56,7 @@ export default {
 <style>
 .not-confirmed-orders-container {
   justify-content: flex-start;
+  flex-wrap: nowrap;
   border: 3px grey dotted;
   border-radius: 0.3em;
 }
@@ -63,6 +64,7 @@ export default {
 .order-item-wrapper {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 .empty-container {
   height: 2rem;

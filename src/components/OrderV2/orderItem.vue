@@ -69,7 +69,7 @@ export default {
   font-size: 0.58rem;
   color: black;
   width: 100%;
-  max-width: 9em;
+  max-width: 10em;
   height: 2rem;
   border-radius: 0.2em;
   display: flex;
