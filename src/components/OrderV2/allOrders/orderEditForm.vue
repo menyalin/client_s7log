@@ -66,15 +66,20 @@
               placeType="shippingPlace"
               class="pb-3"
             />
-            <my-date-picker
-              v-model="editedOrder.shippingDate"
-              label="Плановая дата погрузки"
-            />
-            <my-time-text-field
-              class="mt-2 pt-2"
-              label="Время погрузки"
-              v-model="editedOrder.shippingTime"
-            />
+            <date-time-row>
+              <template v-slot:date>
+                <my-date-picker
+                  v-model="editedOrder.shippingDate"
+                  label="Плановая дата погрузки"
+                />
+              </template>
+              <template v-slot:time>
+                <my-time-text-field
+                  label="Время погрузки"
+                  v-model="editedOrder.shippingTime"
+                />
+              </template>
+            </date-time-row>
           </v-col>
           <v-col>
             <my-partner-autocomplete
@@ -83,15 +88,20 @@
               placeType="deliveryPlace"
               class="pb-3"
             />
-            <my-date-picker
-              v-model="editedOrder.deliveryDate"
-              label="Плановая дата доставки"
-            />
-            <my-time-text-field
-              class="mt-2 pt-2"
-              label="Время доставки"
-              v-model="editedOrder.deliveryTime"
-            />
+            <date-time-row>
+              <template v-slot:date>
+                <my-date-picker
+                  v-model="editedOrder.deliveryDate"
+                  label="Плановая дата доставки"
+                />
+              </template>
+              <template v-slot:time>
+                <my-time-text-field
+                  label="Время доставки"
+                  v-model="editedOrder.deliveryTime"
+                />
+              </template>
+            </date-time-row>
           </v-col>
         </v-row>
         <v-row align="center">
@@ -171,6 +181,7 @@ import myDatePicker from '@/components/common/myDatePicker/index.vue'
 import myPartnerAutocomplete from '@/components/common/myPartnerAutocomplete/index.vue'
 import myTimeTextField from '@/components/common/myTimeTextField/index.vue'
 import myCarAutocomplete from '@/components/common/myCarAutocomplete/index.vue'
+import dateTimeRow from './dateTimeRow'
 import { createOrderTemplateMutation } from '../gql'
 import { mapGetters } from 'vuex'
 export default {
@@ -194,7 +205,8 @@ export default {
     myDatePicker,
     myPartnerAutocomplete,
     myTimeTextField,
-    myCarAutocomplete
+    myCarAutocomplete,
+    dateTimeRow
   },
   data: () => ({
     templateModal: false,

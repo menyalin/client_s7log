@@ -5,6 +5,7 @@
       :items="clock"
       auto-select-first
       clearable
+      hide-details
       color="primary"
       :value="propTime"
       @change="inputHandler"
