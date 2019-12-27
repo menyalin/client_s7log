@@ -77,6 +77,16 @@
       </v-container>
     </v-card-text>
     <v-card-actions>
+      <v-btn
+        v-if="!isNewItem"
+        color="warning"
+        fab
+        small
+        dark
+        @click="deleteHandler"
+      >
+        <v-icon>mdi-delete</v-icon>
+      </v-btn>
       <v-spacer />
       <v-btn color="primary" @click="cancel">Отмена</v-btn>
       <v-btn color="primary" @click="save">
@@ -115,6 +125,12 @@ export default {
     },
     cancel() {
       this.$emit('cancelEdit')
+    },
+    async deleteHandler() {
+      const res = await this.$confirm('Вы уверены? Отменить будет нельзя!', {
+        title: 'Удаление записи'
+      })
+      if (res) this.$emit('deleteCarWorkSchedule')
     }
   }
 }

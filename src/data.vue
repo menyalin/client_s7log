@@ -233,7 +233,11 @@ const updatedCarWorkScheduleSubscription = gql`
     }
   }
 `
-
+const deletedCarWorkScheduleSubscription = gql`
+  subscription deletedCarWorkSchedule {
+    deletedCarWorkSchedule
+  }
+`
 const carWorkScheduleForVuexQuery = gql`
   query carWorkScheduleForVuex {
     carWorkScheduleForVuex {
@@ -257,10 +261,6 @@ export default {
   created() {
     this.$store.commit('setCurrentDate', moment().format('YYYY-MM-DD'))
   },
-  data: () => ({
-    ordersForVuex: [],
-    addressesForVuex: []
-  }),
   apollo: {
     $subscribe: {
       addressAdded: {
@@ -309,6 +309,12 @@ export default {
         query: updatedCarWorkScheduleSubscription,
         result({ data: { updatedCarWorkSchedule } }) {
           store.commit('updateCarWorkSchedule', updatedCarWorkSchedule)
+        }
+      },
+      deletedCarWorkSchedule: {
+        query: deletedCarWorkScheduleSubscription,
+        result({ data: { deletedCarWorkSchedule } }) {
+          store.commit('deletedCarWorkSchedule', deletedCarWorkSchedule)
         }
       }
     },

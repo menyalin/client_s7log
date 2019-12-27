@@ -44,12 +44,13 @@
             {{ carWorkScheduleTypeById(item.type).title }}
           </template>
         </v-data-table>
-        <v-dialog v-model="dialog" max-width="1024px">
+        <v-dialog v-model="dialog" max-width="1024px" persistent>
           <car-work-schedule-form
             v-model="editedSchedule"
             @cancelEdit="cancelHandler"
             @createSchedule="createScheduleHandler"
             @updateSchedule="updateScheduleHandler"
+            @deleteCarWorkSchedule="deleteCarWorkScheduleHandler"
           />
         </v-dialog>
       </v-col>
@@ -123,6 +124,11 @@ const updateCarWorkScheduleMutation = gql`
       endTime
       carId
     }
+  }
+`
+const deleteCarWorkScheduleMutation = gql`
+  mutation deleteCarWorkSchedule($id: ID!) {
+    deleteCarWorkSchedule(id: $id)
   }
 `
 
@@ -199,6 +205,17 @@ export default {
     },
     newCarWorkSchedule() {
       this.dialog = true
+    },
+    deleteCarWorkScheduleHandler() {
+      this.$apollo
+        .mutate({
+          mutation: deleteCarWorkScheduleMutation,
+          variables: this.editedSchedule
+        })
+        .then(this.cancelHandler())
+        .catch(e => {
+          this.$store.commit('setError', e.message)
+        })
     }
   }
 }

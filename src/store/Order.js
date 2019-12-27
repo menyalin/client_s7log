@@ -52,6 +52,9 @@ export default {
       if (carWorkScheduleItem) Object.assign(carWorkScheduleItem, payload)
       else state.carWorkSchedule.push(payload)
     },
+    deletedCarWorkSchedule: ({ carWorkSchedule }, id) => {
+      carWorkSchedule.splice(carWorkSchedule.findIndex(item => item.id === id), 1)
+    },
     fillByTemplate: (state, templateId) => {
       const { shipperId, consigneeId, note, status } = state.orderTemplates.find(item => item.id === templateId)
       state.editedOrder = Object.assign({}, state.editedOrder, {
