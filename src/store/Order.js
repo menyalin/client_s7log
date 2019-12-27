@@ -122,13 +122,13 @@ export default {
     },
     scheduleUpdated: (state, payload) => {
       let scheduleItem = state.schedule.find(item => item.id === payload.id)
-      if (scheduleItem) scheduleItem = Object.assign({}, scheduleItem, payload)
+      if (scheduleItem) scheduleItem = Object.assign(scheduleItem, payload)
       else state.schedule.push(payload)
 
     },
     updateStaff: (state, role) => {
       let staffItem = state.staff.find(item => item.id === role.id)
-      if (staffItem) staffItem = Object.assign(staffItem, {}, role)
+      if (staffItem) staffItem = Object.assign({}, staffItem, role)
       else state.staff.push(role)
     },
     updateOrderTemplate: (state, updatedOrder) => {
