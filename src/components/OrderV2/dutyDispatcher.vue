@@ -60,7 +60,7 @@ export default {
     isExistDispatcher() {
       if (this.isExistScheduleItem) {
         return !!this.dutyDispatcher(this.date).user
-      }
+      } else return null
     }
   },
   data: () => ({

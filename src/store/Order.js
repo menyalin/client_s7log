@@ -2,6 +2,7 @@ import { apolloClient } from '../vue-apollo'
 import gql from 'graphql-tag'
 import moment from 'moment'
 import { updateOrderMutation, createOrderMutation } from './orderGql'
+import store from './index'
 
 export default {
   state: {
@@ -25,6 +26,11 @@ export default {
       { id: '10', title: 'Клиент снял заказ' }
     ],
     schedule: [],
+    carWorkSchedule: [],
+    carWorkScheduleTypes: [
+      { id: 'service', title: 'Сервис' },
+      { id: 'holiday', title: 'Выходной' }
+    ],
     vehicleType: [
       { value: '10tn', text: '10тн' },
       { value: '20tn', text: '20тн' }
@@ -38,6 +44,14 @@ export default {
     orders: []
   },
   mutations: {
+    setCarWorkSchedule: (state, payload) => {
+      state.carWorkSchedule = payload
+    },
+    updateCarWorkSchedule: (state, payload) => {
+      const carWorkScheduleItem = state.carWorkSchedule.find(item => item.id === payload.id)
+      if (carWorkScheduleItem) Object.assign(carWorkScheduleItem, payload)
+      else state.carWorkSchedule.push(payload)
+    },
     fillByTemplate: (state, templateId) => {
       const { shipperId, consigneeId, note, status } = state.orderTemplates.find(item => item.id === templateId)
       state.editedOrder = Object.assign({}, state.editedOrder, {
@@ -180,14 +194,19 @@ export default {
     personOnDuty: ({ schedule }) => (date) => schedule.find(item => item.date === date) || 'не задан',
     vehicleType: state => state.vehicleType,
     cars: state => state.cars,
+    carById: ({ cars }) => (id) => {
+      if (cars.length && id) return cars.find(item => item.id === id)
+      else null
+    },
     notConfirmedOrders: (state) => (carType) => state.orders.filter(item => ((!item.confirmedCarId || !item.confirmTime) && item.carType === carType)),
     ordersByCarAndConfirmDateZone: (state) => (confirmedCarId, confirmDate, confirmTime) =>
       state.orders.filter(item => item.confirmedCarId === confirmedCarId && item.confirmDate === confirmDate && item.confirmTime === confirmTime)[0],
     timeZones: (state) => state.timeZones,
+    timeZoneById: ({ timeZones }) => (id) => timeZones.find(item => item.id === id),
     statuses: (state) => state.statuses,
     statusTitleById: (state) => (id) => state.statuses.find(item => item.id === id),
     isAddressesUpload: (state) => !!state.addresses.length,
-    carsForAutocomplete: (state) => (type) => state.cars.filter(item => item.type === type),
+    carsForAutocomplete: ({ cars }) => (type) => type ? cars.filter(item => item.type === type) : cars,
     carsByType: (state) => (type) => state.cars.filter(item => item.type === type),
     addressesForAutocomplete: (state) => (type) => {
       if (type === 'shippingPlace') {
@@ -212,7 +231,47 @@ export default {
     orderTemplates: (state) => (carType) => state.orderTemplates.filter(item => item.carType === carType),
     allOrderTemplates: (state) => state.orderTemplates,
     showOrderDialog: ({ showOrderDialog }) => showOrderDialog,
-    editedOrder: ({ editedOrder }) => editedOrder
+    editedOrder: ({ editedOrder }) => editedOrder,
+    carWorkSchedule: ({ carWorkSchedule }) => carWorkSchedule,
+    carWorkScheduleTypes: ({ carWorkScheduleTypes }) => carWorkScheduleTypes,
+    carWorkScheduleTypeById: ({ carWorkScheduleTypes }) => (id) => carWorkScheduleTypes.find(item => item.id === id),
+    carWorkScheduleCells: ({ carWorkSchedule, timeZones }) => {
+      if (carWorkSchedule.length) {
+        let res = []
+        carWorkSchedule.forEach(carWorkScheduleItem => {
+          let day = moment(carWorkScheduleItem.startDate)
+          let endDate = moment(carWorkScheduleItem.endDate)
+          const endTime = timeZones.findIndex(item => item.id === carWorkScheduleItem.endTime)
+          let i = timeZones.findIndex(item => item.id === carWorkScheduleItem.startTime)
+          let lastDay = false
+          while (day <= endDate) {
+            if (day >= endDate) lastDay = true
+            while (i < timeZones.length) {
+              if (lastDay && i > endTime) break
+              else res.push({
+                carWorkScheduleId: carWorkScheduleItem.id,
+                date: day.format('YYYY-MM-DD'),
+                time: timeZones[i].id,
+                carId: carWorkScheduleItem.carId,
+                type: carWorkScheduleItem.type,
+                note: carWorkScheduleItem.note
+              })
+              i++
+            }
+            i = 0
+            day.add(1, 'days')
+          }
+        })
+        return res
+      } else return null
+    },
+    carWorkScheduleFiltered: () => (carId, date, time) => {
+      let cells = store.getters.carWorkScheduleCells
+      if (cells && date && time && carId) {
+        return cells.find(item => item.carId === carId && item.date === date && item.time === time)
+      }
+      else return null
+    }
   }
 }
 

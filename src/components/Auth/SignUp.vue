@@ -123,15 +123,14 @@ export default {
       } else return null
     },
     emailErrors() {
+      let res = []
       if (this.$v.form.email.$error) {
-        if (!this.$v.form.email.required) return 'Поле не может быть пустым'
-        if (!this.$v.form.email.email) return 'Введите корректный email'
-        if (!this.$v.form.email.isExistEmailValidator) {
-          return 'Введенный email уже зарегистрирован в системе'
-        }
-      } else {
-        return null
+        if (!this.$v.form.email.required) res.push('Поле не может быть пустым')
+        if (!this.$v.form.email.email) res.push('Введите корректный email')
+        if (!this.$v.form.email.isExistEmailValidator)
+          res.push('Введенный email уже зарегистрирован в системе')
       }
+      return res
     },
     passwordErrors() {
       if (this.$v.form.password.$error) {

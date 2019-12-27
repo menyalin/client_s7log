@@ -71,13 +71,14 @@ export default {
       return this.$store.getters.loading
     },
     emailErrors() {
+      let res = []
       if (this.$v.form.email.$error) {
-        if (!this.$v.form.email.required) return 'Поле не может быть пустым'
-        if (!this.$v.form.email.email) return 'Введите корректный email'
-      } else {
-        return null
+        if (!this.$v.form.email.required) res.push('Поле не может быть пустым')
+        if (!this.$v.form.email.email) res.push('Введите корректный email')
       }
+      return res
     },
+
     passwordErrors() {
       if (this.$v.form.password.$error) {
         return 'Поле не может быть пустым'

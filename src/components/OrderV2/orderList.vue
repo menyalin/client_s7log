@@ -110,7 +110,7 @@ export default {
 <style scoped>
 .car-row-wrapper {
   overflow: auto;
-  max-height: 75vh;
+  max-height: 80vh;
 }
 .car-row-wrapper div:nth-child(2n-1) {
   background-color: rgba(189, 236, 255, 0.2);

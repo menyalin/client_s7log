@@ -23,6 +23,12 @@ export default {
         title: 'Шаблоны заказов',
         url: '/nsi/orderTemplates',
         icon: ''
+      },
+      {
+        id: '04',
+        title: 'График работы машин',
+        url: '/nsi/carWorkSchedule',
+        icon: ''
       }
     ]
   })

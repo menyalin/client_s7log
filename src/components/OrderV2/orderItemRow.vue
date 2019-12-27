@@ -31,6 +31,7 @@ export default {
         return `${this.addressById(this.partnerId).shortName} - ${
           this.addressById(this.partnerId).address
         }`
+      else return null
     }
   }
 }

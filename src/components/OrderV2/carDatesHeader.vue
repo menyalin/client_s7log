@@ -52,6 +52,7 @@ export default {
     }
   },
   methods: {
+    
     changeCurrentDate(val) {
       // this.menu = false
       this.$store.commit('setCurrentDate', val)

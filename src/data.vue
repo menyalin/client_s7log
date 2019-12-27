@@ -219,6 +219,35 @@ const orderTemplateUpdatedSubscription = gql`
     }
   }
 `
+const updatedCarWorkScheduleSubscription = gql`
+  subscription updatedCarWorkSchedule {
+    updatedCarWorkSchedule {
+      id
+      type
+      note
+      startDate
+      startTime
+      endDate
+      endTime
+      carId
+    }
+  }
+`
+
+const carWorkScheduleForVuexQuery = gql`
+  query carWorkScheduleForVuex {
+    carWorkScheduleForVuex {
+      id
+      type
+      note
+      startDate
+      startTime
+      endDate
+      endTime
+      carId
+    }
+  }
+`
 
 export default {
   name: 'dataComponent',
@@ -275,6 +304,12 @@ export default {
         result({ data: { orderTemplateUpdated } }) {
           store.commit('updateOrderTemplate', orderTemplateUpdated)
         }
+      },
+      updatedCarWorkSchedule: {
+        query: updatedCarWorkScheduleSubscription,
+        result({ data: { updatedCarWorkSchedule } }) {
+          store.commit('updateCarWorkSchedule', updatedCarWorkSchedule)
+        }
       }
     },
     carsForVuex: {
@@ -285,6 +320,16 @@ export default {
       },
       update: ({ carsForVuex }) => {
         store.commit('setCars', carsForVuex)
+      }
+    },
+    carWorkScheduleForVuex: {
+      query: carWorkScheduleForVuexQuery,
+      fetchPolicy: 'no-cache',
+      error(error) {
+        store.commit('setError', error.message)
+      },
+      update: ({ carWorkScheduleForVuex }) => {
+        store.commit('setCarWorkSchedule', carWorkScheduleForVuex)
       }
     },
     ordersForVuex: {

@@ -5,7 +5,7 @@
       :value="propValue"
       hide-no-data
       clearable
-      :disabled="!type"
+      :disabled="!noType && !type"
       @click:clear="resetHandler"
       hide-selected
       :items="itemsForSelect"
@@ -43,7 +43,7 @@ export default {
       this.$emit('change', val)
     }
   },
-  props: ['label', 'propValue', 'type']
+  props: ['label', 'propValue', 'type', 'noType']
 }
 </script>
 
