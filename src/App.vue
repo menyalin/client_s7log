@@ -8,12 +8,7 @@
         <v-card class="mx-auto" max-width="300" tile>
           <v-list class="mt-3">
             <v-list-item-group color="primary">
-              <v-list-item
-                ripple
-                v-for="item in itemsForRender"
-                :key="item.id"
-                :to="item.url"
-              >
+              <v-list-item ripple v-for="item in itemsForRender" :key="item.id" :to="item.url">
                 <v-list-item-icon>
                   <v-icon v-text="item.icon" />
                 </v-list-item-icon>
@@ -28,18 +23,11 @@
       <v-app-bar app color="primary" dark dense>
         <v-app-bar-nav-icon @click="toggleDrawer" class="hidden-md-and-up" />
         <v-toolbar-title class="hidden-sm-and-down">
-          <router-link to="/" tag="span" class="main__title"
-            >Vue Share</router-link
-          >
+          <router-link to="/" tag="span" class="main__title">ATP-16</router-link>
         </v-toolbar-title>
         <v-spacer />
         <v-toolbar-items class="hidden-sm-and-down">
-          <v-btn
-            v-for="item in itemsForRender"
-            text
-            :key="item.id"
-            :to="item.url"
-          >
+          <v-btn v-for="item in itemsForRender" text :key="item.id" :to="item.url">
             <v-icon left class="hidden-sm-only">{{ item.icon }}</v-icon>
             {{ item.title }}
           </v-btn>

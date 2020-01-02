@@ -1,11 +1,13 @@
 <template>
   <v-container fluid class="pa-0 ma-0" fill-height>
     <v-row no-gutters>
-      <v-col cols="12">
+      <v-col>
+        <car-row :header="true" :dates="dates" />
         <div class="car-row-wrapper">
           <car-row
-            v-for="car in carsByType('10tn')"
+            v-for="(car, i) in carsByType('10tn')"
             :car="car"
+            :num="i"
             :key="car.id"
             :header="false"
             :dates="dates"
@@ -104,6 +106,6 @@ export default {
   max-height: 80vh;
 }
 .car-row-wrapper div:nth-child(2n-1) {
-  background-color: rgba(189, 236, 255, 0.2);
+  background-color: rgba(189, 236, 255, 0.15);
 }
 </style>

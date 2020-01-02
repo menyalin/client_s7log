@@ -52,6 +52,7 @@ export default {
     limit: 50,
     carPage: {},
     headers: [
+      { text: 'id', value: 'id' },
       {
         text: 'Собственная',
         value: 'isOwned',

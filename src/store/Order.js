@@ -10,30 +10,41 @@ export default {
       {
         id: '01',
         carId: '9f73aabe-11c7-48a8-8d8c-8d0fdf5fccda',
-        startConfirmDate: '2019-12-29 00:00',
-        endConfirmDate: '2020-01-02 12:00',
+        startConfirmDate: '2020-01-04 12:00',
+        endConfirmDate: '2020-01-05 00:00',
         note: '878 - 10ка - 1 Заказ'
       },
       {
         id: '02',
         carId: '9f73aabe-11c7-48a8-8d8c-8d0fdf5fccda',
-        startConfirmDate: '2020-01-02 18:00',
-        endConfirmDate: '2020-01-03 12:00',
+        startConfirmDate: '2020-01-02 12:00',
+        endConfirmDate: '2020-01-03 00:00',
         note: '878 - 10ка - 2 заказ'
       },
       {
         id: '03',
         carId: '9f73aabe-11c7-48a8-8d8c-8d0fdf5fccda',
-        startConfirmDate: '2020-01-01 06:00',
-        endConfirmDate: '2020-01-01 12:00',
+        startConfirmDate: '2019-12-01 06:00',
+        endConfirmDate: '2019-12-25 12:00',
         note: '878 - 10ка - 3 заказ'
       },
       {
         id: '04',
         carId: 'f8d421d0-f977-41ae-a339-b5d234f287b6',
         startConfirmDate: '2019-12-29 06:00',
-        endConfirmDate: '2020-02-01 12:00',
+        endConfirmDate: '2020-02-02 00:00',
         note: '975 - 10ка - 4 заказ'
+      }
+    ],
+    carWorkScheduleV2: [
+      {
+        id: 'CR001',
+        type: 'holiday',
+        carId: '61818490-585a-405d-a961-c90374fb00f3',
+        title: 'Текст для вывода на экран',
+        note: 'Примечание',
+        startDate: '2019-12-31 06:00',
+        endDate: '2020-01-01 00:00'
       }
     ],
     showOrderDialog: false,
@@ -196,7 +207,7 @@ export default {
       commit('resetCarInOrder', orderId)
 
     },
-    confirmOrder ({ commit }, payload) {
+    confirmOrder({ commit }, payload) {
       const { id, confirmedCarId, confirmDate, confirmTime } = payload
       apolloClient.mutate({
         mutation: updateOrderMutation,
@@ -209,7 +220,7 @@ export default {
       })
       commit('confirmOrder', payload)
     },
-    createNewOrder ({ commit, getters }) {
+    createNewOrder({ commit, getters }) {
       apolloClient.mutate({
         mutation: createOrderMutation,
         variables: getters.editedOrder
@@ -305,7 +316,8 @@ export default {
       }
       else return null
     },
-    ordersV2: ({ ordersV2 }) => ordersV2
+    ordersV2: ({ ordersV2 }) => ordersV2,
+    carWorkScheduleV2: ({ carWorkScheduleV2 }) => carWorkScheduleV2
   }
 }
 
