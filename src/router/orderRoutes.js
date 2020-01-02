@@ -1,6 +1,8 @@
 import newOrder from '@/components/Order/newOrder/index.vue'
 import orderList from '@/components/OrderV2/orderList'
 import allOrders from '@/components/OrderV2/allOrders/index.vue'
+import orderV3 from '@/components/OrderV3/index.vue'
+
 
 export default [
   {
@@ -24,5 +26,10 @@ export default [
     props: {
       carType: '20tn'
     }
+  },
+  {
+    path: 'tests',
+    component: orderV3
   }
+
 ]
