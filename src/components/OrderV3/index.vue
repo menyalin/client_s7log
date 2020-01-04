@@ -14,6 +14,7 @@
             carType="10tn"
           />
         </div>
+        <not-confirmed-orders :carType="'10tn'" :dates="dates" />
       </v-col>
     </v-row>
   </v-container>
@@ -21,13 +22,16 @@
 
 <script>
 import carRow from './carRow'
+import notConfirmedOrders from './notConfirmed'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 
 export default {
   name: 'orderV3Component',
+  props: ['carType'],
   components: {
-    carRow
+    carRow,
+    notConfirmedOrders
   },
   computed: {
     ...mapGetters(['carsByType', 'currentDate']),

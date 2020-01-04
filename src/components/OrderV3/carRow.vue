@@ -3,10 +3,7 @@
     <v-row no-gutters justify="center">
       <v-col cols="auto" class="car--title">
         <div v-if="header"></div>
-        <div v-else>
-          <small>{{ num+1 }}</small>
-          {{ car.title }}
-        </div>
+        <div v-else>{{ car.title }}</div>
       </v-col>
       <v-col>
         <div v-if="header" class="header--container">
@@ -38,15 +35,29 @@ import moment from 'moment'
 import itemCell from './itemCell'
 import carDatesHeader from './header/carDatesHeader'
 
-const getOrderLength = (order, startPosition, endPos) => {
+const getCellLength = (cell, startPosition, endPosition) => {
+  if (cell.lengthCell) return cell.lengthCell
   let length = 0
-  const startConf = moment(order.startConfirmDate)
-  const endConf = moment(order.endConfirmDate)
-  while (startPosition.isBefore(endConf) && startPosition.isBefore(endPos)) {
+  // const startConf = moment(cell.startDate)
+  const endConf = moment(cell.endDate)
+  while (
+    startPosition.isSameOrBefore(endConf) &&
+    startPosition.isSameOrBefore(endPosition)
+  ) {
     length++
     startPosition.add(6, 'h')
   }
   return length
+}
+const isLastZone = endDate => {
+  return moment(endDate).hours() == 18
+}
+const getItem = (array, startPosition) => {
+  return array.find(
+    item =>
+      startPosition.isSameOrAfter(item.startDate) &&
+      startPosition.isSameOrBefore(item.endDate)
+  )
 }
 
 export default {
@@ -65,46 +76,39 @@ export default {
       )
       let res = []
       let startPos = moment(this.dates[0] + ' 00:00')
-      const endPos = moment(this.dates[this.dates.length - 1] + ' 23:59:59')
-      while (startPos.isBefore(endPos)) {
-        let tmpOrder = orders.find(
-          item =>
-            startPos.isSameOrAfter(item.startConfirmDate) &&
-            startPos.isBefore(item.endConfirmDate)
-        )
-        let tmpCarWorkSchedule = carSchedule.find(
-          item =>
-            startPos.isSameOrAfter(item.startDate) &&
-            startPos.isBefore(item.endDate)
-        )
+      const endPos = moment(this.dates[this.dates.length - 1]).add(18, 'h')
+      while (startPos.isSameOrBefore(endPos)) {
+        let tmpOrder = getItem(orders, startPos)
+        let tmpCarWorkSchedule = getItem(carSchedule, startPos)
         if (tmpOrder) {
           res.push({
-            itemType: 'order',
-            isLastZone: moment(tmpOrder.endConfirmDate).hours() === 0,
             ...tmpOrder,
-            length: getOrderLength(tmpOrder, startPos, endPos)
+            itemType: 'order',
+            isLastZone: isLastZone(tmpOrder.endDate),
+            length: getCellLength(tmpOrder, startPos, endPos)
           })
-          startPos = moment(tmpOrder.endConfirmDate)
+          startPos = moment(tmpOrder.endDate).add(6, 'h')
         } else if (tmpCarWorkSchedule) {
           res.push({
-            itemType: 'carSchedule',
-            isLastZone: moment(tmpCarWorkSchedule.endDate).hours() === 0,
             ...tmpCarWorkSchedule,
-            length: 3 // <-------------
+            itemType: 'carSchedule',
+            isLastZone: isLastZone(tmpCarWorkSchedule.endDate),
+            length: getCellLength(tmpCarWorkSchedule, startPos, endPos)
           })
-          startPos = moment(tmpCarWorkSchedule.endDate)
+          startPos = moment(tmpCarWorkSchedule.endDate).add(6, 'h')
         } else {
           res.push({
             id: startPos.format('YYYY-MM-DD HH:mm'),
             startPos,
-            isLastZone: startPos.hours() === 18,
+            isLastZone: isLastZone(startPos),
             itemType: 'empty',
             carType: this.carType,
             length: 1
           })
-          startPos.add(6, 'h')
+          startPos.add(6, 'H')
         }
       }
+      console.log(res)
       return res
     },
     colCount() {
