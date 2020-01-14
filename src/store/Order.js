@@ -36,17 +36,6 @@ export default {
         note: '975 - 10ка - 4 заказ'
       }
     ],
-    carWorkScheduleV2: [
-      {
-        id: 'CR001',
-        type: 'holiday',
-        carId: '61818490-585a-405d-a961-c90374fb00f3',
-        title: 'Текст для вывода на экран',
-        note: 'Примечание',
-        startDate: '2019-12-31 06:00',
-        endDate: '2020-01-01 00:00'
-      }
-    ],
     showOrderDialog: false,
     editedOrder: {},
     currentDate: null,
@@ -77,10 +66,10 @@ export default {
       { value: '20tn', text: '20тн' }
     ],
     timeZones: [
-      { id: '01', title: '00-06' },
-      { id: '02', title: '06-12' },
-      { id: '03', title: '12-18' },
-      { id: '04', title: '18-24' }
+      { id: '01', title: '00-06', startTime: '00:00' },
+      { id: '02', title: '06-12', startTime: '06:00' },
+      { id: '03', title: '12-18', startTime: '12:00' },
+      { id: '04', title: '18-24', startTime: '18:00' }
     ],
     orders: []
   },
@@ -207,7 +196,7 @@ export default {
       commit('resetCarInOrder', orderId)
 
     },
-    confirmOrder({ commit }, payload) {
+    confirmOrder ({ commit }, payload) {
       const { id, confirmedCarId, confirmDate, confirmTime } = payload
       apolloClient.mutate({
         mutation: updateOrderMutation,
@@ -220,7 +209,7 @@ export default {
       })
       commit('confirmOrder', payload)
     },
-    createNewOrder({ commit, getters }) {
+    createNewOrder ({ commit, getters }) {
       apolloClient.mutate({
         mutation: createOrderMutation,
         variables: getters.editedOrder
@@ -279,45 +268,45 @@ export default {
     carWorkSchedule: ({ carWorkSchedule }) => carWorkSchedule,
     carWorkScheduleTypes: ({ carWorkScheduleTypes }) => carWorkScheduleTypes,
     carWorkScheduleTypeById: ({ carWorkScheduleTypes }) => (id) => carWorkScheduleTypes.find(item => item.id === id),
-    carWorkScheduleCells: ({ carWorkSchedule, timeZones }) => {
-      if (carWorkSchedule.length) {
-        let res = []
-        carWorkSchedule.forEach(carWorkScheduleItem => {
-          let day = moment(carWorkScheduleItem.startDate)
-          let endDate = moment(carWorkScheduleItem.endDate)
-          const endTime = timeZones.findIndex(item => item.id === carWorkScheduleItem.endTime)
-          let i = timeZones.findIndex(item => item.id === carWorkScheduleItem.startTime)
-          let lastDay = false
-          while (day <= endDate) {
-            if (day >= endDate) lastDay = true
-            while (i < timeZones.length) {
-              if (lastDay && i > endTime) break
-              else res.push({
-                carWorkScheduleId: carWorkScheduleItem.id,
-                date: day.format('YYYY-MM-DD'),
-                time: timeZones[i].id,
-                carId: carWorkScheduleItem.carId,
-                type: carWorkScheduleItem.type,
-                note: carWorkScheduleItem.note
-              })
-              i++
-            }
-            i = 0
-            day.add(1, 'days')
-          }
-        })
-        return res
-      } else return null
-    },
-    carWorkScheduleFiltered: () => (carId, date, time) => {
-      let cells = store.getters.carWorkScheduleCells
-      if (cells && date && time && carId) {
-        return cells.find(item => item.carId === carId && item.date === date && item.time === time)
-      }
-      else return null
-    },
-    ordersV2: ({ ordersV2 }) => ordersV2,
-    carWorkScheduleV2: ({ carWorkScheduleV2 }) => carWorkScheduleV2
+    // carWorkScheduleCells: ({ carWorkSchedule, timeZones }) => {
+    //   if (carWorkSchedule.length) {
+    //     let res = []
+    //     carWorkSchedule.forEach(carWorkScheduleItem => {
+    //       let day = moment(carWorkScheduleItem.startDate)
+    //       let endDate = moment(carWorkScheduleItem.endDate)
+    //       const endTime = timeZones.findIndex(item => item.id === carWorkScheduleItem.endTime)
+    //       let i = timeZones.findIndex(item => item.id === carWorkScheduleItem.startTime)
+    //       let lastDay = false
+    //       while (day <= endDate) {
+    //         if (day >= endDate) lastDay = true
+    //         while (i < timeZones.length) {
+    //           if (lastDay && i > endTime) break
+    //           else res.push({
+    //             carWorkScheduleId: carWorkScheduleItem.id,
+    //             date: day.format('YYYY-MM-DD'),
+    //             time: timeZones[i].id,
+    //             carId: carWorkScheduleItem.carId,
+    //             type: carWorkScheduleItem.type,
+    //             note: carWorkScheduleItem.note
+    //           })
+    //           i++
+    //         }
+    //         i = 0
+    //         day.add(1, 'days')
+    //       }
+    //     })
+    //     return res
+    //   } else return null
+    // },
+  
+    // carWorkScheduleFiltered: () => (carId, date, time) => {
+    //   let cells = store.getters.carWorkScheduleCells
+    //   if (cells && date && time && carId) {
+    //     return cells.find(item => item.carId === carId && item.date === date && item.time === time)
+    //   }
+    //   else return null
+    // },
+    ordersV2: ({ ordersV2 }) => ordersV2
   }
 }
 

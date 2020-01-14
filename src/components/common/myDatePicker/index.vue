@@ -12,7 +12,7 @@
         :label="label"
         :value="textFielValue"
         readonly
-        clearable
+        :clearable="isClearable"
         @click:clear="reset"
         hide-details
         v-on="on"
@@ -22,6 +22,8 @@
     </template>
     <v-date-picker
       no-title
+      :max="max"
+      :min="min"
       :value="propDate"
       scrollable
       @click:date="clickDateHandler"
@@ -36,7 +38,16 @@ export default {
     prop: 'propDate',
     event: 'change'
   },
-  props: ['label', 'propDate'],
+  props: {
+    propDate: String,
+    isClearable: {
+      type: Boolean,
+      default: true
+    },
+    label: String,
+    max: String,
+    min: String
+  },
   data: () => ({
     date: new Date().toISOString().substr(0, 10),
     menu: false
@@ -47,7 +58,7 @@ export default {
       this.menu = false
     },
     reset() {
-      this.$emit('change', undefined)
+      this.$emit('change', null)
     }
   },
   computed: {

@@ -22,51 +22,13 @@
               item-text="title"
             />
           </v-col>
+          <v-col>
+            <v-text-field label="Заголовок" v-model="editedItem.title" />
+          </v-col>
         </v-row>
         <v-row>
           <v-col>
-            <date-time-row>
-              <template v-slot:date>
-                <my-date-picker
-                  v-model="editedItem.startDate"
-                  label="Дата начала"
-                />
-              </template>
-              <template v-slot:time>
-                <v-select
-                  :items="timeZones"
-                  item-text="title"
-                  item-value="id"
-                  clearable
-                  label="Время начала"
-                  hide-details
-                  class="pt-0 mt-0"
-                  v-model="editedItem.startTime"
-                />
-              </template>
-            </date-time-row>
-          </v-col>
-          <v-col
-            ><date-time-row>
-              <template v-slot:date>
-                <my-date-picker
-                  v-model="editedItem.endDate"
-                  label="Дата завершения"
-                />
-              </template>
-              <template v-slot:time>
-                <v-select
-                  :items="timeZones"
-                  item-text="title"
-                  item-value="id"
-                  clearable
-                  label="Время завершения"
-                  hide-details
-                  class="pt-0 mt-0"
-                  v-model="editedItem.endTime"
-                />
-              </template>
-            </date-time-row>
+            <date-time-range v-model="editedItem.dateRange" />
           </v-col>
         </v-row>
         <v-row>
@@ -89,7 +51,7 @@
       </v-btn>
       <v-spacer />
       <v-btn color="primary" @click="cancel">Отмена</v-btn>
-      <v-btn color="primary" @click="save">
+      <v-btn color="primary" @click="save" :disabled="!isValidForm">
         {{ isNewItem ? 'Создать' : 'Сохранить' }}
       </v-btn>
     </v-card-actions>
@@ -97,21 +59,25 @@
 </template>
 
 <script>
-import myDatePicker from '@/components/common/myDatePicker'
-import myTimeTextField from '@/components/common/myTimeTextField'
+import dateTimeRange from '@/components/common/dateTimeRange'
 import myCarAutocomplete from '@/components/common/myCarAutocomplete'
-import dateTimeRow from '@/components/common/dateTimeRow'
 import { mapGetters } from 'vuex'
 export default {
   components: {
-    dateTimeRow,
-    myCarAutocomplete,
-    myDatePicker
+    dateTimeRange,
+    myCarAutocomplete
   },
   computed: {
-    ...mapGetters(['carWorkScheduleTypes', 'timeZones']),
+    ...mapGetters(['carWorkScheduleTypes']),
     isNewItem() {
       return !this.editedItem.id
+    },
+    isValidForm() {
+      return (
+        !!this.editedItem.dateRange &&
+        !!this.editedItem.carId &&
+        !!this.editedItem.type
+      )
     }
   },
   model: {

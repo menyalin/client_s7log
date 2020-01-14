@@ -11,7 +11,7 @@
             v-for="date of dates"
             :date="date"
             :key="date"
-            :style="{width: (100/dates.length)+'%'}"
+            :style="{ width: 100 / dates.length + '%' }"
           />
         </div>
         <div v-else class="items--container">
@@ -19,8 +19,8 @@
             v-for="cell in itemsRow"
             :key="cell.id"
             class="item--cell"
-            :class="{lastCell: cell.isLastZone}"
-            :style="{width: (cell.length/colCount*100)+ '%' }"
+            :class="{ lastCell: cell.isLastZone }"
+            :style="{ width: (cell.length / colCount) * 100 + '%' }"
           >
             <item-cell :item="cell" />
           </div>
@@ -34,6 +34,21 @@
 import moment from 'moment'
 import itemCell from './itemCell'
 import carDatesHeader from './header/carDatesHeader'
+
+const getCellLengthInRange = (cell, startPosition, endPosition) => {
+  if (cell.lengthCell) return cell.lengthCell
+  let length = 0
+  // const startConf = moment(cell.startDate)
+  const endConf = moment(+cell.dateRange[1].value)
+  while (
+    startPosition.isSameOrBefore(endConf) &&
+    startPosition.isSameOrBefore(endPosition)
+  ) {
+    length++
+    startPosition.add(6, 'h')
+  }
+  return length
+}
 
 const getCellLength = (cell, startPosition, endPosition) => {
   if (cell.lengthCell) return cell.lengthCell
@@ -59,6 +74,13 @@ const getItem = (array, startPosition) => {
       startPosition.isSameOrBefore(item.endDate)
   )
 }
+const getItemInRange = (array, startPosition) => {
+  return array.find(
+    item =>
+      startPosition.isSameOrAfter(+item.dateRange[0].value) &&
+      startPosition.isSameOrBefore(+item.dateRange[1].value)
+  )
+}
 
 export default {
   props: ['car', 'header', 'dates', 'carType', 'num'],
@@ -71,7 +93,7 @@ export default {
       let orders = this.$store.getters.ordersV2.filter(
         item => item.carId === this.car.id
       )
-      let carSchedule = this.$store.getters.carWorkScheduleV2.filter(
+      let carSchedule = this.$store.getters.carWorkSchedule.filter(
         item => item.carId === this.car.id
       )
       let res = []
@@ -79,8 +101,8 @@ export default {
       const endPos = moment(this.dates[this.dates.length - 1]).add(18, 'h')
       while (startPos.isSameOrBefore(endPos)) {
         let tmpOrder = getItem(orders, startPos)
-        let tmpCarWorkSchedule = getItem(carSchedule, startPos)
-        if (tmpOrder) {
+        let tmpCarWorkSchedule = getItemInRange(carSchedule, startPos)
+        if (tmpOrder && false) {
           res.push({
             ...tmpOrder,
             itemType: 'order',
@@ -92,10 +114,10 @@ export default {
           res.push({
             ...tmpCarWorkSchedule,
             itemType: 'carSchedule',
-            isLastZone: isLastZone(tmpCarWorkSchedule.endDate),
-            length: getCellLength(tmpCarWorkSchedule, startPos, endPos)
+            isLastZone: isLastZone(+tmpCarWorkSchedule.dateRange[1].value),
+            length: getCellLengthInRange(tmpCarWorkSchedule, startPos, endPos)
           })
-          startPos = moment(tmpCarWorkSchedule.endDate).add(6, 'h')
+          startPos = moment(+tmpCarWorkSchedule.dateRange[1].value).add(6, 'h')
         } else {
           res.push({
             id: startPos.format('YYYY-MM-DD HH:mm'),
@@ -108,7 +130,6 @@ export default {
           startPos.add(6, 'H')
         }
       }
-      console.log(res)
       return res
     },
     colCount() {

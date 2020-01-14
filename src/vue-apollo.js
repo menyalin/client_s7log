@@ -46,7 +46,7 @@ const { apolloClient, wsClient } = createApolloClient({
   ...defaultOptions
 })
 
-// apolloClient.wsClient = wsClient
+apolloClient.wsClient = wsClient
 
 function createProvider () {
   // Create apollo client

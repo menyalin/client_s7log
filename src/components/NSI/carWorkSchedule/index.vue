@@ -29,16 +29,10 @@
             {{ carById(item.carId) ? carById(item.carId).title : 'Не найден' }}
           </template>
           <template v-slot:item.startDate="{ item }">
-            {{ dateForRender(item.startDate) }}
+            {{ dateRender(item.dateRange, 0) }}
           </template>
           <template v-slot:item.endDate="{ item }">
-            {{ dateForRender(item.endDate) }}
-          </template>
-          <template v-slot:item.startTime="{ item }">
-            {{ timeZoneById(item.startTime).title }}
-          </template>
-          <template v-slot:item.endTime="{ item }">
-            {{ timeZoneById(item.endTime).title }}
+            {{ dateRender(item.dateRange, 1) }}
           </template>
           <template v-slot:item.type="{ item }">
             {{ carWorkScheduleTypeById(item.type).title }}
@@ -68,28 +62,24 @@ const createCarWorkScheduleMutation = gql`
   mutation createCarWorkSchedule(
     $type: CarWorkScheduleType!
     $carId: String!
-    $startDate: String!
-    $startTime: String!
-    $endDate: String!
-    $endTime: String!
+    $title: String
+    $dateRange: String!
     $note: String
   ) {
     createCarWorkSchedule(
       type: $type
       carId: $carId
-      startDate: $startDate
-      startTime: $startTime
-      endDate: $endDate
-      endTime: $endTime
+      title: $title
+      dateRange: $dateRange
       note: $note
     ) {
       id
       type
       note
-      startDate
-      startTime
-      endDate
-      endTime
+      dateRange {
+        value
+        inclusive
+      }
       carId
     }
   }
@@ -98,30 +88,27 @@ const updateCarWorkScheduleMutation = gql`
   mutation updateCarWorkSchedule(
     $id: ID!
     $type: CarWorkScheduleType!
+    $title: String
     $carId: String!
-    $startDate: String!
-    $startTime: String!
-    $endDate: String!
-    $endTime: String!
+    $dateRange: String!
     $note: String
   ) {
     updateCarWorkSchedule(
       id: $id
       type: $type
+      title: $title
       carId: $carId
-      startDate: $startDate
-      startTime: $startTime
-      endDate: $endDate
-      endTime: $endTime
+      dateRange: $dateRange
       note: $note
     ) {
       id
       type
+      title
       note
-      startDate
-      startTime
-      endDate
-      endTime
+      dateRange {
+        value
+        inclusive
+      }
       carId
     }
   }
@@ -144,10 +131,9 @@ export default {
       { text: 'id', value: 'id', align: 'center' },
       { text: 'Машина', value: 'car', align: 'center' },
       { text: 'Тип', value: 'type', align: 'center' },
-      { text: 'День начала', value: 'startDate', align: 'center' },
-      { text: 'Время начала', value: 'startTime', align: 'center' },
-      { text: 'День завершение', value: 'endDate', align: 'center' },
-      { text: 'Время завершения', value: 'endTime', align: 'center' },
+      { text: 'Заголовок', value: 'title', align: 'center' },
+      { text: 'Начало', value: 'startDate', align: 'center' },
+      { text: 'Конец', value: 'endDate', align: 'center' },
       { text: 'Комментарий', value: 'note', align: 'center' }
     ],
     limit: 30
@@ -158,7 +144,12 @@ export default {
       'carById',
       'timeZoneById',
       'carWorkScheduleTypeById'
-    ])
+    ]),
+    queryVariables() {
+      return {
+        ...this.editedSchedule
+      }
+    }
   },
   methods: {
     cancelHandler() {
@@ -171,7 +162,7 @@ export default {
       this.$apollo
         .mutate({
           mutation: createCarWorkScheduleMutation,
-          variables: this.editedSchedule
+          variables: this.queryVariables
         })
         .then(() => {
           this.cancelHandler()
@@ -184,7 +175,7 @@ export default {
       this.$apollo
         .mutate({
           mutation: updateCarWorkScheduleMutation,
-          variables: this.editedSchedule
+          variables: this.queryVariables
         })
         .then(() => {
           this.cancelHandler()
@@ -193,14 +184,10 @@ export default {
           this.$store.commit('setError', e.message)
         })
     },
-    dateForRender(date) {
-      moment.locale('ru')
-      return moment(date).format('DD MMM YYYY, ddd')
-    },
     clickRowHandler(item) {
-      this.editedSchedule = Object.assign({}, item)
+      this.dialog = true
       this.$nextTick(() => {
-        this.dialog = true
+        this.editedSchedule = Object.assign({}, item)
       })
     },
     newCarWorkSchedule() {
@@ -216,6 +203,12 @@ export default {
         .catch(e => {
           this.$store.commit('setError', e.message)
         })
+    },
+    dateRender(dateRange, pos) {
+      // pos 0- Начало диапазона, 1 -конец диапазона
+      if (Array.isArray(dateRange) && dateRange.length === 2) {
+        return moment(+dateRange[pos].value).format('DD.MM.YYYY, HH:mm')
+      } else return ''
     }
   }
 }

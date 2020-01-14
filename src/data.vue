@@ -59,14 +59,15 @@ const ordersForVuexQuery = gql`
       carType
       number
       status
-      confirmDate
+      dateRange {
+        value
+        inclusive
+      }
       shipperId
       consigneeId
-      confirmedCarId
+      carId
       managerId
       note
-      confirmDate
-      confirmTime
       shippingDate
       shippingTime
       deliveryDate
@@ -86,8 +87,10 @@ const orderAddedSubscription = gql`
       shipperId
       consigneeId
       note
-      confirmDate
-      confirmTime
+      dateRange {
+        value
+        inclusive
+      }
       managerId
       shippingDate
       shippingTime
@@ -95,7 +98,7 @@ const orderAddedSubscription = gql`
       deliveryTime
       isDriverNotified
       isClientNotified
-      confirmedCarId
+      carId
     }
   }
 `
@@ -109,8 +112,10 @@ const orderUpdatedSubscription = gql`
       shipperId
       consigneeId
       note
-      confirmDate
-      confirmTime
+      dateRange {
+        value
+        inclusive
+      }
       managerId
       shippingDate
       shippingTime
@@ -118,7 +123,7 @@ const orderUpdatedSubscription = gql`
       deliveryTime
       isDriverNotified
       isClientNotified
-      confirmedCarId
+      carId
     }
   }
 `
@@ -225,10 +230,11 @@ const updatedCarWorkScheduleSubscription = gql`
       id
       type
       note
-      startDate
-      startTime
-      endDate
-      endTime
+      title
+      dateRange {
+        value
+        inclusive
+      }
       carId
     }
   }
@@ -244,10 +250,11 @@ const carWorkScheduleForVuexQuery = gql`
       id
       type
       note
-      startDate
-      startTime
-      endDate
-      endTime
+      title
+      dateRange {
+        value
+        inclusive
+      }
       carId
     }
   }
@@ -338,17 +345,17 @@ export default {
         store.commit('setCarWorkSchedule', carWorkScheduleForVuex)
       }
     },
-    ordersForVuex: {
-      query: ordersForVuexQuery,
-      variables: () => store.getters.dateRange,
-      fetchPolicy: 'no-cache',
-      error(error) {
-        store.commit('setError', error.message)
-      },
-      update: ({ ordersForVuex }) => {
-        store.commit('setOrders', ordersForVuex)
-      }
-    },
+    // ordersForVuex: {
+    //   query: ordersForVuexQuery,
+    //   variables: () => store.getters.dateRange,
+    //   fetchPolicy: 'no-cache',
+    //   error(error) {
+    //     store.commit('setError', error.message)
+    //   },
+    //   update: ({ ordersForVuex }) => {
+    //     store.commit('setOrders', ordersForVuex)
+    //   }
+    // },
     addressesForVuex: {
       query: addressesForVuexQuery,
       fetchPolicy: 'no-cache',
