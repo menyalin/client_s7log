@@ -14,6 +14,18 @@
             carType="10tn"
           />
         </div>
+        <v-divider class="ma-2" />
+        <div class="car-row-wrapper">
+          <car-row
+            v-for="(car, i) in carsByType(carType)"
+            :car="car"
+            :num="i"
+            :key="car.id"
+            :header="false"
+            :dates="dates"
+            :carType="carType"
+          />
+        </div>
         <not-confirmed-orders :carType="'10tn'" :dates="dates" />
       </v-col>
     </v-row>
@@ -28,7 +40,12 @@ import moment from 'moment'
 
 export default {
   name: 'orderV3Component',
-  props: ['carType'],
+  props: {
+    carType: {
+      type: String,
+      default: '10tn'
+    }
+  },
   components: {
     carRow,
     notConfirmedOrders
