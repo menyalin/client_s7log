@@ -17,7 +17,7 @@
         <v-divider class="ma-2" />
         <div class="car-row-wrapper">
           <car-row
-            v-for="(car, i) in carsByType(carType)"
+            v-for="(car, i) in carSlotsByType(carType)"
             :car="car"
             :num="i"
             :key="car.id"
@@ -26,7 +26,6 @@
             :carType="carType"
           />
         </div>
-        <not-confirmed-orders :carType="'10tn'" :dates="dates" />
       </v-col>
     </v-row>
   </v-container>
@@ -34,7 +33,6 @@
 
 <script>
 import carRow from './carRow'
-import notConfirmedOrders from './notConfirmed'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 
@@ -47,11 +45,10 @@ export default {
     }
   },
   components: {
-    carRow,
-    notConfirmedOrders
+    carRow
   },
   computed: {
-    ...mapGetters(['carsByType', 'currentDate']),
+    ...mapGetters(['carsByType', 'carSlotsByType', 'currentDate']),
     // eslint-disable-next-line vue/return-in-computed-property
     dates() {
       if (this.currentDate) {
@@ -124,7 +121,7 @@ export default {
 <style scoped>
 .car-row-wrapper {
   overflow: auto;
-  max-height: 80vh;
+  max-height: 40vh;
 }
 .car-row-wrapper div:nth-child(2n-1) {
   background-color: rgba(189, 236, 255, 0.15);

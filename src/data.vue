@@ -132,6 +132,8 @@ const carsForVuexQuery = gql`
     carsForVuex {
       id
       title
+      listItem
+      isTempSlot
       reg
       pts
       isOwned

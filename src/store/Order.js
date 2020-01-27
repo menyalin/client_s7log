@@ -240,7 +240,8 @@ export default {
     statusTitleById: (state) => (id) => state.statuses.find(item => item.id === id),
     isAddressesUpload: (state) => !!state.addresses.length,
     carsForAutocomplete: ({ cars }) => (type) => type ? cars.filter(item => item.type === type) : cars,
-    carsByType: (state) => (type) => state.cars.filter(item => item.type === type),
+    carsByType: (state) => (type) => state.cars.filter(item => (item.type === type && !item.isTempSlot)),
+    carSlotsByType: (state) => (type) => state.cars.filter(item => (item.type === type && item.isTempSlot)),
     addressesForAutocomplete: (state) => (type) => {
       if (type === 'shippingPlace') {
         return state.addresses.filter(item => item.isShippingPlace)
@@ -298,7 +299,7 @@ export default {
     //     return res
     //   } else return null
     // },
-  
+
     // carWorkScheduleFiltered: () => (carId, date, time) => {
     //   let cells = store.getters.carWorkScheduleCells
     //   if (cells && date && time && carId) {
