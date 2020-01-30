@@ -1,7 +1,7 @@
 <template>
   <div
     @click="newOrder"
-    @drop="dropHandler($event, carId, date, zoneId)"
+    @drop="dropHandler($event)"
     @dragover="dragOver"
     class="empty--zone"
   />
@@ -9,7 +9,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-/* 
+import moment from 'moment'
+/*
   props: ['carId', 'date', 'zoneId', 'carType']
 */
 
@@ -18,25 +19,37 @@ export default {
   props: ['cell'],
   methods: {
     newOrder() {
+      console.log(this.cell)
       this.$store.commit('openEditOrderForm', {
-        carType: this.carType,
-        confirmTime: this.zoneId,
-        confirmDate: this.date,
-        confirmedCarId: this.carId,
-        templateId: null
+        carType: this.cell.carType,
+        dateRange: [
+          { value: +moment(this.cell.id), inclusive: true },
+          { value: +moment(this.cell.id), inclusive: true }
+        ],
+        carId: this.cell.carId
       })
     },
 
-    dropHandler(event, carId, date, zoneId) {
+    dropHandler(event) {
       const order = JSON.parse(event.dataTransfer.getData('order'))
       this.$store.dispatch('confirmOrder', {
         id: order.id,
-        confirmedCarId: carId,
-        confirmDate: date,
-        confirmTime: zoneId
+        carId: this.cell.carId,
+        carType: this.cell.carType,
+        dateRange: this.getDateRange(moment(this.cell.id), order.lengthCell)
       })
       event.preventDefault()
       return false
+    },
+    getDateRange(startDate, length) {
+      const dateF = 'YYYY-MM-DD HH:mmZ'
+      let endDate = moment(startDate.format(dateF))
+      let i = 1
+      while (i < length) {
+        endDate.add(6, 'h')
+        i++
+      }
+      return `[${startDate.format(dateF)},${endDate.format(dateF)}]`
     },
     dragOver(event) {
       event.preventDefault()

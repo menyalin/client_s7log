@@ -66,12 +66,12 @@ const ordersForVuexQuery = gql`
       shipperId
       consigneeId
       carId
-      managerId
       note
       shippingDate
       shippingTime
       deliveryDate
       deliveryTime
+      lengthCell
       isDriverNotified
       isClientNotified
     }
@@ -91,7 +91,6 @@ const orderAddedSubscription = gql`
         value
         inclusive
       }
-      managerId
       shippingDate
       shippingTime
       deliveryDate
@@ -99,6 +98,7 @@ const orderAddedSubscription = gql`
       isDriverNotified
       isClientNotified
       carId
+      lengthCell
     }
   }
 `
@@ -116,7 +116,6 @@ const orderUpdatedSubscription = gql`
         value
         inclusive
       }
-      managerId
       shippingDate
       shippingTime
       deliveryDate
@@ -124,6 +123,7 @@ const orderUpdatedSubscription = gql`
       isDriverNotified
       isClientNotified
       carId
+      lengthCell
     }
   }
 `
@@ -208,6 +208,7 @@ const orderTemplatesQuery = gql`
       note
       shipperId
       consigneeId
+      lengthCell
       showInMenu
     }
   }
@@ -223,6 +224,7 @@ const orderTemplateUpdatedSubscription = gql`
       shipperId
       consigneeId
       showInMenu
+      lengthCell
     }
   }
 `
@@ -345,19 +347,25 @@ export default {
       },
       update: ({ carWorkScheduleForVuex }) => {
         store.commit('setCarWorkSchedule', carWorkScheduleForVuex)
+      },
+      skip() {
+        return !store.getters.currentDate
       }
     },
-    // ordersForVuex: {
-    //   query: ordersForVuexQuery,
-    //   variables: () => store.getters.dateRange,
-    //   fetchPolicy: 'no-cache',
-    //   error(error) {
-    //     store.commit('setError', error.message)
-    //   },
-    //   update: ({ ordersForVuex }) => {
-    //     store.commit('setOrders', ordersForVuex)
-    //   }
-    // },
+    ordersForVuex: {
+      query: ordersForVuexQuery,
+      variables: () => store.getters.dateRange,
+      fetchPolicy: 'no-cache',
+      error(error) {
+        store.commit('setError', error.message)
+      },
+      update: ({ ordersForVuex }) => {
+        store.commit('setOrders', ordersForVuex)
+      },
+      skip() {
+        return !store.getters.currentDate
+      }
+    },
     addressesForVuex: {
       query: addressesForVuexQuery,
       fetchPolicy: 'no-cache',
@@ -394,6 +402,9 @@ export default {
       },
       update: ({ scheduleForVuex }) => {
         store.commit('setSchedule', scheduleForVuex)
+      },
+      skip() {
+        return !store.getters.currentDate
       }
     }
   }

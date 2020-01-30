@@ -1,22 +1,22 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="8" sm="4">
+      <v-col :cols="renderedCols[0]" :sm="renderedCols[1]">
         <date-picker
           :label="startLabel"
           v-model="res._startDate"
           :isClearable="false"
-          :max="res._endDate"
+          :max="null"
           @change="changeHandler($event, '_startDate')"
         />
       </v-col>
-      <v-col cols="4" sm="2">
+      <v-col :cols="renderedCols[0] / 2" :sm="renderedCols[1] / 2">
         <time-zone-select
           v-model="res._startTime"
           @change="changeHandler($event, '_startTime')"
         />
       </v-col>
-      <v-col cols="8" sm="4">
+      <v-col cols="8" sm="4" v-if="lengthCell === 0">
         <date-picker
           :label="endLabel"
           :isClearable="false"
@@ -25,7 +25,7 @@
           @change="changeHandler($event, '_endDate')"
         />
       </v-col>
-      <v-col cols="4" sm="2">
+      <v-col cols="4" sm="2" v-if="lengthCell === 0">
         <time-zone-select
           v-model="res._endTime"
           @change="changeHandler($event, '_endTime')"
@@ -57,6 +57,10 @@ export default {
     endLabel: {
       type: String,
       default: 'Конец'
+    },
+    lengthCell: {
+      type: Number,
+      default: 0
     }
   },
   components: {
@@ -77,9 +81,21 @@ export default {
   watch: {
     propDate: function(val) {
       this.initDateRange(val)
+    },
+    lengthCell: function(val) {
+      if (val > 0 && this.res._startDate && this.res._startTime) {
+        this.updateEndDate(val)
+        if (this.isValidStrDate(this.resultStr)) {
+          this.$emit('change', this.resultStr)
+        }
+      }
     }
   },
   computed: {
+    renderedCols() {
+      if (this.lengthCell === 0) return ['8', '4']
+      else return ['8', '8']
+    },
     startTime() {
       if (this.res._startTime) {
         return `${this.res._startTime}+03:00`
@@ -128,8 +144,30 @@ export default {
       const regExp = /^[\[|\(](2[\d\s-:\+]+),(2[\d\s-:\+]+)[\]|\)]$/
       return str.match(regExp)
     },
+    updateEndDate(lengthCellVal) {
+      let date = moment(this.res._startDate + ' ' + this.res._startTime)
+      let i = 1
+      while (i < lengthCellVal) {
+        date.add(6, 'h')
+        i++
+      }
+      this.res._endDate = date.format('YYYY-MM-DD')
+      this.res._endTime = date.format('HH:mm')
+    },
     changeHandler(e, label) {
       this.res[label] = e
+      if (
+        this.lengthCell === 0 &&
+        this.res._startDate &&
+        this.res._startTime &&
+        !this.res._endDate
+      ) {
+        this.res._endDate = this.res._startDate
+        this.res._endTime = this.res._startTime
+      }
+      if (this.lengthCell > 0 && this.res._startDate && this.res._startTime) {
+        this.updateEndDate(this.lengthCell)
+      }
       if (this.isValidStrDate(this.resultStr)) {
         this.$emit('change', this.resultStr)
       }

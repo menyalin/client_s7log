@@ -1,5 +1,5 @@
 import newOrder from '@/components/Order/newOrder/index.vue'
-import orderList from '@/components/OrderV2/orderList'
+import orderList from '@/components/OrderV3/index.vue'
 import allOrders from '@/components/OrderV2/allOrders/index.vue'
 import orderV3 from '@/components/OrderV3/index.vue'
 

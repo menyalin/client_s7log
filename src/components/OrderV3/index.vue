@@ -2,16 +2,17 @@
   <v-container fluid class="pa-0 ma-0" fill-height>
     <v-row no-gutters>
       <v-col>
+        <order-edit-dialog />
         <car-row :header="true" :dates="dates" />
         <div class="car-row-wrapper">
           <car-row
-            v-for="(car, i) in carsByType('10tn')"
+            v-for="(car, i) in carsByType(carType)"
             :car="car"
             :num="i"
             :key="car.id"
             :header="false"
             :dates="dates"
-            carType="10tn"
+            :carType="carType"
           />
         </div>
         <v-divider class="ma-2" />
@@ -23,7 +24,6 @@
             :key="car.id"
             :header="false"
             :dates="dates"
-            :carType="carType"
           />
         </div>
       </v-col>
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import orderEditDialog from '@/components/common/orderEditDialog'
 import carRow from './carRow'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
@@ -45,7 +46,8 @@ export default {
     }
   },
   components: {
-    carRow
+    carRow,
+    orderEditDialog
   },
   computed: {
     ...mapGetters(['carsByType', 'carSlotsByType', 'currentDate']),
@@ -119,10 +121,6 @@ export default {
 </script>
 
 <style scoped>
-.car-row-wrapper {
-  overflow: auto;
-  max-height: 40vh;
-}
 .car-row-wrapper div:nth-child(2n-1) {
   background-color: rgba(189, 236, 255, 0.15);
 }

@@ -20,7 +20,7 @@
             :key="cell.id"
             class="item--cell"
             :class="{ lastCell: cell.isLastZone }"
-            :style="{ width: (cell.length / colCount) * 100 + '%' }"
+            :style="{ width: (cell.lengthCell / colCount) * 100 + '%' }"
           >
             <item-cell :item="cell" />
           </div>
@@ -36,9 +36,7 @@ import itemCell from './itemCell'
 import carDatesHeader from './header/carDatesHeader'
 
 const getCellLengthInRange = (cell, startPosition, endPosition) => {
-  if (cell.lengthCell) return cell.lengthCell
   let length = 0
-  // const startConf = moment(cell.startDate)
   const endConf = moment(+cell.dateRange[1].value)
   while (
     startPosition.isSameOrBefore(endConf) &&
@@ -49,31 +47,29 @@ const getCellLengthInRange = (cell, startPosition, endPosition) => {
   }
   return length
 }
-
-const getCellLength = (cell, startPosition, endPosition) => {
-  if (cell.lengthCell) return cell.lengthCell
-  let length = 0
-  // const startConf = moment(cell.startDate)
-  const endConf = moment(cell.endDate)
-  while (
-    startPosition.isSameOrBefore(endConf) &&
-    startPosition.isSameOrBefore(endPosition)
-  ) {
-    length++
-    startPosition.add(6, 'h')
-  }
-  return length
-}
+// const getCellLength = (cell, startPosition, endPosition) => {
+//   let length = 0
+//   // const startConf = moment(cell.startDate)
+//   const endConf = moment(cell.endDate)
+//   while (
+//     startPosition.isSameOrBefore(endConf) &&
+//     startPosition.isSameOrBefore(endPosition)
+//   ) {
+//     length++
+//     startPosition.add(6, 'h')
+//   }
+//   return length
+// }
 const isLastZone = endDate => {
   return moment(endDate).hours() == 18
 }
-const getItem = (array, startPosition) => {
-  return array.find(
-    item =>
-      startPosition.isSameOrAfter(item.startDate) &&
-      startPosition.isSameOrBefore(item.endDate)
-  )
-}
+// const getItem = (array, startPosition) => {
+//   return array.find(
+//     item =>
+//       startPosition.isSameOrAfter(item.startDate) &&
+//       startPosition.isSameOrBefore(item.endDate)
+//   )
+// }
 const getItemInRange = (array, startPosition) => {
   return array.find(
     item =>
@@ -90,7 +86,7 @@ export default {
   },
   computed: {
     itemsRow() {
-      let orders = this.$store.getters.ordersV2.filter(
+      let orders = this.$store.getters.orders.filter(
         item => item.carId === this.car.id
       )
       let carSchedule = this.$store.getters.carWorkSchedule.filter(
@@ -100,32 +96,36 @@ export default {
       let startPos = moment(this.dates[0] + ' 00:00')
       const endPos = moment(this.dates[this.dates.length - 1]).add(18, 'h')
       while (startPos.isSameOrBefore(endPos)) {
-        let tmpOrder = getItem(orders, startPos)
+        let tmpOrder = getItemInRange(orders, startPos)
         let tmpCarWorkSchedule = getItemInRange(carSchedule, startPos)
-        if (tmpOrder && false) {
+        if (tmpOrder) {
           res.push({
             ...tmpOrder,
             itemType: 'order',
-            isLastZone: isLastZone(tmpOrder.endDate),
-            length: getCellLength(tmpOrder, startPos, endPos)
+            isLastZone: isLastZone(+tmpOrder.dateRange[1].value),
+            lengthCell: getCellLengthInRange(tmpOrder, startPos, endPos)
           })
-          startPos = moment(tmpOrder.endDate).add(6, 'h')
+          startPos = moment(+tmpOrder.dateRange[1].value).add(6, 'h')
         } else if (tmpCarWorkSchedule) {
           res.push({
             ...tmpCarWorkSchedule,
             itemType: 'carSchedule',
             isLastZone: isLastZone(+tmpCarWorkSchedule.dateRange[1].value),
-            length: getCellLengthInRange(tmpCarWorkSchedule, startPos, endPos)
+            lengthCell: getCellLengthInRange(
+              tmpCarWorkSchedule,
+              startPos,
+              endPos
+            )
           })
           startPos = moment(+tmpCarWorkSchedule.dateRange[1].value).add(6, 'h')
         } else {
           res.push({
             id: startPos.format('YYYY-MM-DD HH:mm'),
-            startPos,
             isLastZone: isLastZone(startPos),
             itemType: 'empty',
+            carId: this.car.id,
             carType: this.carType,
-            length: 1
+            lengthCell: 1
           })
           startPos.add(6, 'H')
         }
