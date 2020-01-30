@@ -19,7 +19,15 @@ export default {
       state.error = null
     }
   },
-  actions: {},
+  actions: {
+    setError({ commit }, payload) {
+      commit('clearError')
+      commit('setError', payload)
+      setTimeout(() => {
+        commit('clearError')
+      }, 2500);
+    }
+  },
   getters: {
     loading: state => state.loading,
     loadingApp: state => state.loadingApp,

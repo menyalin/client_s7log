@@ -139,7 +139,7 @@ export default {
     }
   },
   actions: {
-    updateOrder: ({ commit, getters }) => {
+    updateOrder: ({ commit, dispatch, getters }) => {
       apolloClient.mutate({
         mutation: updateOrderMutation,
         variables: getters.editedOrder
@@ -148,10 +148,10 @@ export default {
           commit('cancelOrderEdit')
         })
         .catch(e => {
-          commit('setError', e.message)
+          dispatch('setError', e.message)
         })
     },
-    confirmOrder ({ commit }, payload) {
+    confirmOrder({ commit, dispatch }, payload) {
       const { id, carId, dateRange, carType } = payload
       apolloClient.mutate({
         mutation: updateOrderMutation,
@@ -163,11 +163,11 @@ export default {
         }
       })
         .catch(e => {
-          commit('setError', e.message)
+          dispatch('setError', e.message)
         })
       // commit('confirmOrder', payload)
     },
-    createNewOrder ({ commit, getters }) {
+    createNewOrder({ commit, getters }) {
       apolloClient.mutate({
         mutation: createOrderMutation,
         variables: getters.editedOrder
@@ -176,7 +176,7 @@ export default {
           commit('cancelOrderEdit')
         })
         .catch(e => {
-          commit('setError', e.message)
+          dispatch('setError', e.message)
         })
     }
   },
