@@ -12,7 +12,7 @@ export default {
     currentDate: null,
     orderTemplates: [],
     addresses: [],
-    cars: [],
+
     staff: [],
     statuses: [
       { id: '01', title: 'Надо получить' },
@@ -27,15 +27,7 @@ export default {
       { id: '10', title: 'Клиент снял заказ' }
     ],
     schedule: [],
-    carWorkSchedule: [],
-    carWorkScheduleTypes: [
-      { id: 'service', title: 'Сервис' },
-      { id: 'holiday', title: 'Выходной' }
-    ],
-    vehicleType: [
-      { value: '10tn', text: '10тн' },
-      { value: '20tn', text: '20тн' }
-    ],
+
     timeZones: [
       { id: '01', title: '00-06', startTime: '00:00' },
       { id: '02', title: '06-12', startTime: '06:00' },
@@ -45,17 +37,6 @@ export default {
     orders: []
   },
   mutations: {
-    setCarWorkSchedule: (state, payload) => {
-      state.carWorkSchedule = payload
-    },
-    updateCarWorkSchedule: (state, payload) => {
-      const carWorkScheduleItem = state.carWorkSchedule.find(item => item.id === payload.id)
-      if (carWorkScheduleItem) Object.assign(carWorkScheduleItem, payload)
-      else state.carWorkSchedule.push(payload)
-    },
-    deletedCarWorkSchedule: ({ carWorkSchedule }, id) => {
-      carWorkSchedule.splice(carWorkSchedule.findIndex(item => item.id === id), 1)
-    },
     fillByTemplate: (state, templateId) => {
       const orderTemplate = state.orderTemplates.find(item => item.id === templateId)
       state.editedOrder = Object.assign({}, state.editedOrder, {
@@ -85,9 +66,6 @@ export default {
     setAddresses: (state, payload) => {
       state.addresses = payload
     },
-    setCars: (state, payload) => {
-      state.cars = payload
-    },
     addAddress: (state, payload) => {
       state.addresses.push(payload)
     },
@@ -106,18 +84,18 @@ export default {
         state.orders.push(orderUpdated)
       }
     },
-    resetCarInOrder: (state, orderId) => {
-      let order = state.orders.find(item => item.id === orderId)
-      order.confirmedCarId = null
-      order.confirmDate = null
-      order.confirmTime = null
-    },
-    confirmOrder: (state, { id, confirmedCarId, confirmDate, confirmTime }) => {
-      let order = state.orders.find(item => item.id === id)
-      order.confirmedCarId = confirmedCarId
-      order.confirmDate = confirmDate
-      order.confirmTime = confirmTime
-    },
+    // resetCarInOrder: (state, orderId) => {
+    //   let order = state.orders.find(item => item.id === orderId)
+    //   order.confirmedCarId = null
+    //   order.confirmDate = null
+    //   order.confirmTime = null
+    // },
+    // confirmOrder: (state, { id, confirmedCarId, confirmDate, confirmTime }) => {
+    //   let order = state.orders.find(item => item.id === id)
+    //   order.confirmedCarId = confirmedCarId
+    //   order.confirmDate = confirmDate
+    //   order.confirmTime = confirmTime
+    // },
     setCurrentDate: (state, payload) => {
       state.currentDate = payload
     },
@@ -145,6 +123,9 @@ export default {
       let templateItem = state.orderTemplates.find(item => item.id === updatedOrder.id)
       if (templateItem) templateItem = Object.assign(templateItem, {}, updatedOrder)
       else state.orderTemplates.push(updatedOrder)
+    },
+    orderTemplateDeleted: ({ orderTemplates }, id) => {
+      orderTemplates.splice(orderTemplates.findIndex(item => item.id === id), 1)
     }
   },
   actions: {
@@ -192,23 +173,16 @@ export default {
     orders: ({ orders }) => orders,
     currentDate: (state) => state.currentDate,
     personOnDuty: ({ schedule }) => (date) => schedule.find(item => item.date === date) || 'не задан',
-    vehicleType: state => state.vehicleType,
-    cars: state => state.cars,
-    carById: ({ cars }) => (id) => {
-      if (cars.length && id) return cars.find(item => item.id === id)
-      else null
-    },
-    notConfirmedOrders: (state) => (carType) => state.orders.filter(item => ((!item.confirmedCarId || !item.confirmTime) && item.carType === carType)),
-    ordersByCarAndConfirmDateZone: (state) => (confirmedCarId, confirmDate, confirmTime) =>
-      state.orders.filter(item => item.confirmedCarId === confirmedCarId && item.confirmDate === confirmDate && item.confirmTime === confirmTime)[0],
+
+    // notConfirmedOrders: (state) => (carType) => state.orders.filter(item => ((!item.confirmedCarId || !item.confirmTime) && item.carType === carType)),
+    // ordersByCarAndConfirmDateZone: (state) => (confirmedCarId, confirmDate, confirmTime) =>
+    //   state.orders.filter(item => item.confirmedCarId === confirmedCarId && item.confirmDate === confirmDate && item.confirmTime === confirmTime)[0],
     timeZones: (state) => state.timeZones,
     timeZoneById: ({ timeZones }) => (id) => timeZones.find(item => item.id === id),
     statuses: (state) => state.statuses,
     statusTitleById: (state) => (id) => state.statuses.find(item => item.id === id),
     isAddressesUpload: (state) => !!state.addresses.length,
-    carsForAutocomplete: ({ cars }) => (type) => type ? cars.filter(item => item.type === type) : cars,
-    carsByType: (state) => (type) => state.cars.filter(item => (item.type === type && !item.isTempSlot)),
-    carSlotsByType: (state) => (type) => state.cars.filter(item => (item.type === type && item.isTempSlot)),
+
     addressesForAutocomplete: (state) => (type) => {
       if (type === 'shippingPlace') {
         return state.addresses.filter(item => item.isShippingPlace)
@@ -233,9 +207,6 @@ export default {
     allOrderTemplates: (state) => state.orderTemplates,
     showOrderDialog: ({ showOrderDialog }) => showOrderDialog,
     editedOrder: ({ editedOrder }) => editedOrder,
-    carWorkSchedule: ({ carWorkSchedule }) => carWorkSchedule,
-    carWorkScheduleTypes: ({ carWorkScheduleTypes }) => carWorkScheduleTypes,
-    carWorkScheduleTypeById: ({ carWorkScheduleTypes }) => (id) => carWorkScheduleTypes.find(item => item.id === id)
   }
 }
 

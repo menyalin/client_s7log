@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row>
       <v-col cols="12">
         <v-data-table
@@ -20,29 +20,37 @@
             </div>
           </template>
           <template v-slot:item.shipper="{ item }">
-            <span>{{
+            <span>
+              {{
               item.shipperId
-                ? `${addressById(item.shipperId).shortName} :  ${
-                    addressById(item.shipperId).partner
-                  }`
-                : null
-            }}</span>
+              ? `${addressById(item.shipperId).shortName} : ${
+              addressById(item.shipperId).partner
+              }`
+              : null
+              }}
+            </span>
           </template>
           <template v-slot:item.consignee="{ item }">
-            <span>{{
+            <span>
+              {{
               item.consigneeId
-                ? `${addressById(item.consigneeId).shortName} :  ${
-                    addressById(item.consigneeId).partner
-                  }`
-                : null
-            }}</span>
+              ? `${addressById(item.consigneeId).shortName} : ${
+              addressById(item.consigneeId).partner
+              }`
+              : null
+              }}
+            </span>
           </template>
+          <template
+            v-slot:item.status="{ item }"
+          >{{ statusTitleById(item.status) ? statusTitleById(item.status).title : '(пусто)'}}</template>
         </v-data-table>
         <v-dialog v-model="dialog" max-width="500px" persistent>
           <order-template-edit-form
             v-model="editedTemplate"
             @cancelOrderTemplateEdit="cancelEdit"
             @updateTemplate="updateTemplateHandler"
+            @deleteOrderTemplate="deleteTemlateHandler"
           />
         </v-dialog>
       </v-col>
@@ -53,33 +61,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import orderTemplateEditForm from './orderTemplateEditForm'
-import gql from 'graphql-tag'
-
-const updateTemplateMutation = gql`
-  mutation updateTemplate(
-    $id: ID!
-    $carType: String!
-    $shipperId: String
-    $consigneeId: String
-    $status: String
-    $note: String
-    $templateName: String
-    $showInMenu: Boolean
-  ) {
-    updateTemplate(
-      id: $id
-      carType: $carType
-      shipperId: $shipperId
-      consigneeId: $consigneeId
-      status: $status
-      note: $note
-      templateName: $templateName
-      showInMenu: $showInMenu
-    ) {
-      id
-    }
-  }
-`
+import {
+  updateTemplateMutation,
+  deleteOrderTemplateMutation
+} from '@/gql/orders'
 
 export default {
   data: () => ({
@@ -89,14 +74,23 @@ export default {
     page: 1,
     headers: [
       { text: 'Название шаблона', value: 'templateName' },
-      { text: 'Показывать в меню', value: 'showInMenu' },
+      {
+        text: 'Показывать',
+        value: 'showInMenu',
+        align: 'center',
+        width: '5em',
+        sortable: false
+      },
       { text: 'Тип ТС', value: 'carType' },
       { text: 'Погрузка', value: 'shipper' },
-      { text: 'Разгрузка', value: 'consignee' }
+      { text: 'Разгрузка', value: 'consignee' },
+      { text: 'Статус', value: 'status' },
+      { text: 'Кол-во ячеек', value: 'lengthCell', align: 'center' },
+      { text: 'Примечание', value: 'note' }
     ]
   }),
   computed: {
-    ...mapGetters(['allOrderTemplates', 'addressById'])
+    ...mapGetters(['allOrderTemplates', 'addressById', 'statusTitleById'])
   },
   components: {
     orderTemplateEditForm
@@ -112,8 +106,19 @@ export default {
           this.cancelEdit()
         })
         .catch(e => {
-          this.$store.commit('setError', e.message)
+          this.$store.dispatch('setError', e.message)
           this.cancelEdit()
+        })
+    },
+    deleteTemlateHandler() {
+      this.$apollo
+        .mutate({
+          mutation: deleteOrderTemplateMutation,
+          variables: this.editedTemplate
+        })
+        .then(this.cancelEdit())
+        .catch(e => {
+          this.$store.dispatch('setError', e.message)
         })
     },
     cancelEdit() {

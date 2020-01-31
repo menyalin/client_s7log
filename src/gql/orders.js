@@ -244,6 +244,34 @@ export const orderTemplatesQuery = gql`
     }
   }
 `
+export const updateTemplateMutation = gql`
+  mutation updateTemplate(
+    $id: ID!
+    $carType: String!
+    $lengthCell: Int!
+    $shipperId: String
+    $consigneeId: String
+    $status: String
+    $note: String
+    $templateName: String
+    $showInMenu: Boolean
+  ) {
+    updateTemplate(
+      id: $id
+      lengthCell: $lengthCell
+      carType: $carType
+      shipperId: $shipperId
+      consigneeId: $consigneeId
+      status: $status
+      note: $note
+      templateName: $templateName
+      showInMenu: $showInMenu
+    ) {
+      id
+    }
+  }
+`
+
 export const orderTemplateUpdatedSubscription = gql`
   subscription orderTemplateUpdated {
     orderTemplateUpdated {
@@ -257,5 +285,15 @@ export const orderTemplateUpdatedSubscription = gql`
       showInMenu
       lengthCell
     }
+  }
+`
+export const deleteOrderTemplateMutation = gql`
+  mutation deleteOrderTemplate($id: ID! ) { 
+    deleteOrderTemplate(id: $id) 
+    }
+`
+export const orderTemplateDeletedSubscription = gql`
+  subscription orderTemplateDeleted {
+    orderTemplateDeleted
   }
 `

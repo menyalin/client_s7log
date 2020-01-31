@@ -12,7 +12,8 @@ import {
   orderAddedSubscription,
   orderUpdatedSubscription,
   orderTemplateUpdatedSubscription,
-  orderTemplatesQuery
+  orderTemplatesQuery,
+  orderTemplateDeletedSubscription
 } from './gql/orders'
 
 import { mapGetters } from 'vuex'
@@ -177,6 +178,12 @@ export default {
   },
   apollo: {
     $subscribe: {
+      orderTemplateDeleted: {
+        query: orderTemplateDeletedSubscription,
+        result({ data: { orderTemplateDeleted } }) {
+          store.commit('orderTemplateDeleted', orderTemplateDeleted)
+        }
+      },
       addressAdded: {
         query: addressAddedSubscription,
         result({ data: { addressAdded } }) {

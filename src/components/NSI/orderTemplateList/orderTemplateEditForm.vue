@@ -1,19 +1,20 @@
 <template>
   <v-card>
-    <v-card-title>
-      {{ isNewTemplate ? 'Новый шаблон' : 'Редактировать шаблон' }}
-    </v-card-title>
+    <v-card-title>{{ isNewTemplate ? 'Новый шаблон' : 'Редактировать шаблон' }}</v-card-title>
     <v-card-text>
-      <v-text-field
-        label="Название шаблона"
-        v-model="editedTemplate.templateName"
-      />
+      <v-text-field label="Название шаблона" v-model="editedTemplate.templateName" />
       <v-select
         :items="vehicleType"
         label="Тип ТС"
         item-text="text"
         item-value="value"
         v-model="editedTemplate.carType"
+      />
+      <v-text-field
+        label="Кол-во ячеек"
+        type="number"
+        min="1"
+        v-model.number="editedTemplate.lengthCell"
       />
       <v-select
         :items="statuses"
@@ -33,17 +34,19 @@
         v-model="editedTemplate.consigneeId"
       />
       <v-text-field label="Примечание" v-model="editedTemplate.note" />
-      <v-checkbox
-        v-model="editedTemplate.showInMenu"
-        label="Показывать в меню"
-      />
+      <v-checkbox color="primary" v-model="editedTemplate.showInMenu" label="Показывать в меню" />
     </v-card-text>
     <v-card-actions>
+      <v-btn v-if="!isNewItem" color="warning" fab small dark @click="deleteHandler">
+        <v-icon>mdi-delete</v-icon>
+      </v-btn>
       <v-spacer />
       <v-btn color="primary" @click="cancel">Отмена</v-btn>
-      <v-btn color="primary" @click="save">{{
+      <v-btn color="primary" @click="save">
+        {{
         isNewTemplate ? 'Создать' : 'Сохранить'
-      }}</v-btn>
+        }}
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -68,6 +71,12 @@ export default {
     }
   },
   methods: {
+    async deleteHandler() {
+      const res = await this.$confirm('Вы уверены? Отменить будет нельзя!', {
+        title: 'Удаление записи'
+      })
+      if (res) this.$emit('deleteOrderTemplate')
+    },
     cancel() {
       this.$emit('cancelOrderTemplateEdit')
     },
