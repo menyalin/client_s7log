@@ -250,7 +250,8 @@ export default {
             shipperId: this.editedOrder.shipperId,
             consigneeId: this.editedOrder.consigneeId,
             note: this.editedOrder.note,
-            templateName: this.templateName
+            templateName: this.templateName,
+            lengthCell: this.editedOrder.lengthCell
           }
         })
         .then(() => {
@@ -258,7 +259,7 @@ export default {
           this.templateModal = false
         })
         .catch(e => {
-          this.$store.commit('setError', e.message)
+          this.$store.dispatch('setError', e.message)
         })
     }
   }

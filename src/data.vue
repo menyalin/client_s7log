@@ -333,7 +333,7 @@ export default {
       query: carsForVuexQuery,
       fetchPolicy: 'no-cache',
       error(error) {
-        store.commit('setError', error.message)
+        store.dispatch('setError', error.message)
       },
       update: ({ carsForVuex }) => {
         store.commit('setCars', carsForVuex)
@@ -343,7 +343,7 @@ export default {
       query: carWorkScheduleForVuexQuery,
       fetchPolicy: 'no-cache',
       error(error) {
-        store.commit('setError', error.message)
+        store.dispatch('setError', error.message)
       },
       update: ({ carWorkScheduleForVuex }) => {
         store.commit('setCarWorkSchedule', carWorkScheduleForVuex)
@@ -357,7 +357,7 @@ export default {
       variables: () => store.getters.dateRange,
       fetchPolicy: 'no-cache',
       error(error) {
-        store.commit('setError', error.message)
+        store.dispatch('setError', error.message)
       },
       update: ({ ordersForVuex }) => {
         store.commit('setOrders', ordersForVuex)
@@ -370,7 +370,7 @@ export default {
       query: addressesForVuexQuery,
       fetchPolicy: 'no-cache',
       error(error) {
-        store.commit('setError', error.message)
+        store.dispatch('setError', error.message)
       },
       update: ({ addressesForVuex }) => {
         store.commit('setAddresses', addressesForVuex)
@@ -387,7 +387,7 @@ export default {
       query: orderTemplatesQuery,
       fetchPolicy: 'no-cache',
       error(error) {
-        store.commit('setError', error.message)
+        store.dispatch('setError', error.message)
       },
       update: ({ orderTemplates }) => {
         store.commit('setOrderTemplates', orderTemplates)
@@ -398,7 +398,7 @@ export default {
       variables: () => store.getters.dateRange,
       fetchPolicy: 'no-cache',
       error(error) {
-        store.commit('setError', error.message)
+        store.dispatch('setError', error.message)
       },
       update: ({ scheduleForVuex }) => {
         store.commit('setSchedule', scheduleForVuex)

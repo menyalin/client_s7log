@@ -137,6 +137,7 @@ export const createOrderTemplateMutation = gql`
     $status: String
     $note: String
     $templateName: String
+    $lengthCell: Int!
   ) {
     createOrderTemplate(
       carType: $carType
@@ -145,6 +146,7 @@ export const createOrderTemplateMutation = gql`
       status: $status
       note: $note
       templateName: $templateName
+      lengthCell: $lengthCell
     ) {
       id
     }

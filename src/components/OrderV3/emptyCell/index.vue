@@ -19,13 +19,10 @@ export default {
   props: ['cell'],
   methods: {
     newOrder() {
-      console.log(this.cell)
       this.$store.commit('openEditOrderForm', {
+        lengthCell: 1,
         carType: this.cell.carType,
-        dateRange: [
-          { value: +moment(this.cell.id), inclusive: true },
-          { value: +moment(this.cell.id), inclusive: true }
-        ],
+        dateRange: this.getDateRange(moment(this.cell.id), 1),
         carId: this.cell.carId
       })
     },

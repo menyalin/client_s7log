@@ -6,9 +6,7 @@ import store from './index'
 export default {
   state: {
     showOrderDialog: false,
-    editedOrder: {
-      lengthCell: 1
-    },
+    editedOrder: {},
     currentDate: null,
     orderTemplates: [],
     addresses: [],
