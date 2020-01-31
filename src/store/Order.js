@@ -6,7 +6,9 @@ import store from './index'
 export default {
   state: {
     showOrderDialog: false,
-    editedOrder: {},
+    editedOrder: {
+      lengthCell: 1
+    },
     currentDate: null,
     orderTemplates: [],
     addresses: [],
@@ -56,17 +58,26 @@ export default {
     },
     fillByTemplate: (state, templateId) => {
       const orderTemplate = state.orderTemplates.find(item => item.id === templateId)
-      state.editedOrder = Object.assign({}, state.editedOrder, orderTemplate)
+      state.editedOrder = Object.assign({}, state.editedOrder, {
+        templateId,
+        lengthCell: orderTemplate.lengthCell,
+        carType: orderTemplate.carType,
+        consigneeId: orderTemplate.consigneeId,
+        shipperId: orderTemplate.shipperId,
+        note: orderTemplate.note,
+        status: orderTemplate.status
+      })
     },
-    openEditOrderForm: (state, editedOrder) => {
-      if (editedOrder) {
-        state.editedOrder = Object.assign({}, state.editedOrder, editedOrder)
-      }
+    clearTemplateId: (state) => {
+      state.editedOrder.templateId = null
+    },
+    openEditOrderForm: (state, payload) => {
+      state.editedOrder = Object.assign({}, payload)
       state.showOrderDialog = true;
     },
     cancelOrderEdit: (state) => {
+      state.editedOrder = Object.assign({}, {}, { lengthCell: 1, templateId: null })
       state.showOrderDialog = false
-      state.editedOrder = Object.assign({}, { lengthCell: 1 })
     },
     setOrderTemplates: (state, payload) => {
       state.orderTemplates = payload
@@ -163,7 +174,6 @@ export default {
         .catch(e => {
           dispatch('setError', e.message)
         })
-      // commit('confirmOrder', payload)
     },
     createNewOrder({ commit, getters }) {
       apolloClient.mutate({
@@ -225,46 +235,7 @@ export default {
     editedOrder: ({ editedOrder }) => editedOrder,
     carWorkSchedule: ({ carWorkSchedule }) => carWorkSchedule,
     carWorkScheduleTypes: ({ carWorkScheduleTypes }) => carWorkScheduleTypes,
-    carWorkScheduleTypeById: ({ carWorkScheduleTypes }) => (id) => carWorkScheduleTypes.find(item => item.id === id),
-    // carWorkScheduleCells: ({ carWorkSchedule, timeZones }) => {
-    //   if (carWorkSchedule.length) {
-    //     let res = []
-    //     carWorkSchedule.forEach(carWorkScheduleItem => {
-    //       let day = moment(carWorkScheduleItem.startDate)
-    //       let endDate = moment(carWorkScheduleItem.endDate)
-    //       const endTime = timeZones.findIndex(item => item.id === carWorkScheduleItem.endTime)
-    //       let i = timeZones.findIndex(item => item.id === carWorkScheduleItem.startTime)
-    //       let lastDay = false
-    //       while (day <= endDate) {
-    //         if (day >= endDate) lastDay = true
-    //         while (i < timeZones.length) {
-    //           if (lastDay && i > endTime) break
-    //           else res.push({
-    //             carWorkScheduleId: carWorkScheduleItem.id,
-    //             date: day.format('YYYY-MM-DD'),
-    //             time: timeZones[i].id,
-    //             carId: carWorkScheduleItem.carId,
-    //             type: carWorkScheduleItem.type,
-    //             note: carWorkScheduleItem.note
-    //           })
-    //           i++
-    //         }
-    //         i = 0
-    //         day.add(1, 'days')
-    //       }
-    //     })
-    //     return res
-    //   } else return null
-    // },
-
-    // carWorkScheduleFiltered: () => (carId, date, time) => {
-    //   let cells = store.getters.carWorkScheduleCells
-    //   if (cells && date && time && carId) {
-    //     return cells.find(item => item.carId === carId && item.date === date && item.time === time)
-    //   }
-    //   else return null
-    // },
-    ordersV2: ({ ordersV2 }) => ordersV2
+    carWorkScheduleTypeById: ({ carWorkScheduleTypes }) => (id) => carWorkScheduleTypes.find(item => item.id === id)
   }
 }
 

@@ -14,6 +14,12 @@ export default {
   }),
   computed: {
     ...mapGetters(['error'])
+  },
+  methods: {
+    close() {
+      this.snackbar = false
+      this.$store.commit('clearError')
+    }
   }
 }
 </script>

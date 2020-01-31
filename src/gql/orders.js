@@ -16,6 +16,7 @@ export const updateOrderMutation = gql`
     $isDriverNotified: Boolean
     $isClientNotified: Boolean
     $lengthCell: Int
+    $templateId: String
   ) {
     updateOrder(
       id: $id
@@ -33,6 +34,7 @@ export const updateOrderMutation = gql`
       carId: $carId
       isDriverNotified: $isDriverNotified
       isClientNotified: $isClientNotified
+      templateId: $templateId
     ) {
       id
       number
@@ -103,6 +105,7 @@ export const createOrderMutation = gql`
     $lengthCell: Int
     $isDriverNotified: Boolean
     $isClientNotified: Boolean
+    $templateId: String 
   ) {
     createOrder(
       carType: $carType
@@ -119,13 +122,9 @@ export const createOrderMutation = gql`
       carId: $carId
       isDriverNotified: $isDriverNotified
       isClientNotified: $isClientNotified
+      templateId: $templateId
     ) {
       id
-      number
-      carId
-      dateRange {
-        value
-      }
     }
   }
 `
@@ -151,3 +150,112 @@ export const createOrderTemplateMutation = gql`
       id
     }
   }`
+
+export const ordersForVuexQuery = gql`
+  query ordersForVuex($startDate: String, $endDate: String) {
+    ordersForVuex(startDate: $startDate, endDate: $endDate) {
+      id
+      carType
+      number
+      status
+      dateRange {
+        value
+        inclusive
+      }
+      shipperId
+      consigneeId
+      carId
+      note
+      shippingDate
+      shippingTime
+      deliveryDate
+      deliveryTime
+      lengthCell
+      isDriverNotified
+      isClientNotified
+      templateId
+    }
+  }
+`
+export const orderAddedSubscription = gql`
+  subscription orderAdded {
+    orderAdded {
+      id
+      number
+      carType
+      status
+      shipperId
+      consigneeId
+      note
+      dateRange {
+        value
+        inclusive
+      }
+      shippingDate
+      shippingTime
+      deliveryDate
+      deliveryTime
+      isDriverNotified
+      isClientNotified
+      carId
+      lengthCell
+      templateId
+    }
+  }
+`
+export const orderUpdatedSubscription = gql`
+  subscription orderUpdated {
+    orderUpdated {
+      id
+      number
+      carType
+      status
+      shipperId
+      consigneeId
+      note
+      dateRange {
+        value
+        inclusive
+      }
+      shippingDate
+      shippingTime
+      deliveryDate
+      deliveryTime
+      isDriverNotified
+      isClientNotified
+      carId
+      lengthCell
+      templateId
+    }
+  }
+`
+export const orderTemplatesQuery = gql`
+  query orderTemplates {
+    orderTemplates {
+      id
+      templateName
+      carType
+      status
+      note
+      shipperId
+      consigneeId
+      lengthCell
+      showInMenu
+    }
+  }
+`
+export const orderTemplateUpdatedSubscription = gql`
+  subscription orderTemplateUpdated {
+    orderTemplateUpdated {
+      id
+      templateName
+      carType
+      status
+      note
+      shipperId
+      consigneeId
+      showInMenu
+      lengthCell
+    }
+  }
+`

@@ -25,7 +25,7 @@ export default {
       commit('setError', payload)
       setTimeout(() => {
         commit('clearError')
-      }, 2500);
+      }, 3000);
     }
   },
   getters: {

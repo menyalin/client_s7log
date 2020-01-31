@@ -7,6 +7,13 @@
 import moment from 'moment'
 import gql from 'graphql-tag'
 import store from './store/index'
+import {
+  ordersForVuexQuery,
+  orderAddedSubscription,
+  orderUpdatedSubscription,
+  orderTemplateUpdatedSubscription,
+  orderTemplatesQuery
+} from './gql/orders'
 
 import { mapGetters } from 'vuex'
 
@@ -49,81 +56,6 @@ const addressUpdatedSubscription = gql`
       isActive
       isShippingPlace
       isDeliveryPlace
-    }
-  }
-`
-const ordersForVuexQuery = gql`
-  query ordersForVuex($startDate: String, $endDate: String) {
-    ordersForVuex(startDate: $startDate, endDate: $endDate) {
-      id
-      carType
-      number
-      status
-      dateRange {
-        value
-        inclusive
-      }
-      shipperId
-      consigneeId
-      carId
-      note
-      shippingDate
-      shippingTime
-      deliveryDate
-      deliveryTime
-      lengthCell
-      isDriverNotified
-      isClientNotified
-    }
-  }
-`
-const orderAddedSubscription = gql`
-  subscription orderAdded {
-    orderAdded {
-      id
-      number
-      carType
-      status
-      shipperId
-      consigneeId
-      note
-      dateRange {
-        value
-        inclusive
-      }
-      shippingDate
-      shippingTime
-      deliveryDate
-      deliveryTime
-      isDriverNotified
-      isClientNotified
-      carId
-      lengthCell
-    }
-  }
-`
-const orderUpdatedSubscription = gql`
-  subscription orderUpdated {
-    orderUpdated {
-      id
-      number
-      carType
-      status
-      shipperId
-      consigneeId
-      note
-      dateRange {
-        value
-        inclusive
-      }
-      shippingDate
-      shippingTime
-      deliveryDate
-      deliveryTime
-      isDriverNotified
-      isClientNotified
-      carId
-      lengthCell
     }
   }
 `
@@ -198,36 +130,7 @@ const staffUpdatedSubscription = gql`
     }
   }
 `
-const orderTemplatesQuery = gql`
-  query orderTemplates {
-    orderTemplates {
-      id
-      templateName
-      carType
-      status
-      note
-      shipperId
-      consigneeId
-      lengthCell
-      showInMenu
-    }
-  }
-`
-const orderTemplateUpdatedSubscription = gql`
-  subscription orderTemplateUpdated {
-    orderTemplateUpdated {
-      id
-      templateName
-      carType
-      status
-      note
-      shipperId
-      consigneeId
-      showInMenu
-      lengthCell
-    }
-  }
-`
+
 const updatedCarWorkScheduleSubscription = gql`
   subscription updatedCarWorkSchedule {
     updatedCarWorkSchedule {
