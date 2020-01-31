@@ -2,7 +2,9 @@
   <v-container fluid class="pa-0 ma-0">
     <v-row no-gutters justify="center">
       <v-col cols="auto" class="car--title">
-        <div v-if="header"></div>
+        <div v-if="header">
+          <car-title-header />
+        </div>
         <div v-else>{{ car.title }}</div>
       </v-col>
       <v-col>
@@ -34,6 +36,7 @@
 import moment from 'moment'
 import itemCell from './itemCell'
 import carDatesHeader from './header/carDatesHeader'
+import carTitleHeader from './carTitleHeader'
 
 const getCellLengthInRange = (cell, startPosition, endPosition) => {
   let length = 0
@@ -47,29 +50,9 @@ const getCellLengthInRange = (cell, startPosition, endPosition) => {
   }
   return length
 }
-// const getCellLength = (cell, startPosition, endPosition) => {
-//   let length = 0
-//   // const startConf = moment(cell.startDate)
-//   const endConf = moment(cell.endDate)
-//   while (
-//     startPosition.isSameOrBefore(endConf) &&
-//     startPosition.isSameOrBefore(endPosition)
-//   ) {
-//     length++
-//     startPosition.add(6, 'h')
-//   }
-//   return length
-// }
 const isLastZone = endDate => {
   return moment(endDate).hours() == 18
 }
-// const getItem = (array, startPosition) => {
-//   return array.find(
-//     item =>
-//       startPosition.isSameOrAfter(item.startDate) &&
-//       startPosition.isSameOrBefore(item.endDate)
-//   )
-// }
 const getItemInRange = (array, startPosition) => {
   return array.find(
     item =>
@@ -82,7 +65,8 @@ export default {
   props: ['car', 'header', 'dates', 'carType', 'num'],
   components: {
     carDatesHeader,
-    itemCell
+    itemCell,
+    carTitleHeader
   },
   computed: {
     itemsRow() {
