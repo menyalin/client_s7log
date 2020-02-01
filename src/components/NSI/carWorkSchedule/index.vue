@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row>
       <v-col>
         <v-data-table
@@ -51,67 +51,11 @@ import moment from 'moment'
 import carWorkScheduleForm from './carWorkScheduleForm'
 import { mapGetters } from 'vuex'
 import gql from 'graphql-tag'
-
-const createCarWorkScheduleMutation = gql`
-  mutation createCarWorkSchedule(
-    $type: CarWorkScheduleType!
-    $carId: String!
-    $title: String
-    $dateRange: String!
-    $note: String
-  ) {
-    createCarWorkSchedule(
-      type: $type
-      carId: $carId
-      title: $title
-      dateRange: $dateRange
-      note: $note
-    ) {
-      id
-      type
-      note
-      dateRange {
-        value
-        inclusive
-      }
-      carId
-    }
-  }
-`
-const updateCarWorkScheduleMutation = gql`
-  mutation updateCarWorkSchedule(
-    $id: ID!
-    $type: CarWorkScheduleType!
-    $title: String
-    $carId: String!
-    $dateRange: String!
-    $note: String
-  ) {
-    updateCarWorkSchedule(
-      id: $id
-      type: $type
-      title: $title
-      carId: $carId
-      dateRange: $dateRange
-      note: $note
-    ) {
-      id
-      type
-      title
-      note
-      dateRange {
-        value
-        inclusive
-      }
-      carId
-    }
-  }
-`
-const deleteCarWorkScheduleMutation = gql`
-  mutation deleteCarWorkSchedule($id: ID!) {
-    deleteCarWorkSchedule(id: $id)
-  }
-`
+import {
+  createCarWorkScheduleMutation,
+  updateCarWorkScheduleMutation,
+  deleteCarWorkScheduleMutation
+} from '@/gql/cars'
 
 export default {
   name: 'carWorkSchedule',

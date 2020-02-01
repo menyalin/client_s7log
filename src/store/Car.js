@@ -1,6 +1,5 @@
 import { apolloClient } from '../vue-apollo'
 import moment from 'moment'
-import { createOrderMutation, updateOrderMutation } from '@/gql/car.js'
 import store from './index'
 
 export default {
@@ -37,7 +36,7 @@ export default {
   },
   getters: {
     vehicleType: state => state.vehicleType,
-    cars: state => state.cars,
+    cars: state => state.cars.filter(item => !item.isTempSlot),
     carById: ({ cars }) => (id) => {
       if (cars.length && id) return cars.find(item => item.id === id)
       else return null

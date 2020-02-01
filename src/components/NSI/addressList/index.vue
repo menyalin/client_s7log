@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row class="data--block">
       <v-col cols="12">
         <v-data-table
@@ -72,19 +72,13 @@
             </v-container>
           </template>
           <template v-slot:item.isShippingPlace="{ item }">
-            <v-icon v-if="item.isShippingPlace" small color="green"
-              >mdi-check</v-icon
-            >
+            <v-icon v-if="item.isShippingPlace" small color="green">mdi-check</v-icon>
           </template>
           <template v-slot:item.isDeliveryPlace="{ item }">
-            <v-icon v-if="item.isDeliveryPlace" small color="green"
-              >mdi-check</v-icon
-            >
+            <v-icon v-if="item.isDeliveryPlace" small color="green">mdi-check</v-icon>
           </template>
           <template v-slot:item.action="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)"
-              >mdi-pencil</v-icon
-            >
+            <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
             <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
           </template>
         </v-data-table>

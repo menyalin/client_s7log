@@ -1,119 +1,61 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row>
-      <v-col cols="12">
+      <v-col>
         <v-data-table
           class="elevation-1"
-          hide-default-footer
-          :items="carPage.cars"
+          :items="cars"
           :items-per-page="limit"
           :headers="headers"
           dense
+          align="center"
+          @click:row="clickRowHandler"
+          :footer-props="{
+            'items-per-page-options': [40, 80, 120, -1]
+          }"
         >
-          <template v-slot:item.isOwned="{ item }">
-            <v-icon v-if="item.isOwned" small color="green">mdi-check</v-icon>
+          <template v-slot:top>
+            <v-container fluid>
+              <v-row align="center">
+                <v-col cols="auto">
+                  <v-btn color="secondary" dark @click="newCarHandler">
+                    <v-icon>mdi-plus</v-icon>Добавить
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-container>
           </template>
         </v-data-table>
-        <div class="text-center">
-          <v-pagination
-            v-model="page"
-            :length="Math.floor(carPage.totalCar / limit) + 1 || 0"
-            :total-visible="7"
+        <v-dialog v-model="dialog" max-width="1024px" persistent>
+          <car-work-schedule-form
+            v-model="editedSchedule"
+            @cancelEdit="cancelHandler"
+            @createSchedule="createScheduleHandler"
+            @updateSchedule="updateScheduleHandler"
+            @deleteCarWorkSchedule="deleteCarWorkScheduleHandler"
           />
-        </div>
+        </v-dialog>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import gql from 'graphql-tag'
-const carPageQuery = gql`
-  query carPage($limit: Int!, $offset: Int!) {
-    carPage(limit: $limit, offset: $offset) {
-      cars {
-        id
-        title
-        reg
-        pts
-        isOwned
-        type
-        maxPltCount
-        note
-      }
-      totalCar
-    }
-  }
-`
-
+import { mapGetters } from 'vuex'
 export default {
+  name: 'CarList',
   data: () => ({
-    page: 1,
-    limit: 50,
-    carPage: {},
     headers: [
-      { text: 'id', value: 'id' },
-      {
-        text: 'Собственная',
-        value: 'isOwned',
-        align: 'center',
-        sortable: false,
-        width: '6em'
-      },
-      {
-        text: 'Заголовок',
-        value: 'title',
-        align: 'left',
-        sortable: false,
-        width: '8em'
-      },
-      {
-        text: 'Тип',
-        value: 'type',
-        align: 'left',
-        sortable: false,
-        width: '8em'
-      },
-      {
-        text: 'Кол-во плт',
-        value: 'maxPltCount',
-        align: 'left',
-        sortable: false,
-        width: '8em'
-      },
-
-      {
-        text: 'Гос.номер',
-        value: 'reg',
-        align: 'left',
-        sortable: false,
-        width: '8em'
-      },
-      {
-        text: 'ПТС',
-        value: 'pts',
-        align: 'left',
-        sortable: false,
-        width: '8em'
-      },
-      {
-        text: 'Примечание',
-        value: 'note',
-        align: 'left',
-        sortable: false
-      }
+      { text: ' Тип', value: 'type' },
+      { text: 'Заголовок', value: 'title' },
+      { text: '№ списке', value: 'listItem' },
+      { text: 'Собственная', value: 'isOwned' },
+      { text: 'Кол-во плт', value: 'maxPltCount' },
+      { text: 'Примечание', value: 'note' }
     ]
   }),
-  apollo: {
-    carPage: {
-      query: carPageQuery,
-      variables() {
-        return {
-          limit: this.limit,
-          offset: (this.page - 1) * this.limit
-        }
-      }
-    }
+  computed: {
+    ...mapGetters(['cars'])
   }
 }
 </script>
