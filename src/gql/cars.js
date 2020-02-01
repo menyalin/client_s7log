@@ -60,3 +60,90 @@ export const deleteCarWorkScheduleMutation = gql`
     deleteCarWorkSchedule(id: $id)
   }
 `
+export const updatedCarWorkScheduleSubscription = gql`
+  subscription updatedCarWorkSchedule {
+    updatedCarWorkSchedule {
+      id
+      type
+      note
+      title
+      dateRange {
+        value
+        inclusive
+      }
+      carId
+    }
+  }
+`
+export const deletedCarWorkScheduleSubscription = gql`
+  subscription deletedCarWorkSchedule {
+    deletedCarWorkSchedule
+  }
+`
+export const carWorkScheduleForVuexQuery = gql`
+  query carWorkScheduleForVuex {
+    carWorkScheduleForVuex {
+      id
+      type
+      note
+      title
+      dateRange {
+        value
+        inclusive
+      }
+      carId
+    }
+  }
+`
+
+export const carsForVuexQuery = gql`
+  query allCars {
+    carsForVuex {
+      id
+      title
+      listItem
+      regNumber
+      isTempSlot
+      reg
+      pts
+      isOwned
+      type
+      maxPltCount
+      note
+      isActive
+    }
+  }
+`
+export const carUpdatedSubscription = gql`
+  subscription carUpdated {
+    carUpdated {
+      id
+      title
+      listItem
+      regNumber
+      reg
+      pts
+      isOwned
+      type
+      maxPltCount
+      note
+    }
+  }
+`
+export const createCarMutation = gql`
+  mutation createCar ($title: String! $listItem: Int $regNumber: String $reg: String $pts: String $isOwned: Boolean $type: String! $maxPltCount: Int $note: String){
+    createCar (
+      title: $title
+      listItem: $listItem
+      regNumber: $regNumber
+      reg: $reg
+      pts: $pts
+      isOwned: $isOwned
+      type: $type
+      maxPltCount: $maxPltCount
+      note: $note
+    ) {
+      id
+    }
+  }
+`

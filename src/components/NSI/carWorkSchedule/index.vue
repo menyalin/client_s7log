@@ -25,12 +25,18 @@
               </v-row>
             </v-container>
           </template>
-          <template
-            v-slot:item.car="{ item }"
-          >{{ carById(item.carId) ? carById(item.carId).title : 'Не найден' }}</template>
-          <template v-slot:item.startDate="{ item }">{{ dateRender(item.dateRange, 0) }}</template>
-          <template v-slot:item.endDate="{ item }">{{ dateRender(item.dateRange, 1) }}</template>
-          <template v-slot:item.type="{ item }">{{ carWorkScheduleTypeById(item.type).title }}</template>
+          <template v-slot:item.car="{ item }">{{
+            carById(item.carId) ? carById(item.carId).title : 'Не найден'
+          }}</template>
+          <template v-slot:item.startDate="{ item }">{{
+            dateRender(item.dateRange, 0)
+          }}</template>
+          <template v-slot:item.endDate="{ item }">{{
+            dateRender(item.dateRange, 1)
+          }}</template>
+          <template v-slot:item.type="{ item }">{{
+            carWorkScheduleTypeById(item.type).title
+          }}</template>
         </v-data-table>
         <v-dialog v-model="dialog" max-width="1024px" persistent>
           <car-work-schedule-form
@@ -106,7 +112,7 @@ export default {
           this.cancelHandler()
         })
         .catch(e => {
-          this.$store.commit('setError', e.message)
+          this.$store.dispatch('setError', e.message)
         })
     },
     updateScheduleHandler() {

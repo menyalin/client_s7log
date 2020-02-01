@@ -16,6 +16,13 @@ import {
   orderTemplateDeletedSubscription
 } from './gql/orders'
 
+import {
+  carsForVuexQuery,
+  updatedCarWorkScheduleSubscription,
+  deletedCarWorkScheduleSubscription,
+  carWorkScheduleForVuexQuery,
+  carUpdatedSubscription
+} from './gql/cars'
 import { mapGetters } from 'vuex'
 
 const addressesForVuexQuery = gql`
@@ -60,23 +67,7 @@ const addressUpdatedSubscription = gql`
     }
   }
 `
-const carsForVuexQuery = gql`
-  query allCars {
-    carsForVuex {
-      id
-      title
-      listItem
-      isTempSlot
-      reg
-      pts
-      isOwned
-      type
-      maxPltCount
-      note
-      isActive
-    }
-  }
-`
+
 const staffQuery = gql`
   query staff {
     staff {
@@ -131,43 +122,6 @@ const staffUpdatedSubscription = gql`
     }
   }
 `
-
-const updatedCarWorkScheduleSubscription = gql`
-  subscription updatedCarWorkSchedule {
-    updatedCarWorkSchedule {
-      id
-      type
-      note
-      title
-      dateRange {
-        value
-        inclusive
-      }
-      carId
-    }
-  }
-`
-const deletedCarWorkScheduleSubscription = gql`
-  subscription deletedCarWorkSchedule {
-    deletedCarWorkSchedule
-  }
-`
-const carWorkScheduleForVuexQuery = gql`
-  query carWorkScheduleForVuex {
-    carWorkScheduleForVuex {
-      id
-      type
-      note
-      title
-      dateRange {
-        value
-        inclusive
-      }
-      carId
-    }
-  }
-`
-
 export default {
   name: 'dataComponent',
   computed: {
@@ -236,6 +190,12 @@ export default {
         query: deletedCarWorkScheduleSubscription,
         result({ data: { deletedCarWorkSchedule } }) {
           store.commit('deletedCarWorkSchedule', deletedCarWorkSchedule)
+        }
+      },
+      carUpdated: {
+        query: carUpdatedSubscription,
+        result({ data: { carUpdated } }) {
+          store.commit('carUpdated', carUpdated)
         }
       }
     },

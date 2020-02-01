@@ -5,7 +5,6 @@
         <v-data-table
           class="elevation-1"
           :items="cars"
-          :items-per-page="limit"
           :headers="headers"
           dense
           align="center"
@@ -22,17 +21,31 @@
                     <v-icon>mdi-plus</v-icon>Добавить
                   </v-btn>
                 </v-col>
+                <v-col>
+                  {{ editedItem }}
+                </v-col>
               </v-row>
             </v-container>
           </template>
+
+          <template v-slot:item.isOwned="{ item }">
+            <div>
+              <v-icon color="green" v-if="!!item.isOwned">
+                mdi-check
+              </v-icon>
+              <v-icon color="grey" v-else>
+                mdi-checkbox-blank-circle-outline
+              </v-icon>
+            </div>
+          </template>
         </v-data-table>
-        <v-dialog v-model="dialog" max-width="1024px" persistent>
-          <car-work-schedule-form
-            v-model="editedSchedule"
+        <v-dialog v-model="dialog" max-width="500px" persistent>
+          <car-edit-form
+            v-model="editedItem"
             @cancelEdit="cancelHandler"
-            @createSchedule="createScheduleHandler"
-            @updateSchedule="updateScheduleHandler"
-            @deleteCarWorkSchedule="deleteCarWorkScheduleHandler"
+            @createSchedule="createCarHandler"
+            @updateSchedule="updateCarHandler"
+            @deleteCarWorkSchedule="deleteCarHandler"
           />
         </v-dialog>
       </v-col>
@@ -41,21 +54,64 @@
 </template>
 
 <script>
+import carEditForm from './carEditForm'
+import { createCarMutation } from '@/gql/cars'
 import { mapGetters } from 'vuex'
 export default {
   name: 'CarList',
+  components: {
+    carEditForm
+  },
   data: () => ({
+    dialog: false,
+    editedItem: {},
     headers: [
       { text: ' Тип', value: 'type' },
       { text: 'Заголовок', value: 'title' },
-      { text: '№ списке', value: 'listItem' },
-      { text: 'Собственная', value: 'isOwned' },
-      { text: 'Кол-во плт', value: 'maxPltCount' },
+      { text: '№ списке', value: 'listItem', align: 'center' },
+      { text: 'Собственная', value: 'isOwned', align: 'center' },
+      { text: 'Кол-во плт', value: 'maxPltCount', align: 'center' },
+      { text: 'Гос.номер', value: 'regNumber' },
+      { text: 'Св-во регистрации', value: 'reg' },
+      { text: 'ПТС', value: 'pts' },
       { text: 'Примечание', value: 'note' }
     ]
   }),
   computed: {
     ...mapGetters(['cars'])
+  },
+  methods: {
+    cancelHandler() {
+      this.editedItem = Object.assign({})
+      this.$nextTick(() => {
+        this.dialog = false
+      })
+    },
+    clickRowHandler(item) {
+      this.dialog = true
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, item)
+      })
+    },
+    createCarHandler() {
+      this.$apollo
+        .mutate({
+          mutation: createCarMutation,
+          variables: this.editedItem
+        })
+        .then(() => {
+          this.cancelHandler()
+        })
+        .catch(e => {
+          this.$store.dispatch('setError', e.message)
+          this.cancelHandler()
+        })
+    },
+    updateCarHandler() {},
+    deleteCarHandler() {},
+    newCarHandler() {
+      this.dialog = true
+    }
   }
 }
 </script>

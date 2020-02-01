@@ -29,7 +29,12 @@ export default {
     },
     setCars: (state, payload) => {
       state.cars = payload
-    }
+    },
+    carUpdated: ({ cars }, payload) => {
+      const car = cars.find(item => item.id === payload.id)
+      if (car) Object.assign(car, payload)
+      else cars.push(payload)
+    },
   },
   actions: {
 
@@ -42,7 +47,9 @@ export default {
       else return null
     },
     carsForAutocomplete: ({ cars }) => (type) => type ? cars.filter(item => item.type === type) : cars,
-    carsByType: (state) => (type) => state.cars.filter(item => (item.type === type && !item.isTempSlot)),
+    carsByType: ({ cars }) => (type) => cars
+      .filter(item => (item.type === type && !item.isTempSlot))
+      .sort((a, b) => a.listItem - b.listItem),
     carSlotsByType: (state) => (type) => state.cars.filter(item => (item.type === type && item.isTempSlot)),
     carWorkSchedule: ({ carWorkSchedule }) => carWorkSchedule,
     carWorkScheduleTypes: ({ carWorkScheduleTypes }) => carWorkScheduleTypes,
