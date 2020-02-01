@@ -7,6 +7,7 @@
           :items="cars"
           :headers="headers"
           dense
+          :search="search"
           align="center"
           @click:row="clickRowHandler"
           :footer-props="{
@@ -22,7 +23,13 @@
                   </v-btn>
                 </v-col>
                 <v-col>
-                  {{ editedItem }}
+                  <v-text-field
+                    v-model="search"
+                    append-icon="mdi-search"
+                    label="Поиск"
+                    single-line
+                    hide-details
+                  />
                 </v-col>
               </v-row>
             </v-container>
@@ -30,12 +37,8 @@
 
           <template v-slot:item.isOwned="{ item }">
             <div>
-              <v-icon color="green" v-if="!!item.isOwned">
-                mdi-check
-              </v-icon>
-              <v-icon color="grey" v-else>
-                mdi-checkbox-blank-circle-outline
-              </v-icon>
+              <v-icon color="green" v-if="!!item.isOwned">mdi-check</v-icon>
+              <v-icon color="grey" v-else>mdi-minus</v-icon>
             </div>
           </template>
         </v-data-table>
@@ -55,7 +58,7 @@
 
 <script>
 import carEditForm from './carEditForm'
-import { createCarMutation } from '@/gql/cars'
+import { createCarMutation, updateCarMutation } from '@/gql/cars'
 import { mapGetters } from 'vuex'
 export default {
   name: 'CarList',
@@ -64,6 +67,7 @@ export default {
   },
   data: () => ({
     dialog: false,
+    search: '',
     editedItem: {},
     headers: [
       { text: ' Тип', value: 'type' },
@@ -107,7 +111,20 @@ export default {
           this.cancelHandler()
         })
     },
-    updateCarHandler() {},
+    updateCarHandler() {
+      this.$apollo
+        .mutate({
+          mutation: updateCarMutation,
+          variables: this.editedItem
+        })
+        .then(() => {
+          this.cancelHandler()
+        })
+        .catch(e => {
+          this.$store.dispatch('setError', e.message)
+          this.cancelHandler()
+        })
+    },
     deleteCarHandler() {},
     newCarHandler() {
       this.dialog = true

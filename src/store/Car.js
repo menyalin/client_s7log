@@ -48,7 +48,7 @@ export default {
     },
     carsForAutocomplete: ({ cars }) => (type) => type ? cars.filter(item => item.type === type) : cars,
     carsByType: ({ cars }) => (type) => cars
-      .filter(item => (item.type === type && !item.isTempSlot))
+      .filter(item => (item.type === type && !item.isTempSlot && item.isActive))
       .sort((a, b) => a.listItem - b.listItem),
     carSlotsByType: (state) => (type) => state.cars.filter(item => (item.type === type && item.isTempSlot)),
     carWorkSchedule: ({ carWorkSchedule }) => carWorkSchedule,

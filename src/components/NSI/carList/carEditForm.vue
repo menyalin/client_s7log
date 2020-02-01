@@ -1,8 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>
-      {{ isNewItem ? 'Новый автомобиль' : `ТС: ${editedItem.title}` }}
-    </v-card-title>
+    <v-card-title>{{ isNewItem ? 'Новый автомобиль' : `ТС: ${editedItem.title}` }}</v-card-title>
     <v-card-text>
       <v-container>
         <v-row no-gutters>
@@ -34,11 +32,7 @@
         </v-row>
         <v-row no-gutters>
           <v-col>
-            <v-text-field
-              label="№ в списке"
-              v-model.number="editedItem.listItem"
-              type="number"
-            />
+            <v-text-field label="№ в списке" v-model.number="editedItem.listItem" type="number" />
           </v-col>
           <v-col>
             <v-text-field
@@ -66,21 +60,19 @@
       </v-container>
     </v-card-text>
     <v-card-actions>
-      <v-btn
+      <v-checkbox
         v-if="!isNewItem"
-        color="warning"
-        fab
-        small
-        dark
-        @click="deleteHandler"
-      >
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
+        v-model="editedItem.isActive"
+        label="Запись активна"
+        class="pl-3"
+      />
       <v-spacer />
       <v-btn color="primary" @click="cancel">Отмена</v-btn>
-      <v-btn color="primary" @click="save" :disabled="!isValidForm">
-        {{ isNewItem ? 'Создать' : 'Сохранить' }}
-      </v-btn>
+      <v-btn
+        color="primary"
+        @click="save"
+        :disabled="!isValidForm"
+      >{{ isNewItem ? 'Создать' : 'Сохранить' }}</v-btn>
     </v-card-actions>
   </v-card>
 </template>

@@ -127,6 +127,7 @@ export const carUpdatedSubscription = gql`
       type
       maxPltCount
       note
+      isActive
     }
   }
 `
@@ -142,6 +143,26 @@ export const createCarMutation = gql`
       type: $type
       maxPltCount: $maxPltCount
       note: $note
+    ) {
+      id
+    }
+  }
+`
+export const updateCarMutation = gql`
+  mutation updateCar ($id: ID! $title: String! $listItem: Int $regNumber: String $isActive: Boolean
+                      $reg: String $pts: String $isOwned: Boolean $type: String! $maxPltCount: Int $note: String){
+    updateCar (
+      id: $id
+      title: $title
+      listItem: $listItem
+      regNumber: $regNumber
+      reg: $reg
+      pts: $pts
+      isOwned: $isOwned
+      type: $type
+      maxPltCount: $maxPltCount
+      note: $note
+      isActive: $isActive
     ) {
       id
     }
