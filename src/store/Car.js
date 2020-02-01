@@ -50,7 +50,9 @@ export default {
     carsByType: ({ cars }) => (type) => cars
       .filter(item => (item.type === type && !item.isTempSlot && item.isActive))
       .sort((a, b) => a.listItem - b.listItem),
-    carSlotsByType: (state) => (type) => state.cars.filter(item => (item.type === type && item.isTempSlot)),
+    carSlotsByType: (state) => (type) => state.cars
+      .filter(item => (item.type === type && item.isTempSlot))
+      .sort((a, b) => a.listItem - b.listItem),
     carWorkSchedule: ({ carWorkSchedule }) => carWorkSchedule,
     carWorkScheduleTypes: ({ carWorkScheduleTypes }) => carWorkScheduleTypes,
     carWorkScheduleTypeById: ({ carWorkScheduleTypes }) => (id) => carWorkScheduleTypes.find(item => item.id === id)

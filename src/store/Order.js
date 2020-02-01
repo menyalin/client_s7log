@@ -15,19 +15,16 @@ export default {
 
     staff: [],
     statuses: [
-      { id: '01', title: 'Надо получить' },
-      { id: '02', title: 'ОЧЕНЬ Надо получить' },
-      { id: '03', title: 'Получен' },
-      { id: '04', title: 'Сообщен водителю' },
-      { id: '05', title: 'Подтвержден клиенту' },
-      { id: '06', title: 'На погрузке' },
-      { id: '07', title: 'На выгрузке' },
-      { id: '08', title: 'Выполнен' },
-      { id: '09', title: 'Мы отказались' },
-      { id: '10', title: 'Клиент снял заказ' }
+      { id: '10', title: 'Надо получить' },
+      { id: '20', title: 'ОЧЕНЬ Надо получить' },
+      { id: '30', title: 'Получен' },
+      { id: '40', title: 'В пути или на погрузке' },
+      { id: '50', title: 'В пути или на выгрузке' },
+      { id: '60', title: 'Выполнен' },
+      { id: '98', title: 'Мы отказались' },
+      { id: '99', title: 'Клиент снял заказ' }
     ],
     schedule: [],
-
     timeZones: [
       { id: '01', title: '00-06', startTime: '00:00' },
       { id: '02', title: '06-12', startTime: '06:00' },
@@ -84,18 +81,6 @@ export default {
         state.orders.push(orderUpdated)
       }
     },
-    // resetCarInOrder: (state, orderId) => {
-    //   let order = state.orders.find(item => item.id === orderId)
-    //   order.confirmedCarId = null
-    //   order.confirmDate = null
-    //   order.confirmTime = null
-    // },
-    // confirmOrder: (state, { id, confirmedCarId, confirmDate, confirmTime }) => {
-    //   let order = state.orders.find(item => item.id === id)
-    //   order.confirmedCarId = confirmedCarId
-    //   order.confirmDate = confirmDate
-    //   order.confirmTime = confirmTime
-    // },
     setCurrentDate: (state, payload) => {
       state.currentDate = payload
     },

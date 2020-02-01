@@ -1,11 +1,11 @@
 <template>
   <v-container fluid class="pa-0 ma-0">
-    <v-row no-gutters justify="center">
-      <v-col cols="auto" class="car--title">
+    <v-row no-gutters justify="center" fill>
+      <v-col cols="auto" class="car--title pa-0">
         <div v-if="header">
           <car-title-header />
         </div>
-        <div v-else>{{ car.title }}</div>
+        <div v-else class="car-title-cell" :class="carTitleClasses">{{ car.title }}</div>
       </v-col>
       <v-col>
         <div v-if="header" class="header--container">
@@ -118,6 +118,14 @@ export default {
     },
     colCount() {
       return this.dates.length * 4
+    },
+    carTitleClasses() {
+      return {
+        'owned--car': this.car.isOwned,
+        'two--tier': this.car.maxPltCount > 33,
+        'alien--car': !this.car.isOwned,
+        'slot--item': this.car.isTempSlot
+      }
     }
   }
 }
@@ -147,5 +155,25 @@ export default {
 .header--container {
   display: flex;
   flex-direction: row;
+}
+.car-title-cell {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
+.owned--car {
+  background-color: rgba(135, 206, 250, 0.65);
+}
+.two--tier {
+  color: rgb(202, 0, 0);
+  font-weight: 500;
+}
+.alien--car {
+  background-color: rgba(248, 162, 176, 0.55);
+}
+.slot--item {
+  background-color: inherit;
+  color: darkgray;
+  font-size: 0.8em;
 }
 </style>

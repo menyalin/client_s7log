@@ -24,6 +24,7 @@
             :key="car.id"
             :header="false"
             :dates="dates"
+            :carType="carType"
           />
         </div>
       </v-col>

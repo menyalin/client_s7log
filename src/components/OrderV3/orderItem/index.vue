@@ -33,22 +33,18 @@ export default {
   computed: {
     ...mapGetters(['addressById', 'isAddressesUpload']),
     classes() {
-      let resArr = []
-      switch (this.order.status) {
-        case 'Проблема': {
-          resArr.push('problems')
-          break
-        }
-        case 'На погрузке': {
-          resArr.push('in-process')
-          break
-        }
-        case 'Выполнен': {
-          resArr.push('finished')
-          break
-        }
+      return {
+        'status--10': this.order.status == 10,
+        'status--20': this.order.status == 20,
+        'status--30': this.order.status == 30,
+        isDriverNotified: this.order.isDriverNotified,
+        isClientNotified: this.order.isClientNotified,
+        'status--40': this.order.status == 40,
+        'status--50': this.order.status == 50,
+        'status--60': this.order.status == 60,
+        'status--98': this.order.status == 98,
+        'status--99': this.order.status == 99
       }
-      return resArr
     }
   },
   methods: {
@@ -65,7 +61,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .order-container {
   background-color: white;
   font-size: 0.58rem;
@@ -82,14 +78,50 @@ export default {
 .order-container:hover {
   box-shadow: 1px 1px 1px 1px rgba(5, 5, 5, 0.3);
 }
-.problems {
-  background-color: rgba(248, 93, 21, 0.452);
+.status--10 {
+  color: rgb(95, 95, 95);
+  border: 1px black dotted;
 }
-.in-process {
-  background-color: rgba(8, 153, 8, 0.596);
+.status--20 {
+  color: red;
+  border: 1px black dotted;
 }
-.finished {
-  background-color: rgba(169, 169, 169, 0.349);
+.status--30 {
+  color: black;
+  font-weight: 400;
+}
+.isDriverNotified {
+  color: blue;
+  font-weight: 400;
+}
+.isClientNotified {
+  background-color: rgb(176, 226, 255);
+}
+.status--40 {
+  background-color: lightgreen;
+  color: inherit;
+}
+.status--40 > div:nth-child(1) {
+  color: red;
+}
+.status--50 {
+  background-color: lightgreen;
+  color: inherit;
+}
+.status--60 {
+  background-color: rgb(196, 241, 196);
+  color: inherit;
+}
+.status--50 > div:nth-child(4) {
+  color: red;
+}
+.status--98 {
+  color: red;
+  background-color: black;
+}
+.status--99 {
+  color: black;
+  background-color: red;
 }
 .tooltip-information {
   display: flex;
