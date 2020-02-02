@@ -1,5 +1,9 @@
 <template>
-  <v-dialog v-model="showOrderDialog" max-width="1024px" persistent>
+  <v-dialog
+    v-model="showOrderDialog"
+    max-width="1024px"
+    @keydown="cancelFormHandler"
+  >
     <order-edit-form
       v-model="editedOrder"
       @cancelEdit="cancelFormHandler"

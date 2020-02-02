@@ -13,19 +13,12 @@
 import { mapGetters } from 'vuex'
 export default {
   data: () => ({}),
-  created() {
-    this.$store.commit('openEditOrderForm')
-  },
   components: {
-    
   },
   computed: {
-    ...mapGetters(['editedOrder'])
+    ...mapGetters([])
   },
   methods: {
-    clickHandler() {
-      this.$store.commit('openEditOrderForm')
-    }
   }
 }
 </script>

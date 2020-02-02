@@ -17,6 +17,7 @@ export const updateOrderMutation = gql`
     $isClientNotified: Boolean
     $lengthCell: Int
     $templateId: String
+    $attention: Boolean
   ) {
     updateOrder(
       id: $id
@@ -35,6 +36,7 @@ export const updateOrderMutation = gql`
       isDriverNotified: $isDriverNotified
       isClientNotified: $isClientNotified
       templateId: $templateId
+      attention: $attention
     ) {
       id
       number
@@ -105,7 +107,8 @@ export const createOrderMutation = gql`
     $lengthCell: Int
     $isDriverNotified: Boolean
     $isClientNotified: Boolean
-    $templateId: String 
+    $templateId: String
+    $attention: Boolean 
   ) {
     createOrder(
       carType: $carType
@@ -123,6 +126,7 @@ export const createOrderMutation = gql`
       isDriverNotified: $isDriverNotified
       isClientNotified: $isClientNotified
       templateId: $templateId
+      attention: $attention
     ) {
       id
     }
@@ -174,6 +178,7 @@ export const ordersForVuexQuery = gql`
       isDriverNotified
       isClientNotified
       templateId
+      attention
     }
   }
 `
@@ -200,6 +205,7 @@ export const orderAddedSubscription = gql`
       carId
       lengthCell
       templateId
+      attention
     }
   }
 `
@@ -226,6 +232,7 @@ export const orderUpdatedSubscription = gql`
       carId
       lengthCell
       templateId
+      attention
     }
   }
 `

@@ -2,8 +2,7 @@
   <div
     class="order-container"
     :draggable="true"
-    @dragstart.exact="dragStartHandler($event, JSON.stringify(order))"
-    @dragstart.meta="dragStartHandler($event, JSON.stringify(order), 'test')"
+    @dragstart="dragStartHandler($event, JSON.stringify(order))"
     @click="clickHandler"
     :class="classes"
   >
@@ -43,13 +42,13 @@ export default {
         'status--50': this.order.status == 50,
         'status--60': this.order.status == 60,
         'status--98': this.order.status == 98,
-        'status--99': this.order.status == 99
+        'status--99': this.order.status == 99,
+        attention: this.order.attention
       }
     }
   },
   methods: {
-    dragStartHandler(event, item, arg3) {
-      if (arg3) console.log('Огонь :)')
+    dragStartHandler(event, item) {
       event.dataTransfer.dropEffect = 'move'
       event.dataTransfer.effectAllowed = 'move'
       event.dataTransfer.setData('order', item)
@@ -76,7 +75,7 @@ export default {
   z-index: 4;
 }
 .order-container:hover {
-  box-shadow: 1px 1px 1px 1px rgba(5, 5, 5, 0.3);
+  box-shadow: 0px 0px 4px rgba(5, 5, 5, 0.6);
 }
 .status--10 {
   color: rgb(95, 95, 95);
@@ -122,6 +121,10 @@ export default {
 .status--99 {
   color: black;
   background-color: red;
+}
+.attention {
+  border: 1px solid darkorange;
+  box-shadow: inset 0px 0px 4px darkorange;
 }
 .tooltip-information {
   display: flex;

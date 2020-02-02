@@ -67,10 +67,16 @@
             />
             <date-time-row>
               <template v-slot:date>
-                <my-date-picker v-model="editedOrder.shippingDate" label="Плановая дата погрузки" />
+                <my-date-picker
+                  v-model="editedOrder.shippingDate"
+                  label="Плановая дата погрузки"
+                />
               </template>
               <template v-slot:time>
-                <my-time-text-field label="Время погрузки" v-model="editedOrder.shippingTime" />
+                <my-time-text-field
+                  label="Время погрузки"
+                  v-model="editedOrder.shippingTime"
+                />
               </template>
             </date-time-row>
           </v-col>
@@ -83,10 +89,16 @@
             />
             <date-time-row>
               <template v-slot:date>
-                <my-date-picker v-model="editedOrder.deliveryDate" label="Плановая дата доставки" />
+                <my-date-picker
+                  v-model="editedOrder.deliveryDate"
+                  label="Плановая дата доставки"
+                />
               </template>
               <template v-slot:time>
-                <my-time-text-field label="Время доставки" v-model="editedOrder.deliveryTime" />
+                <my-time-text-field
+                  label="Время доставки"
+                  v-model="editedOrder.deliveryTime"
+                />
               </template>
             </date-time-row>
           </v-col>
@@ -118,6 +130,14 @@
               color="primary"
             />
           </v-col>
+          <v-col>
+            <v-checkbox
+              v-model="editedOrder.attention"
+              label="На контроль"
+              hide-details
+              color="warning"
+            />
+          </v-col>
         </v-row>
         <v-row>
           <v-col cols="12">
@@ -127,12 +147,19 @@
       </v-container>
     </v-card-text>
     <v-card-actions>
-      <v-btn text color="primary" @click="openTemplateModal">Сохранить как шаблон</v-btn>
+      <v-btn text color="primary" @click="openTemplateModal"
+        >Сохранить как шаблон</v-btn
+      >
       <v-spacer />
-      <v-btn color="primary" @click="save" :loading="$apollo.loading">Сохранить</v-btn>
+      <v-btn color="primary" @click="save" :loading="$apollo.loading"
+        >Сохранить</v-btn
+      >
       <v-btn color="primary" @click="cancel">Отмена</v-btn>
     </v-card-actions>
-    <v-dialog v-model="templateModal" max-width="350">
+    <v-dialog
+      v-model="templateModal"
+      max-width="350"
+    >
       <v-card>
         <v-card-title class="headline">Сохранить новый шаблон</v-card-title>
         <v-card-text>
@@ -140,13 +167,16 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-3" text @click="templateModalCancel">Отмена</v-btn>
+          <v-btn color="green darken-3" text @click="templateModalCancel">
+            Отмена
+          </v-btn>
           <v-btn
             color="green darken-3"
             text
             @click="templateModalSave"
             :disabled="!templateName"
-          >Сохранить</v-btn>
+            >Сохранить</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
