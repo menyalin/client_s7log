@@ -54,8 +54,8 @@ export default {
       state.showOrderDialog = true;
     },
     cancelOrderEdit: (state) => {
-      state.editedOrder = Object.assign({}, {}, { lengthCell: 1, templateId: null })
       state.showOrderDialog = false
+      state.editedOrder = Object.assign({}, {}, { lengthCell: 1, templateId: null })
     },
     setOrderTemplates: (state, payload) => {
       state.orderTemplates = payload

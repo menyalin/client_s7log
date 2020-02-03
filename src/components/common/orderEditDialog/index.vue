@@ -2,7 +2,8 @@
   <v-dialog
     v-model="showOrderDialog"
     max-width="1024px"
-    @keydown="cancelFormHandler"
+    persistent
+    @keydown.esc="cancelFormHandler"
   >
     <order-edit-form
       v-model="editedOrder"
