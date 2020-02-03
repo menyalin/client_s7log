@@ -5,7 +5,9 @@
         <div v-if="header">
           <car-title-header />
         </div>
-        <div v-else class="car-title-cell" :class="carTitleClasses">{{ car.title }}</div>
+        <div v-else class="car-title-cell" :class="carTitleClasses">
+          {{ car.title }}
+        </div>
       </v-col>
       <v-col>
         <div v-if="header" class="header--container">
