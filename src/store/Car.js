@@ -46,7 +46,7 @@ export default {
       if (cars.length && id) return cars.find(item => item.id === id)
       else return null
     },
-    carsForAutocomplete: ({ cars }) => (type) => type ? cars.filter(item => item.type === type) : cars,
+    carsForAutocomplete: ({ cars }) => (type) => type ? cars.filter(item => item.type === type && !item.isTempSlot) : cars,
     carsByType: ({ cars }) => (type) => cars
       .filter(item => (item.type === type && !item.isTempSlot && item.isActive))
       .sort((a, b) => a.listItem - b.listItem),
