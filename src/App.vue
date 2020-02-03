@@ -20,7 +20,7 @@
           </v-list>
         </v-card>
       </v-navigation-drawer>
-      <v-app-bar app color="primary" dark dense>
+      <v-app-bar app color="primary" dark dense hide-on-scroll>
         <v-app-bar-nav-icon @click="toggleDrawer" class="hidden-md-and-up" />
         <v-toolbar-title class="hidden-sm-and-down">
           <router-link to="/" tag="span" class="main__title">ATP-16</router-link>
