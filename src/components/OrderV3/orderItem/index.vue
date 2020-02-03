@@ -123,8 +123,7 @@ export default {
   background-color: red;
 }
 .attention {
-  border: 1px solid darkorange;
-  box-shadow: inset 0px 0px 4px darkorange;
+  border: 2px solid darkred;
 }
 .tooltip-information {
   display: flex;
