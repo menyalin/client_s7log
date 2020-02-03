@@ -1,7 +1,8 @@
 <template>
   <div
     @click="newOrder"
-    @drop="dropHandler($event)"
+    @drop.exact="dropHandler($event)"
+    @drop.ctrl="dropHandler($event, 'new')"
     @dragover="dragOver"
     class="empty--zone"
   />
@@ -10,9 +11,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import moment from 'moment'
-/*
-  props: ['carId', 'date', 'zoneId', 'carType']
-*/
 
 export default {
   name: 'emptyCell',
@@ -27,15 +25,29 @@ export default {
       })
     },
 
-    dropHandler(event) {
-      const order = JSON.parse(event.dataTransfer.getData('order'))
-      this.$store.dispatch('confirmOrder', {
-        id: order.id,
-        carId: this.cell.carId,
-        carType: this.cell.carType,
-        dateRange: this.getDateRange(moment(this.cell.id), order.lengthCell)
-      })
+    dropHandler(event, arg) {
       event.preventDefault()
+      const order = JSON.parse(event.dataTransfer.getData('order'))
+      if (arg === 'new') {
+        this.$store.dispatch('createNewOrder', {
+          status: '10',
+          carType: this.cell.carType,
+          carId: this.cell.carId,
+          dateRange: this.getDateRange(moment(this.cell.id), order.lengthCell),
+          lengthCell: order.lengthCell,
+          shipperId: order.shipperId,
+          consigneeId: order.consigneeId,
+          shippingDate: this.cell.id
+        })
+      } else {
+        this.$store.dispatch('confirmOrder', {
+          id: order.id,
+          carId: this.cell.carId,
+          carType: this.cell.carType,
+          dateRange: this.getDateRange(moment(this.cell.id), order.lengthCell)
+        })
+      }
+
       return false
     },
     getDateRange(startDate, length) {

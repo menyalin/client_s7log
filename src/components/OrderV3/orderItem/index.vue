@@ -1,22 +1,22 @@
 <template>
-  <div
-    class="order-container"
-    :draggable="true"
-    @dragstart="dragStartHandler($event, JSON.stringify(order))"
-    @click="clickHandler"
-    :class="classes"
-  >
-    <order-item-row
-      :partnerId="order.shipperId"
-      :time="order.shippingTime"
-      :date="order.shippingDate"
-    />
-    <order-item-row
-      :partnerId="order.consigneeId"
-      :time="order.deliveryTime"
-      :date="order.deliveryDate"
-    />
-  </div>
+    <div
+      class="order-container"
+      :draggable="true"
+      @dragstart="dragStartHandler($event, JSON.stringify(order))"
+      @click="clickHandler"
+      :class="classes"
+    >
+      <order-item-row
+        :partnerId="order.shipperId"
+        :time="order.shippingTime"
+        :date="order.shippingDate"
+      />
+      <order-item-row
+        :partnerId="order.consigneeId"
+        :time="order.deliveryTime"
+        :date="order.deliveryDate"
+      />
+    </div>
 </template>
 
 <script>

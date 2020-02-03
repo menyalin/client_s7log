@@ -31,41 +31,12 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
-const usersForAdminPanelQuery = gql`
-  query usersForAdminPanel {
-    usersForAdminPanel {
-      id
-      name
-      email
-      roles
-      isActive
-    }
-  }
-`
-const changeUserStatusMutation = gql`
-  mutation changeUserStatus($userId: String!, $isActive: Boolean!) {
-    changeUserStatus(userId: $userId, isActive: $isActive) {
-      id
-      isActive
-    }
-  }
-`
-const changeDispatcherRoleMutation = gql`
-  mutation changeDispatcherRole($userId: String!, $isDispatcher: Boolean!) {
-    changeDispatcherRole(userId: $userId, isDispatcher: $isDispatcher) {
-      id
-      userId
-      user {
-        id
-        name
-        email
-      }
-      role
-      isActive
-    }
-  }
-`
+import {
+  usersForAdminPanelQuery,
+  changeUserStatusMutation,
+  changeDispatcherRoleMutation
+} from '@/gql/users'
+
 export default {
   name: 'userManagement',
   methods: {
@@ -94,7 +65,6 @@ export default {
           const tmpUser = data.usersForAdminPanel.find(
             item => item.id === changeDispatcherRole.userId
           )
-          console.log(changeDispatcherRole)
           if (changeDispatcherRole.isActive) {
             tmpUser.roles.push('dispatcher')
           } else tmpUser.roles.splice(tmpUser.roles.indexOf('dispatcher'), 1)

@@ -126,7 +126,7 @@ export default {
           dispatch('setError', e.message)
         })
     },
-    confirmOrder({ commit, dispatch }, payload) {
+    confirmOrder ({ commit, dispatch }, payload) {
       const { id, carId, dateRange, carType } = payload
       apolloClient.mutate({
         mutation: updateOrderMutation,
@@ -141,10 +141,13 @@ export default {
           dispatch('setError', e.message)
         })
     },
-    createNewOrder({ commit, getters }) {
+    createNewOrder ({ commit, getters }, payload) {
+      let variables = null
+      if (payload) variables = payload
+      else variables = getters.editedOrder
       apolloClient.mutate({
         mutation: createOrderMutation,
-        variables: getters.editedOrder
+        variables
       })
         .then(() => {
           commit('cancelOrderEdit')
@@ -158,10 +161,6 @@ export default {
     orders: ({ orders }) => orders,
     currentDate: (state) => state.currentDate,
     personOnDuty: ({ schedule }) => (date) => schedule.find(item => item.date === date) || 'не задан',
-
-    // notConfirmedOrders: (state) => (carType) => state.orders.filter(item => ((!item.confirmedCarId || !item.confirmTime) && item.carType === carType)),
-    // ordersByCarAndConfirmDateZone: (state) => (confirmedCarId, confirmDate, confirmTime) =>
-    //   state.orders.filter(item => item.confirmedCarId === confirmedCarId && item.confirmDate === confirmDate && item.confirmTime === confirmTime)[0],
     timeZones: (state) => state.timeZones,
     timeZoneById: ({ timeZones }) => (id) => timeZones.find(item => item.id === id),
     statuses: (state) => state.statuses,
