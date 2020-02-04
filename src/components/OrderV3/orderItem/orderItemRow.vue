@@ -1,22 +1,18 @@
 <template>
-  <v-tooltip bottom open-delay="350" color="blue-grey darken-3">
+  <v-tooltip bottom open-delay="700" color="blue-grey darken-3">
     <template v-slot:activator="{ on }">
       <div class="row-wrapper">
         <div class="col-title" v-on="on">
           {{
-            partnerId && isAddressesUpload
-              ? addressById(partnerId).shortName
-              : null
+          partnerId && isAddressesUpload
+          ? addressById(partnerId).shortName
+          : null
           }}
         </div>
-        <div class="col-time">
-          {{ time ? time.slice(0, 2) : '' }}
-        </div>
+        <div class="col-time">{{ time ? time.slice(0, 2) : '' }}</div>
       </div>
     </template>
-    <div class="tooltip--row">
-      {{ tooltipText }}
-    </div>
+    <div class="tooltip--row">{{ tooltipText }}</div>
   </v-tooltip>
 </template>
 
