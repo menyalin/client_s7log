@@ -80,11 +80,11 @@ export default {
 }
 .status--10 {
   color: rgb(95, 95, 95);
-  border: 1px black dotted;
+  border: 1px gray solid;
 }
 .status--20 {
   color: red;
-  border: 1px black dotted;
+  border: 1px gray solid;
 }
 .status--30 {
   color: black;
@@ -124,7 +124,7 @@ export default {
   background-color: red;
 }
 .attention {
-  border: 2px solid red;
+  border: 1px solid red;
 }
 .tooltip-information {
   display: flex;
