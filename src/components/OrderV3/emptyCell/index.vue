@@ -21,7 +21,8 @@ export default {
         lengthCell: 1,
         carType: this.cell.carType,
         dateRange: this.getDateRange(moment(this.cell.id), 1),
-        carId: this.cell.carId
+        carId: this.cell.carId,
+        shippingDate: this.cell.id
       })
     },
 

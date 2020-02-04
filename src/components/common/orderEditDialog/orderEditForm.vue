@@ -15,7 +15,7 @@
         @click:clear="clearTemplateSelect"
       />
       <v-text-field
-        label="кол-во ячеек"
+        label="Кол-во ячеек"
         class="pl-2"
         type="number"
         min="1"
@@ -23,7 +23,7 @@
       />
     </v-card-title>
     <v-card-text>
-      <v-container>
+      <v-container fluid>
         <v-row align="center">
           <v-col cols="4">
             <v-select
@@ -156,10 +156,7 @@
       >
       <v-btn color="primary" @click="cancel">Отмена</v-btn>
     </v-card-actions>
-    <v-dialog
-      v-model="templateModal"
-      max-width="350"
-    >
+    <v-dialog v-model="templateModal" max-width="350">
       <v-card>
         <v-card-title class="headline">Сохранить новый шаблон</v-card-title>
         <v-card-text>

@@ -1,22 +1,22 @@
 <template>
-    <div
-      class="order-container"
-      :draggable="true"
-      @dragstart="dragStartHandler($event, JSON.stringify(order))"
-      @click="clickHandler"
-      :class="classes"
-    >
-      <order-item-row
-        :partnerId="order.shipperId"
-        :time="order.shippingTime"
-        :date="order.shippingDate"
-      />
-      <order-item-row
-        :partnerId="order.consigneeId"
-        :time="order.deliveryTime"
-        :date="order.deliveryDate"
-      />
-    </div>
+  <div
+    class="order-container"
+    :draggable="true"
+    @dragstart="dragStartHandler($event, JSON.stringify(order))"
+    @click="clickHandler"
+    :class="classes"
+  >
+    <order-item-row
+      :partnerId="order.shipperId"
+      :time="order.shippingTime"
+      :date="order.shippingDate"
+    />
+    <order-item-row
+      :partnerId="order.consigneeId"
+      :time="order.deliveryTime"
+      :date="order.deliveryDate"
+    />
+  </div>
 </template>
 
 <script>
@@ -72,6 +72,7 @@ export default {
   flex-direction: column;
   border: 1px black solid;
   overflow: hidden;
+  margin: 1px;
   z-index: 4;
 }
 .order-container:hover {
@@ -123,11 +124,11 @@ export default {
   background-color: red;
 }
 .attention {
-  border: 2px solid darkred;
+  border: 2px solid red;
 }
 .tooltip-information {
   display: flex;
-  font-size: 1.5em;
+  font-size: 1.4em;
   flex-direction: column;
 }
 </style>
