@@ -24,9 +24,9 @@ export default {
     ...mapGetters(['isAddressesUpload', 'addressById']),
     tooltipText() {
       if (this.partnerId && this.isAddressesUpload)
-        return `${this.addressById(this.partnerId).shortName} - ${
-          this.addressById(this.partnerId).address
-        }`
+        return `${this.addressById(this.partnerId).partner} - ${
+          this.addressById(this.partnerId).shortName
+        } - ${this.addressById(this.partnerId).address}`
       else return null
     }
   }

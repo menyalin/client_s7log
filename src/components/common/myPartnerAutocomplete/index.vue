@@ -17,7 +17,7 @@
 <script>
 function addressTransform(item) {
   return {
-    text: `${item.shortName} - ${item.partner} - ${item.address ||
+    text: `${item.partner} - ${item.shortName} - ${item.address ||
       'адрес не указан'}`,
     value: item.id
   }
