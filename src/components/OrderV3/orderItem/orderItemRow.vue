@@ -51,7 +51,7 @@ export default {
   padding-right: 1px;
 }
 .tooltip--row {
-  font-size: 1rem;
+  font-size: 0.8rem;
   min-width: 150px;
 }
 </style>
