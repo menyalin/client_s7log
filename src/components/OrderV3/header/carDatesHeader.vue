@@ -1,30 +1,31 @@
 <template>
   <div class="date-wrapper">
     <div class="date-header-column-wrapper">
-      <div v-if="date === currentDate">
-        <v-icon @click="prevDate">mdi-arrow-left-circle</v-icon>
-        <v-menu v-model="menu" :close-on-content-click="false" max-width="290">
-          <template v-slot:activator="{ on }">
-            <span class="current-date" v-on="on">
-              <strong>{{ displayDate }}</strong>
-            </span>
-          </template>
-          <v-date-picker
-            :value="date"
-            @change="changeCurrentDate"
-            first-day-of-week="1"
-            color="primary"
-            no-title
-          ></v-date-picker>
-        </v-menu>
-
-        <v-icon @click="nextDate">mdi-arrow-right-circle</v-icon>
+      <div class="arrow-wrapper">
+        <date-shifter
+          v-if="isFirst"
+          direction="left"
+          :clickHandler="prevDate"
+          :changeCurrentDate="changeCurrentDate"
+        />
       </div>
-      <div v-else>{{ displayDate }}</div>
+      <div :class="{ today: isToday }">
+        {{ displayDate }}
+      </div>
+      <div class="arrow-wrapper">
+        <date-shifter
+          v-if="isLast"
+          direction="right"
+          :clickHandler="nextDate"
+          :changeCurrentDate="changeCurrentDate"
+        />
+      </div>
     </div>
     <duty-dispatcher :date="date" />
     <div class="time--zone--container">
-      <div v-for="zone of timeZones" :key="zone.title" class="time--zone">{{ zone.title }}</div>
+      <div v-for="zone of timeZones" :key="zone.title" class="time--zone">
+        {{ zone.title }}
+      </div>
     </div>
   </div>
 </template>
@@ -33,25 +34,29 @@
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 import dutyDispatcher from './dutyDispatcher'
+import dateShifter from './dateShifter'
 
 export default {
-  props: ['date'],
+  props: ['date', 'isFirst', 'isLast'],
   data: () => ({
-    menu: false
+    
   }),
   components: {
-    dutyDispatcher
+    dutyDispatcher,
+    dateShifter
   },
   computed: {
     ...mapGetters(['currentDate', 'timeZones']),
     displayDate() {
       moment.locale('ru')
       return moment(this.date).format('DD MMM YYYY, ddd')
+    },
+    isToday() {
+      return moment().isSame(this.date, 'date')
     }
   },
   methods: {
     changeCurrentDate(val) {
-      // this.menu = false
       this.$store.commit('setCurrentDate', val)
     },
     prevDate() {
@@ -84,7 +89,7 @@ export default {
 .date-header-column-wrapper {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 .current-date {
   padding-left: 1em;
@@ -102,8 +107,14 @@ export default {
   font-size: 0.7em;
   color: grey;
 }
+.today {
+  font-weight: 700;
+  color: red;
+}
+.arrow-wrapper {
+  width: 13%;
+}
 .personOnDuty {
   text-align: center;
-}
-</style
+}</style
 >>

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="pa-0 ma-0">
-    <v-row no-gutters justify="center" fill>
+    <v-row no-gutters justify="center" fill class="car--row">
       <v-col cols="auto" class="car--title pa-0">
         <div v-if="header">
           <car-title-header />
@@ -12,8 +12,10 @@
       <v-col>
         <div v-if="header" class="header--container">
           <car-dates-header
-            v-for="date of dates"
+            v-for="(date, i) of dates"
             :date="date"
+            :isFirst="i === 0"
+            :isLast="i === dates.length - 1"
             :key="date"
             :style="{ width: 100 / dates.length + '%' }"
           />

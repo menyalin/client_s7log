@@ -63,20 +63,23 @@ export default {
 <style>
 .order-container {
   background-color: white;
-  font-size: 0.58rem;
+  font-size: 0.625em;
+  line-height: 1.5em;
+  letter-spacing: -0.05em;
+  font-weight: 400;
   color: black;
   width: 100%;
   height: 2rem;
-  border-radius: 0.2em;
+  border-radius: 0.1em;
   display: flex;
   flex-direction: column;
   border: 1px black solid;
   overflow: hidden;
-  margin: 1px;
+  margin: 0px;
   z-index: 4;
 }
 .order-container:hover {
-  box-shadow: 0px 0px 4px rgba(5, 5, 5, 0.6);
+  box-shadow: inset 0px 0px 3px rgba(5, 5, 5, 0.7);
 }
 .status--10 {
   color: rgb(95, 95, 95);

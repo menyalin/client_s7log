@@ -4,19 +4,22 @@
       <div class="row-wrapper">
         <div class="col-title" v-on="on">
           {{
-          partnerId && isAddressesUpload
-          ? addressById(partnerId).shortName
-          : null
+            partnerId && isAddressesUpload
+              ? addressById(partnerId).shortName
+              : null
           }}
         </div>
         <div class="col-time">{{ time ? time.slice(0, 2) : '' }}</div>
       </div>
     </template>
-    <div class="tooltip--row">{{ tooltipText }}</div>
+    <div class="tooltip--row">
+      {{ tooltipText }} : {{ formatedDate }} {{ time }}
+    </div>
   </v-tooltip>
 </template>
 
 <script>
+import moment from 'moment'
 import { mapGetters } from 'vuex'
 export default {
   props: ['partnerId', 'time', 'date'],
@@ -27,6 +30,10 @@ export default {
         return `${this.addressById(this.partnerId).partner} - ${
           this.addressById(this.partnerId).shortName
         } - ${this.addressById(this.partnerId).address}`
+      else return null
+    },
+    formatedDate() {
+      if (this.date) return moment(this.date).format('DD.MM.YYYY')
       else return null
     }
   }
