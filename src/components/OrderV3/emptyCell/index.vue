@@ -73,7 +73,7 @@ export default {
 .empty--zone {
   width: 100%;
   height: 100%;
-  height: 2rem;
+  height: 1.8rem;
 }
 .empty--zone:hover {
   box-shadow: 0px 0px 3px rgba(5, 5, 5, 0.3);

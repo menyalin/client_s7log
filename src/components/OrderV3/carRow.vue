@@ -143,7 +143,7 @@ export default {
   width: 4rem;
 }
 .item--cell {
-  min-height: 2rem;
+  min-height: 1.8rem;
   min-width: 3rem;
 }
 .item--cell:first-of-type {

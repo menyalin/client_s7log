@@ -43,7 +43,6 @@ export default {
 <style scoped>
 .row-wrapper {
   display: flex;
-  min-height: 1rem;
   flex-wrap: nowrap;
   justify-content: space-around;
   justify-items: center;
@@ -52,6 +51,7 @@ export default {
   flex: 8;
   padding-left: 1px;
   overflow: hidden;
+  white-space: nowrap;
 }
 .col-time {
   flex: 1;
