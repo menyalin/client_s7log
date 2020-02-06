@@ -24,32 +24,46 @@
             />
           </v-col>
         </v-row>
-
         <!-- Строка информации о местах погрузки и времени выгрузки -->
-        <v-row align="center">
-          <!-- Блок с местами погрузки, выгрузки -->
-          <v-col cols="12" md="6">
-            <v-card>
-              <v-card-text>
-                <my-partner-autocomplete
-                  label="Место погрузки"
-                  placeType="shippingPlace"
-                />
-                <v-alert dense text tile>
-                  Комментарий к месту погрузки
-                </v-alert>
-                <my-partner-autocomplete
-                  label="Место выгрузки"
-                  placeType="deliveryPlace"
-                  hide-details
-                />
-                <v-alert dense text tile>
-                  Комментарий к месту выгрузки
-                </v-alert>
-              </v-card-text>
-            </v-card>
+        <v-row>
+          <v-col>
+            <div class="main-section">
+              <div class="status-block">
+                <v-card>
+                  <v-card-text>
+                    <v-select label="Статус рейса" hide-details />
+                  </v-card-text>
+                </v-card>
+              </div>
+              <div class="place-block">
+                <v-card>
+                  <v-card-text>
+                    <my-partner-autocomplete
+                      label="Место погрузки"
+                      placeType="shippingPlace"
+                    />
+                    <my-partner-autocomplete
+                      label="Место выгрузки"
+                      placeType="deliveryPlace"
+                      hide-details
+                    />
+                  </v-card-text>
+                </v-card>
+              </div>
+              <div class="date-block">
+                <v-card>
+                  <v-card-text>
+                    <date-time-control label="План погрузки" dense />
+                    <date-time-control label="План выгрузки" />
+                    <date-time-control label="Прибытие на погрузку" />
+                    <date-time-control label="Окончание погрузки" />
+                    <date-time-control label="Прибытие на выгрузку" />
+                    <date-time-control label="Окончание выгрузки" />
+                  </v-card-text>
+                </v-card>
+              </div>
+            </div>
           </v-col>
-          <v-col></v-col>
         </v-row>
       </v-container>
     </v-card-text>
@@ -88,6 +102,7 @@
 </template>
 
 <script>
+import dateTimeControl from '@/components/common/dateTimeControl'
 import myDatePicker from '@/components/common/myDatePicker/index.vue'
 import myPartnerAutocomplete from '@/components/common/myPartnerAutocomplete/index.vue'
 import myTimeTextField from '@/components/common/myTimeTextField/index.vue'
@@ -114,6 +129,7 @@ export default {
     }
   },
   components: {
+    dateTimeControl,
     dateTimeRange,
     myDatePicker,
     myPartnerAutocomplete,
@@ -188,5 +204,47 @@ export default {
 }
 .length-count-wrapper {
   max-width: 8rem;
+}
+.main-section {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-gap: 1em;
+}
+@media (min-width: 95em) {
+  .status-block {
+    background-color: blue;
+    grid-column: 1/5;
+    grid-row: 1/4;
+  }
+  .place-block {
+    grid-column: 5/10;
+    grid-row: 1/4;
+  }
+  .date-block {
+    grid-column: 10/13;
+    grid-row: 1/4;
+  }
+}
+
+@media (min-width: 40em) and (max-width: 95em) {
+  .status-block {
+    background-color: green;
+    grid-column: 1/8;
+    grid-row: 1/2;
+  }
+  .place-block {
+    grid-column: 1/8;
+    grid-row: 2/4;
+  }
+  .date-block {
+    grid-column: 8/13;
+    grid-row: 1/4;
+  }
+}
+@media (max-width: 40em) {
+  .status-block {
+    background-color: red;
+  }
 }
 </style>
