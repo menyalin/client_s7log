@@ -4,12 +4,14 @@
       @change="onChangeHandler"
       :value="propValue"
       hide-no-data
+      :dense="dense"
       clearable
       @click:clear="resetHandler"
       :items="itemsForSelect"
       color="primary"
       :label="label"
       :messages="note"
+      :hide-details="hide - details"
     />
   </div>
 </template>
@@ -52,6 +54,6 @@ export default {
       this.$emit('change', val)
     }
   },
-  props: ['label', 'propValue', 'placeType']
+  props: ['label', 'propValue', 'placeType', 'dense', 'hide-details']
 }
 </script>

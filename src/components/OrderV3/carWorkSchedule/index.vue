@@ -21,7 +21,6 @@ export default {
   overflow: hidden;
   font-size: 0.7em;
   border: 1px solid black;
-  border-radius: 3px;
 }
 .service {
   background-color: grey;

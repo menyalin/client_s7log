@@ -70,7 +70,6 @@ export default {
   color: black;
   width: 100%;
   height: 1.8rem;
-  border-radius: 0.1em;
   display: flex;
   flex-direction: column;
   border: 1px black solid;

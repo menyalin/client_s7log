@@ -9,6 +9,10 @@ export default {
     editedOrder: {
       lengthCell: 1
     },
+    showOrderDialog_v2: true,
+    editedOrder_v2: {
+      lengthCell: 1
+    },
     currentDate: null,
     orderTemplates: [],
     addresses: [],
@@ -126,7 +130,7 @@ export default {
           dispatch('setError', e.message)
         })
     },
-    confirmOrder ({ commit, dispatch }, payload) {
+    confirmOrder ({ dispatch }, payload) {
       const { id, carId, dateRange, carType } = payload
       apolloClient.mutate({
         mutation: updateOrderMutation,
@@ -191,6 +195,8 @@ export default {
     allOrderTemplates: (state) => state.orderTemplates,
     showOrderDialog: ({ showOrderDialog }) => showOrderDialog,
     editedOrder: ({ editedOrder }) => editedOrder,
+    showOrderDialog_v2: ({ showOrderDialog_v2 }) => showOrderDialog_v2,
+    editedOrder_v2: ({ editedOrder_v2 }) => editedOrder_v2,
   }
 }
 

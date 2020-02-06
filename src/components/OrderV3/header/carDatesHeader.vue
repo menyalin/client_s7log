@@ -38,9 +38,7 @@ import dateShifter from './dateShifter'
 
 export default {
   props: ['date', 'isFirst', 'isLast'],
-  data: () => ({
-    
-  }),
+  data: () => ({}),
   components: {
     dutyDispatcher,
     dateShifter
@@ -82,9 +80,11 @@ export default {
 <style scoped>
 .date-wrapper {
   border-right: 2px solid red;
+  border-bottom: 2px solid red;
 }
 .date-wrapper:last-of-type {
   border: 0px;
+  border-bottom: 2px solid red;
 }
 .date-header-column-wrapper {
   display: flex;
