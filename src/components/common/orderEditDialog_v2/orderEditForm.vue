@@ -7,22 +7,14 @@
           <v-col dense>
             <h3>Заголовок формы</h3>
           </v-col>
-          <v-spacer />
-          <v-col cols="auto" class="car-type-wrapper">
-            <v-select label="Тип ТС*" dense hide-details />
-          </v-col>
-
-          <v-col cols="auto" class="length-count-wrapper">
-            <v-text-field label="Ячеек" dense type="number" min="1" hide-details />
-          </v-col>
         </v-row>
         <v-row>
           <v-col>
             <div class="main-section">
               <div class="status-block">
-                <v-card>
+                <v-card class="block-wrapper">
                   <v-card-text>
-                    <v-radio-group class="status-group-wrapper" dense>
+                    <v-radio-group class="status-group-wrapper">
                       <v-radio
                         dense
                         v-for="status in statuses"
@@ -32,9 +24,21 @@
                       />
                     </v-radio-group>
                     <div class="checkbox-wrapper">
-                      <v-checkbox label="Водитель оповещен" hide-details color="primary" />
-                      <v-checkbox label="Клиент оповещен" hide-details color="primary" />
-                      <v-checkbox label="На контроль" hide-details color="primary" />
+                      <v-checkbox
+                        label="Водитель оповещен"
+                        hide-details
+                        color="primary"
+                      />
+                      <v-checkbox
+                        label="Клиент оповещен"
+                        hide-details
+                        color="primary"
+                      />
+                      <v-checkbox
+                        label="На контроль"
+                        hide-details
+                        color="primary"
+                      />
                     </div>
                   </v-card-text>
                 </v-card>
@@ -58,9 +62,22 @@
                   </v-card-text>
                 </v-card>
               </div>
-              <div class="date-block">
+              <div class="info-block">
                 <v-card>
-                  <v-card-text>
+                  <v-card-text class="info-controls">
+                    <v-select label="Тип ТС*" hide-details />
+                    <v-text-field
+                      label="Ячеек"
+                      type="number"
+                      min="1"
+                      hide-details
+                    />
+                  </v-card-text>
+                </v-card>
+              </div>
+              <div class="date-block">
+                <v-card class="block-wrapper">
+                  <v-card-text class="date-controls-group">
                     <date-time-control label="План погрузки" dense />
                     <date-time-control label="План выгрузки" dense />
                     <date-time-control label="Прибытие на погрузку" dense />
@@ -73,7 +90,11 @@
               <div class="dop-info-block">
                 <v-card>
                   <v-card-text class="dop-info-control-group">
-                    <v-select label="Тип ТС (план)" hide-details class="carTypePlan" />
+                    <v-select
+                      label="Тип ТС (план)"
+                      hide-details
+                      class="carTypePlan"
+                    />
                     <v-text-field hide-details label="Вес, тн" />
                     <v-text-field hide-details label="Кол-во ПЛТ" />
                     <v-text-field hide-details label="Стоимость" />
@@ -84,7 +105,11 @@
                 <v-card>
                   <v-card-text class="car-selects-wrapper">
                     <div>
-                      <my-car-autocomplete label="Машина" type="20tn" hide-details />
+                      <my-car-autocomplete
+                        label="Машина"
+                        type="20tn"
+                        hide-details
+                      />
                     </div>
                     <div>
                       <v-select hide-details label="Прицеп" />
@@ -103,11 +128,20 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-textarea label="Комментарий" outlined dense no-resize hide-details height="7em" />
+            <v-textarea
+              label="Комментарий"
+              outlined
+              dense
+              no-resize
+              hide-details
+              height="7em"
+            />
           </v-col>
           <v-col cols="auto">
             <div class="pa-1">
-              <v-btn outlined color="primary" @click="openTemplateModal" small>Сохранить как шаблон</v-btn>
+              <v-btn outlined color="primary" @click="openTemplateModal" small
+                >Сохранить как шаблон</v-btn
+              >
             </div>
             <div class="pa-1">
               <v-btn small block outlined color="primary">button2</v-btn>
@@ -124,7 +158,9 @@
         <v-icon>mdi-delete</v-icon>
       </v-btn>
       <v-spacer />
-      <v-btn color="primary" @click="save" :loading="$apollo.loading">Сохранить</v-btn>
+      <v-btn color="primary" @click="save" :loading="$apollo.loading"
+        >Сохранить</v-btn
+      >
       <v-btn color="primary" @click="cancel">Отмена</v-btn>
     </v-card-actions>
     <v-dialog v-model="templateModal" max-width="350">
@@ -135,13 +171,16 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-3" text @click="templateModalCancel">Отмена</v-btn>
+          <v-btn color="green darken-3" text @click="templateModalCancel"
+            >Отмена</v-btn
+          >
           <v-btn
             color="green darken-3"
             text
             @click="templateModalSave"
             :disabled="!templateName"
-          >Сохранить</v-btn>
+            >Сохранить</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -246,6 +285,19 @@ export default {
 </script>
 
 <style scoped>
+.block-wrapper {
+  height: 100%;
+}
+.info-controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.info-controls > * {
+  max-width: 9rem;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
 .car-type-wrapper {
   max-width: 8rem;
 }
@@ -262,31 +314,45 @@ export default {
 .length-count-wrapper {
   max-width: 8rem;
 }
+.date-controls-group {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
 .main-section {
   display: grid;
-  grid-template-columns: repeat(14, 1fr);
+  grid-template-columns: repeat(15, 1fr);
   grid-template-rows: auto;
-  grid-gap: 1em;
+  grid-gap: 0.7em;
 }
 @media (min-width: 95em) {
   .main-section {
-    grid-template-rows: 7em 9em 1fr 1fr;
+    grid-template-rows: 5.5em 11em 6em 1fr;
   }
   .status-block {
     grid-column: 1/5;
     grid-row: 1/5;
   }
   .place-block {
-    grid-column: 5/10;
+    grid-column: 5/13;
     grid-row: 1/2;
   }
   .date-block {
-    grid-column: 11/15;
-    grid-row: 1/4;
+    grid-column: 13/16;
+    grid-row: 2/5;
   }
   .car-block {
-    grid-column: 5/15;
+    grid-column: 5/13;
     grid-row: 4;
+  }
+  .info-block {
+    grid-column: 13/16;
+    grid-row: 1;
+  }
+  .dop-info-block {
+    grid-column: 5/13;
+    grid-row: 3;
   }
   .car-selects-wrapper {
     display: flex;
@@ -298,10 +364,6 @@ export default {
   .car-selects-wrapper > div {
     height: 100%;
     padding-left: 1em;
-  }
-  .dop-info-block {
-    grid-column: 5/11;
-    grid-row: 3;
   }
   .checkbox-wrapper {
     display: flex;
