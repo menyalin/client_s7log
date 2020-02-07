@@ -3,11 +3,9 @@
     <v-autocomplete
       @change="onChangeHandler"
       :value="propValue"
-      hide-no-data
       clearable
       :disabled="!noType && !type"
       @click:clear="resetHandler"
-      hide-selected
       :items="itemsForSelect"
       color="primary"
       :label="label"
@@ -43,7 +41,7 @@ export default {
       this.$emit('change', val)
     }
   },
-  props: ['label', 'propValue', 'type', 'noType']
+  props: ['label', 'propValue', 'type', 'noType', 'hide-details']
 }
 </script>
 

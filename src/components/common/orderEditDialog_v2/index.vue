@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="showOrderDialog_v2" max-width="1400px">
+  <v-dialog v-model="showOrderDialog_v2" max-width="1480px">
     <order-edit-form v-model="editedOrder_v2" />
   </v-dialog>
 </template>

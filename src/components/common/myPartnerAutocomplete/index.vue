@@ -11,7 +11,6 @@
       color="primary"
       :label="label"
       :messages="note"
-      :hide-details="hide - details"
     />
   </div>
 </template>

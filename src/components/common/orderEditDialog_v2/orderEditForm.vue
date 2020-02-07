@@ -32,6 +32,23 @@
                 <v-card>
                   <v-card-text>
                     <v-select label="Статус рейса" hide-details />
+                    <div class="checkbox-wrapper">
+                      <v-checkbox
+                        label="Водитель оповещен"
+                        hide-details
+                        color="primary"
+                      />
+                      <v-checkbox
+                        label="Клиент оповещен"
+                        hide-details
+                        color="primary"
+                      />
+                      <v-checkbox
+                        label="На контроль"
+                        hide-details
+                        color="primary"
+                      />
+                    </div>
                   </v-card-text>
                 </v-card>
               </div>
@@ -54,27 +71,78 @@
                 <v-card>
                   <v-card-text>
                     <date-time-control label="План погрузки" dense />
-                    <date-time-control label="План выгрузки" />
-                    <date-time-control label="Прибытие на погрузку" />
-                    <date-time-control label="Окончание погрузки" />
-                    <date-time-control label="Прибытие на выгрузку" />
-                    <date-time-control label="Окончание выгрузки" />
+                    <date-time-control label="План выгрузки" dense />
+                    <date-time-control label="Прибытие на погрузку" dense />
+                    <date-time-control label="Окончание погрузки" dense />
+                    <date-time-control label="Прибытие на выгрузку" dense />
+                    <date-time-control label="Окончание выгрузки" dense />
+                  </v-card-text>
+                </v-card>
+              </div>
+              <div class="car-block">
+                <v-card>
+                  <v-card-text class="car-selects-wrapper">
+                    <div>
+                      <my-car-autocomplete
+                        label="Машина"
+                        type="20tn"
+                        hide-details
+                      />
+                    </div>
+                    <div>
+                      <v-select hide-details label="Прицеп" />
+                    </div>
+                    <div>
+                      <v-select hide-details label="Водитель" />
+                    </div>
+                    <div>
+                      <v-select hide-details label="Водитель 2" />
+                    </div>
                   </v-card-text>
                 </v-card>
               </div>
             </div>
           </v-col>
         </v-row>
+        <v-row>
+          <v-col>
+            <v-textarea
+              label="Комментарий"
+              outlined
+              dense
+              no-resize
+              hide-details
+              height="7em"
+            />
+          </v-col>
+          <v-col cols="auto">
+            <div class="pa-1">
+              <v-btn outlined color="primary" @click="openTemplateModal" small>
+                Сохранить как шаблон
+              </v-btn>
+            </div>
+            <div class="pa-1">
+              <v-btn small block outlined color="primary">
+                button2
+              </v-btn>
+            </div>
+            <div class="pa-1">
+              <v-btn small block outlined color="primary">
+                button3
+              </v-btn>
+            </div>
+          </v-col>
+        </v-row>
       </v-container>
     </v-card-text>
     <v-card-actions>
-      <v-btn text color="primary" @click="openTemplateModal"
-        >Сохранить как шаблон</v-btn
-      >
+      <v-btn color="warning" fab small dark>
+        <v-icon>mdi-delete</v-icon>
+      </v-btn>
       <v-spacer />
-      <v-btn color="primary" @click="save" :loading="$apollo.loading"
-        >Сохранить</v-btn
-      >
+      <v-btn color="primary" @click="save" :loading="$apollo.loading">
+        Сохранить
+      </v-btn>
       <v-btn color="primary" @click="cancel">Отмена</v-btn>
     </v-card-actions>
     <v-dialog v-model="templateModal" max-width="350">
@@ -208,43 +276,102 @@ export default {
 .main-section {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-rows: auto;
   grid-gap: 1em;
 }
 @media (min-width: 95em) {
+  .main-section {
+    grid-template-rows: 1fr 8em;
+  }
   .status-block {
-    background-color: blue;
     grid-column: 1/5;
-    grid-row: 1/4;
+    grid-row: 1;
   }
   .place-block {
     grid-column: 5/10;
-    grid-row: 1/4;
+    grid-row: 1;
   }
   .date-block {
     grid-column: 10/13;
-    grid-row: 1/4;
+    grid-row: 1/3;
+  }
+  .car-block {
+    grid-column: 1/10;
+    grid-row: 2;
+  }
+  .car-selects-wrapper {
+    display: flex;
+    height: 100%;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  .car-selects-wrapper > div {
+    height: 100%;
+    padding-left: 1em;
+  }
+  .checkbox-wrapper {
+    display: flex;
+    height: 100%;
+    justify-content: space-evenly;
+    flex-direction: row;
+    flex-wrap: nowrap;
   }
 }
-
-@media (min-width: 40em) and (max-width: 95em) {
+@media (min-width: 47em) and (max-width: 96em) {
+  .main-section {
+    grid-template-rows: 9em 12em 1fr;
+  }
   .status-block {
-    background-color: green;
     grid-column: 1/8;
-    grid-row: 1/2;
+    grid-row: 1;
   }
   .place-block {
     grid-column: 1/8;
-    grid-row: 2/4;
+    grid-row: 2;
   }
   .date-block {
     grid-column: 8/13;
-    grid-row: 1/4;
+    grid-row: 1/3;
+  }
+  .car-block {
+    grid-column: 1/13;
+    grid-row: 3;
+  }
+  .checkbox-wrapper {
+    display: flex;
+    height: 100%;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  .checkbox-wrapper > * {
+    padding-left: 1em;
+  }
+  .car-selects-wrapper {
+    display: flex;
+    height: 100%;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .car-selects-wrapper > div {
+    height: 100%;
+    padding-left: 1em;
   }
 }
-@media (max-width: 40em) {
+@media (max-width: 47em) {
   .status-block {
-    background-color: red;
+    grid-column: 1/13;
+  }
+  .place-block {
+    grid-column: 1/13;
+  }
+  .date-block {
+    grid-column: 1/13;
+  }
+  .car-block {
+    grid-column: 1/13;
   }
 }
 </style>

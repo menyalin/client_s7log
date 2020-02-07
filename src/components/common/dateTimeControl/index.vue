@@ -1,10 +1,10 @@
 <template>
   <div class="wrapper">
     <div class="date">
-      <v-text-field :label="label" hide-details />
+      <v-text-field :label="label" hide-details :dense="dense" />
     </div>
     <div class="time">
-      <v-text-field hide-details />
+      <v-text-field hide-details :dense="dense" />
     </div>
   </div>
 </template>
@@ -25,6 +25,7 @@ export default {
 
 <style scoped>
 .wrapper {
+  padding-top: 0.7em;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
