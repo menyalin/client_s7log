@@ -1,5 +1,5 @@
 <template>
-  <v-card @keydown.enter="save">
+  <v-card @keydown.alt.enter.exact="save">
     <v-card-title>
       {{ isNewOrder ? 'Новый заказ' : `Заказ №${editedOrder.number}` }}
       <v-spacer />
