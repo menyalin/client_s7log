@@ -13,24 +13,18 @@
           </v-col>
 
           <v-col cols="auto" class="length-count-wrapper">
-            <v-text-field
-              label="Ячеек"
-              dense
-              type="number"
-              min="1"
-              hide-details
-            />
+            <v-text-field label="Ячеек" dense type="number" min="1" hide-details />
           </v-col>
         </v-row>
-        <!-- Строка информации о местах погрузки и времени выгрузки -->
         <v-row>
           <v-col>
             <div class="main-section">
               <div class="status-block">
                 <v-card>
                   <v-card-text>
-                    <v-radio-group class="status-group-wrapper">
+                    <v-radio-group class="status-group-wrapper" dense>
                       <v-radio
+                        dense
                         v-for="status in statuses"
                         :key="status.id"
                         :label="status.title"
@@ -38,21 +32,9 @@
                       />
                     </v-radio-group>
                     <div class="checkbox-wrapper">
-                      <v-checkbox
-                        label="Водитель оповещен"
-                        hide-details
-                        color="primary"
-                      />
-                      <v-checkbox
-                        label="Клиент оповещен"
-                        hide-details
-                        color="primary"
-                      />
-                      <v-checkbox
-                        label="На контроль"
-                        hide-details
-                        color="primary"
-                      />
+                      <v-checkbox label="Водитель оповещен" hide-details color="primary" />
+                      <v-checkbox label="Клиент оповещен" hide-details color="primary" />
+                      <v-checkbox label="На контроль" hide-details color="primary" />
                     </div>
                   </v-card-text>
                 </v-card>
@@ -88,15 +70,21 @@
                   </v-card-text>
                 </v-card>
               </div>
+              <div class="dop-info-block">
+                <v-card>
+                  <v-card-text class="dop-info-control-group">
+                    <v-select label="Тип ТС (план)" hide-details class="carTypePlan" />
+                    <v-text-field hide-details label="Вес, тн" />
+                    <v-text-field hide-details label="Кол-во ПЛТ" />
+                    <v-text-field hide-details label="Стоимость" />
+                  </v-card-text>
+                </v-card>
+              </div>
               <div class="car-block">
                 <v-card>
                   <v-card-text class="car-selects-wrapper">
                     <div>
-                      <my-car-autocomplete
-                        label="Машина"
-                        type="20tn"
-                        hide-details
-                      />
+                      <my-car-autocomplete label="Машина" type="20tn" hide-details />
                     </div>
                     <div>
                       <v-select hide-details label="Прицеп" />
@@ -115,30 +103,17 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-textarea
-              label="Комментарий"
-              outlined
-              dense
-              no-resize
-              hide-details
-              height="7em"
-            />
+            <v-textarea label="Комментарий" outlined dense no-resize hide-details height="7em" />
           </v-col>
           <v-col cols="auto">
             <div class="pa-1">
-              <v-btn outlined color="primary" @click="openTemplateModal" small>
-                Сохранить как шаблон
-              </v-btn>
+              <v-btn outlined color="primary" @click="openTemplateModal" small>Сохранить как шаблон</v-btn>
             </div>
             <div class="pa-1">
-              <v-btn small block outlined color="primary">
-                button2
-              </v-btn>
+              <v-btn small block outlined color="primary">button2</v-btn>
             </div>
             <div class="pa-1">
-              <v-btn small block outlined color="primary">
-                button3
-              </v-btn>
+              <v-btn small block outlined color="primary">button3</v-btn>
             </div>
           </v-col>
         </v-row>
@@ -149,9 +124,7 @@
         <v-icon>mdi-delete</v-icon>
       </v-btn>
       <v-spacer />
-      <v-btn color="primary" @click="save" :loading="$apollo.loading">
-        Сохранить
-      </v-btn>
+      <v-btn color="primary" @click="save" :loading="$apollo.loading">Сохранить</v-btn>
       <v-btn color="primary" @click="cancel">Отмена</v-btn>
     </v-card-actions>
     <v-dialog v-model="templateModal" max-width="350">
@@ -162,16 +135,13 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-3" text @click="templateModalCancel">
-            Отмена
-          </v-btn>
+          <v-btn color="green darken-3" text @click="templateModalCancel">Отмена</v-btn>
           <v-btn
             color="green darken-3"
             text
             @click="templateModalSave"
             :disabled="!templateName"
-            >Сохранить</v-btn
-          >
+          >Сохранить</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -279,34 +249,44 @@ export default {
 .car-type-wrapper {
   max-width: 8rem;
 }
+.dop-info-control-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.dop-info-control-group > * {
+  width: 9rem;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
 .length-count-wrapper {
   max-width: 8rem;
 }
 .main-section {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(14, 1fr);
   grid-template-rows: auto;
   grid-gap: 1em;
 }
 @media (min-width: 95em) {
   .main-section {
-    grid-template-rows: 1fr 8em;
+    grid-template-rows: 7em 9em 1fr 1fr;
   }
   .status-block {
     grid-column: 1/5;
-    grid-row: 1;
+    grid-row: 1/5;
   }
   .place-block {
     grid-column: 5/10;
-    grid-row: 1;
+    grid-row: 1/2;
   }
   .date-block {
-    grid-column: 10/13;
-    grid-row: 1/3;
+    grid-column: 11/15;
+    grid-row: 1/4;
   }
   .car-block {
-    grid-column: 1/10;
-    grid-row: 2;
+    grid-column: 5/15;
+    grid-row: 4;
   }
   .car-selects-wrapper {
     display: flex;
@@ -318,6 +298,10 @@ export default {
   .car-selects-wrapper > div {
     height: 100%;
     padding-left: 1em;
+  }
+  .dop-info-block {
+    grid-column: 5/11;
+    grid-row: 3;
   }
   .checkbox-wrapper {
     display: flex;
