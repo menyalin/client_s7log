@@ -11,9 +11,7 @@
           <v-col cols="auto" class="car-type-wrapper">
             <v-select label="Тип ТС*" dense hide-details />
           </v-col>
-          <v-col cols="auto" class="hidden-sm-and-down">
-            <v-select label="Заполнить из шаблона" dense hide-details />
-          </v-col>
+
           <v-col cols="auto" class="length-count-wrapper">
             <v-text-field
               label="Ячеек"
@@ -31,7 +29,14 @@
               <div class="status-block">
                 <v-card>
                   <v-card-text>
-                    <v-select label="Статус рейса" hide-details />
+                    <v-radio-group class="status-group-wrapper">
+                      <v-radio
+                        v-for="status in statuses"
+                        :key="status.id"
+                        :label="status.title"
+                        :value="status.id"
+                      />
+                    </v-radio-group>
                     <div class="checkbox-wrapper">
                       <v-checkbox
                         label="Водитель оповещен"
@@ -55,9 +60,13 @@
               <div class="place-block">
                 <v-card>
                   <v-card-text>
+                    <v-col cols="auto" class="pa-0">
+                      <v-select label="Заполнить из шаблона" />
+                    </v-col>
                     <my-partner-autocomplete
                       label="Место погрузки"
                       placeType="shippingPlace"
+                      hide-details
                     />
                     <my-partner-autocomplete
                       label="Место выгрузки"
