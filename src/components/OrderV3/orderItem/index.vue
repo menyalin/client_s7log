@@ -69,7 +69,7 @@ export default {
   font-weight: 400;
   color: black;
   width: 100%;
-  height: 1.8rem;
+  height: 1.7rem;
   display: flex;
   flex-direction: column;
   border: 1px black solid;

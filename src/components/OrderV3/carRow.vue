@@ -143,7 +143,7 @@ export default {
   width: 4rem;
 }
 .item--cell {
-  min-height: 1.8rem;
+  min-height: 1.7rem;
   min-width: 3rem;
 }
 .item--cell:first-of-type {
@@ -163,6 +163,7 @@ export default {
 .car-title-cell {
   height: 100%;
   width: 100%;
+  font-size: 0.85rem;
   text-align: center;
 }
 .owned--car {

@@ -17,7 +17,7 @@ export default {
   justify-content: center;
   align-items: center;
   min-width: 3rem;
-  height: 1.8rem;
+  height: 1.7rem;
   overflow: hidden;
   font-size: 0.7em;
   border: 1px solid black;
