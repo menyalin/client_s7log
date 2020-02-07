@@ -105,11 +105,7 @@
                 <v-card>
                   <v-card-text class="car-selects-wrapper">
                     <div>
-                      <my-car-autocomplete
-                        label="Машина"
-                        type="20tn"
-                        hide-details
-                      />
+                      <v-select hide-details label="Машина" />
                     </div>
                     <div>
                       <v-select hide-details label="Прицеп" />
@@ -298,6 +294,9 @@ export default {
   padding-left: 0.5em;
   padding-right: 0.5em;
 }
+.car-selects-wrapper > div {
+  width: 50%;
+}
 .car-type-wrapper {
   max-width: 8rem;
 }
@@ -326,7 +325,7 @@ export default {
   grid-template-rows: auto;
   grid-gap: 0.7em;
 }
-@media (min-width: 95em) {
+@media (min-width: 90em) {
   .main-section {
     grid-template-rows: 5.5em 11em 6em 1fr;
   }
@@ -344,7 +343,7 @@ export default {
   }
   .car-block {
     grid-column: 5/13;
-    grid-row: 4;
+    grid-row: 3;
   }
   .info-block {
     grid-column: 13/16;
@@ -352,7 +351,7 @@ export default {
   }
   .dop-info-block {
     grid-column: 5/13;
-    grid-row: 3;
+    grid-row: 4;
   }
   .car-selects-wrapper {
     display: flex;
@@ -362,7 +361,7 @@ export default {
     flex-wrap: nowrap;
   }
   .car-selects-wrapper > div {
-    height: 100%;
+    height: 50%;
     padding-left: 1em;
   }
   .checkbox-wrapper {
@@ -373,60 +372,114 @@ export default {
     flex-wrap: nowrap;
   }
 }
-@media (min-width: 47em) and (max-width: 96em) {
+@media (min-width: 60em) and (max-width: 89.99em) {
   .main-section {
-    grid-template-rows: 9em 12em 1fr;
+    grid-template-rows: 5.5em 11em 10.5em 1fr;
   }
   .status-block {
-    grid-column: 1/8;
-    grid-row: 1;
+    grid-column: 1/5;
+    grid-row: 1/5;
   }
   .place-block {
-    grid-column: 1/8;
-    grid-row: 2;
+    grid-column: 5/12;
+    grid-row: 1;
   }
   .date-block {
-    grid-column: 8/13;
-    grid-row: 1/3;
+    grid-column: 12/16;
+    grid-row: 2/4;
   }
   .car-block {
-    grid-column: 1/13;
+    grid-column: 5/12;
     grid-row: 3;
+  }
+  .info-block {
+    grid-column: 12/16;
+    grid-row: 1;
+  }
+  .dop-info-block {
+    grid-column: 5/16;
+    grid-row: 4;
   }
   .checkbox-wrapper {
     display: flex;
     height: 100%;
     justify-content: flex-start;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: nowrap;
   }
   .checkbox-wrapper > * {
-    padding-left: 1em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
   }
   .car-selects-wrapper {
     display: flex;
     height: 100%;
-    justify-content: flex-start;
+    justify-content: space-evenly;
     flex-direction: row;
     flex-wrap: wrap;
   }
   .car-selects-wrapper > div {
-    height: 100%;
+    height: 50%;
     padding-left: 1em;
   }
 }
-@media (max-width: 47em) {
+@media (max-width: 59.99em) {
+  .info-block {
+    grid-column: 1/16;
+    grid-row: 1;
+  }
   .status-block {
-    grid-column: 1/13;
+    grid-column: 1/16;
+    grid-row: 2;
   }
   .place-block {
-    grid-column: 1/13;
+    grid-column: 1/16;
+    grid-row: 3;
   }
   .date-block {
-    grid-column: 1/13;
+    grid-column: 1/16;
+    grid-row: 4;
+  }
+  .dop-info-block {
+    grid-column: 1/16;
+    grid-row: 5;
   }
   .car-block {
-    grid-column: 1/13;
+    grid-column: 1/16;
+    grid-row: 6;
+  }
+
+  .status-group-wrapper > * {
+    max-width: 25%;
+  }
+  .status-group-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .checkbox-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .dop-info-control-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .car-selects-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .car-selects-wrapper > * {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    width: 100%;
   }
 }
 </style>
