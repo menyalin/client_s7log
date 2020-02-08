@@ -82,18 +82,23 @@ export default {
           this.cancelHandler()
         })
     },
-    deleteHandler() {
-      this.$apollo
-        .mutate({
-          mutation: deleteDriverMutation,
-          variables: this.editedDriver
-        })
-        .catch(e => {
-          this.$store.dispatch('setError', e.message)
-        })
-        .then(() => {
-          this.cancelHandler()
-        })
+    async deleteHandler() {
+      const res = await this.$confirm('Вы уверены? Отменить будет нельзя!', {
+        title: 'Удаление записи'
+      })
+      if (res) {
+        this.$apollo
+          .mutate({
+            mutation: deleteDriverMutation,
+            variables: this.editedDriver
+          })
+          .catch(e => {
+            this.$store.dispatch('setError', e.message)
+          })
+          .then(() => {
+            this.cancelHandler()
+          })
+      }
     },
     cancelHandler() {
       this.editedDriver = Object.assign({})

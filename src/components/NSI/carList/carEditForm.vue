@@ -1,6 +1,8 @@
 <template>
   <v-card>
-    <v-card-title>{{ isNewItem ? 'Новый автомобиль' : `ТС: ${editedItem.title}` }}</v-card-title>
+    <v-card-title>{{
+      isNewItem ? 'Новый автомобиль' : `ТС: ${editedItem.title}`
+    }}</v-card-title>
     <v-card-text>
       <v-container>
         <v-row no-gutters>
@@ -8,7 +10,7 @@
             <v-select
               label="Тип*"
               v-model="editedItem.type"
-              :items="vehicleType"
+              :items="allVehicleTypes"
               item-value="value"
               item-text="text"
             />
@@ -32,7 +34,11 @@
         </v-row>
         <v-row no-gutters>
           <v-col>
-            <v-text-field label="№ в списке" v-model.number="editedItem.listItem" type="number" />
+            <v-text-field
+              label="№ в списке"
+              v-model.number="editedItem.listItem"
+              type="number"
+            />
           </v-col>
           <v-col>
             <v-text-field
@@ -54,6 +60,11 @@
         </v-row>
         <v-row no-gutters>
           <v-col>
+            <v-text-field label="Принадлежность" v-model="editedItem.owner" />
+          </v-col>
+        </v-row>
+        <v-row no-gutters>
+          <v-col>
             <v-text-field label="Примечание" v-model="editedItem.note" />
           </v-col>
         </v-row>
@@ -68,11 +79,9 @@
       />
       <v-spacer />
       <v-btn color="primary" @click="cancel">Отмена</v-btn>
-      <v-btn
-        color="primary"
-        @click="save"
-        :disabled="!isValidForm"
-      >{{ isNewItem ? 'Создать' : 'Сохранить' }}</v-btn>
+      <v-btn color="primary" @click="save" :disabled="!isValidForm">{{
+        isNewItem ? 'Создать' : 'Сохранить'
+      }}</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -82,7 +91,7 @@ import { mapGetters } from 'vuex'
 export default {
   components: {},
   computed: {
-    ...mapGetters(['vehicleType']),
+    ...mapGetters(['allVehicleTypes']),
     isNewItem() {
       return !this.editedItem.id
     },

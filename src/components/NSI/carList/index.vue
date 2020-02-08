@@ -4,7 +4,7 @@
       <v-col>
         <v-data-table
           class="elevation-1"
-          :items="cars"
+          :items="carsForJournal"
           :headers="headers"
           dense
           :search="search"
@@ -82,7 +82,7 @@ export default {
     ]
   }),
   computed: {
-    ...mapGetters(['cars'])
+    ...mapGetters(['carsForJournal'])
   },
   methods: {
     cancelHandler() {

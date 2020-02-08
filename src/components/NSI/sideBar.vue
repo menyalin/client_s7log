@@ -20,7 +20,7 @@ export default {
   data: () => ({
     items: [
       { id: '01', title: 'Адреса', url: '/nsi/addresses', icon: 'mdi-city' },
-      { id: '02', title: 'Машины', url: '/nsi/cars', icon: 'mdi-car' },
+      { id: '02', title: 'Машины', url: '/nsi/cars', icon: 'mdi-truck' },
       {
         id: '03',
         title: 'Водители',

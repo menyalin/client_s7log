@@ -12,7 +12,8 @@ export default {
     ],
     vehicleType: [
       { value: '10tn', text: '10тн' },
-      { value: '20tn', text: '20тн' }
+      { value: '20tn', text: '20тн' },
+      { value: 'trailer', text: 'Прицеп' }
     ],
   },
   mutations: {
@@ -40,19 +41,24 @@ export default {
 
   },
   getters: {
-    vehicleType: state => state.vehicleType,
-    cars: state => state.cars.filter(item => !item.isTempSlot),
+    vehicleType: state => state.vehicleType.filter(item => item.value !== 'trailer'),
+    allVehicleTypes: state => state.vehicleType,
+    trailers: ({ cars }) => cars.filter(item => item.type === 'trailer' && !item.isTempSlot),
+    cars: state => state.cars.filter(item => !item.isTempSlot && item.type !== 'trailer'),
+    carsForJournal: ({ cars }) => cars.filter(item => !item.isTempSlot),
     carById: ({ cars }) => (id) => {
       if (cars.length && id) return cars.find(item => item.id === id)
       else return null
     },
-    carsForAutocomplete: ({ cars }) => (type) => type ? cars.filter(item => item.type === type && !item.isTempSlot) : cars,
+    carsForAutocomplete: ({ cars }) => (type) => type ? cars.filter(item => item.type === type && !item.isTempSlot && item.type !== 'trailer') : cars,
     carsByType: ({ cars }) => (type) => cars
       .filter(item => (item.type === type && !item.isTempSlot && item.isActive))
       .sort((a, b) => a.listItem - b.listItem),
     carSlotsByType: (state) => (type) => state.cars
       .filter(item => (item.type === type && item.isTempSlot))
       .sort((a, b) => a.listItem - b.listItem),
+
+
     carWorkSchedule: ({ carWorkSchedule }) => carWorkSchedule,
     carWorkScheduleTypes: ({ carWorkScheduleTypes }) => carWorkScheduleTypes,
     carWorkScheduleTypeById: ({ carWorkScheduleTypes }) => (id) => carWorkScheduleTypes.find(item => item.id === id)
