@@ -236,21 +236,6 @@ export const orderUpdatedSubscription = gql`
     }
   }
 `
-export const orderTemplatesQuery = gql`
-  query orderTemplates {
-    orderTemplates {
-      id
-      templateName
-      carType
-      status
-      note
-      shipperId
-      consigneeId
-      lengthCell
-      showInMenu
-    }
-  }
-`
 export const updateTemplateMutation = gql`
   mutation updateTemplate(
     $id: ID!

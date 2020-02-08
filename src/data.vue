@@ -12,10 +12,13 @@ import {
   orderAddedSubscription,
   orderUpdatedSubscription,
   orderTemplateUpdatedSubscription,
-  orderTemplatesQuery,
   orderTemplateDeletedSubscription
 } from './gql/orders'
-
+import { queryFilterLess } from './gql/queryForVuex'
+import {
+  driverUpdatedSubscription,
+  driverDeletedSubscription
+} from './gql/drivers'
 import {
   carsForVuexQuery,
   updatedCarWorkScheduleSubscription,
@@ -25,20 +28,6 @@ import {
 } from './gql/cars'
 import { mapGetters } from 'vuex'
 
-const addressesForVuexQuery = gql`
-  query addressesForVuex {
-    addressesForVuex {
-      id
-      partner
-      address
-      shortName
-      note
-      isShippingPlace
-      isDeliveryPlace
-      isActive
-    }
-  }
-`
 const addressAddedSubscription = gql`
   subscription addressAdded {
     addressAdded {
@@ -64,21 +53,6 @@ const addressUpdatedSubscription = gql`
       isActive
       isShippingPlace
       isDeliveryPlace
-    }
-  }
-`
-
-const staffQuery = gql`
-  query staff {
-    staff {
-      id
-      userId
-      role
-      isActive
-      user {
-        name
-        email
-      }
     }
   }
 `
@@ -150,6 +124,18 @@ export default {
           store.commit('updateAddress', addressUpdated)
         }
       },
+      driverUpdated: {
+        query: driverUpdatedSubscription,
+        result({ data: { driverUpdated } }) {
+          store.commit('driverUpdated', driverUpdated)
+        }
+      },
+      driverDeleted: {
+        query: driverDeletedSubscription,
+        result({ data: { driverDeleted } }) {
+          store.commit('driverDeleted', driverDeleted.id)
+        }
+      },
       orderAdded: {
         query: orderAddedSubscription,
         result({ data: { orderAdded } }) {
@@ -199,14 +185,24 @@ export default {
         }
       }
     },
-    carsForVuex: {
-      query: carsForVuexQuery,
+    queryFilterLess: {
+      query: queryFilterLess,
       fetchPolicy: 'no-cache',
       error(error) {
         store.dispatch('setError', error.message)
       },
-      update: ({ carsForVuex }) => {
+      update: ({
+        driversForVuex,
+        carsForVuex,
+        addressesForVuex,
+        staff,
+        orderTemplates
+      }) => {
+        store.commit('setDrivers', driversForVuex)
         store.commit('setCars', carsForVuex)
+        store.commit('setAddresses', addressesForVuex)
+        store.commit('setStaff', staff)
+        store.commit('setOrderTemplates', orderTemplates)
       }
     },
     carWorkScheduleForVuex: {
@@ -234,33 +230,6 @@ export default {
       },
       skip() {
         return !store.getters.currentDate
-      }
-    },
-    addressesForVuex: {
-      query: addressesForVuexQuery,
-      fetchPolicy: 'no-cache',
-      error(error) {
-        store.dispatch('setError', error.message)
-      },
-      update: ({ addressesForVuex }) => {
-        store.commit('setAddresses', addressesForVuex)
-      }
-    },
-    staff: {
-      query: staffQuery,
-      fetchPolicy: 'no-cache',
-      update: ({ staff }) => {
-        store.commit('setStaff', staff)
-      }
-    },
-    orderTemplates: {
-      query: orderTemplatesQuery,
-      fetchPolicy: 'no-cache',
-      error(error) {
-        store.dispatch('setError', error.message)
-      },
-      update: ({ orderTemplates }) => {
-        store.commit('setOrderTemplates', orderTemplates)
       }
     },
     scheduleForVuex: {

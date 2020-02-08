@@ -11,7 +11,7 @@
           align="center"
           @click:row="clickRowHandler"
           :footer-props="{
-            'items-per-page-options': [15, 30, 50, -1]
+            'items-per-page-options': [50, 100, -1]
           }"
         >
           <template v-slot:top>

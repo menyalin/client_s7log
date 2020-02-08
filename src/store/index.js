@@ -4,6 +4,7 @@ import Common from './Common'
 import Auth from './Auth'
 import Order from './Order'
 import Car from './Car'
+import Driver from './Driver'
 
 Vue.use(Vuex)
 
@@ -12,6 +13,7 @@ export default new Vuex.Store({
     Auth,
     Common,
     Order,
-    Car
+    Car,
+    Driver
   }
 })

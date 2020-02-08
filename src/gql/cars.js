@@ -95,25 +95,6 @@ export const carWorkScheduleForVuexQuery = gql`
     }
   }
 `
-
-export const carsForVuexQuery = gql`
-  query allCars {
-    carsForVuex {
-      id
-      title
-      listItem
-      regNumber
-      isTempSlot
-      reg
-      pts
-      isOwned
-      type
-      maxPltCount
-      note
-      isActive
-    }
-  }
-`
 export const carUpdatedSubscription = gql`
   subscription carUpdated {
     carUpdated {
