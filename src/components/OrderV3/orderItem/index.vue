@@ -64,7 +64,7 @@ export default {
 .order-container {
   background-color: white;
   font-size: 0.625em;
-  line-height: 1.35em;
+  line-height: 1.27em;
   letter-spacing: -0.05em;
   font-weight: 400;
   color: black;

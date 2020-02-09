@@ -26,9 +26,14 @@ export default {
       })
     },
 
-    dropHandler(event, arg) {
+    async dropHandler(event, arg) {
       event.preventDefault()
       const order = JSON.parse(event.dataTransfer.getData('order'))
+      let carUnit = await this.$store.dispatch('getCarUnit', {
+        truckId: this.cell.carId,
+        date: this.cell.id
+      })
+      console.log(carUnit)
       if (arg === 'new') {
         this.$store.dispatch('createNewOrder', {
           status: '10',

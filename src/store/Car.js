@@ -4,6 +4,7 @@ import store from './index'
 
 export default {
   state: {
+    carUnits: [],
     cars: [],
     carWorkSchedule: [],
     carWorkScheduleTypes: [
@@ -17,6 +18,9 @@ export default {
     ],
   },
   mutations: {
+    setCarUnits: ({ carUnits }, payload) => {
+      carUnits = payload
+    },
     setCarWorkSchedule: (state, payload) => {
       state.carWorkSchedule = payload
     },
@@ -38,7 +42,12 @@ export default {
     },
   },
   actions: {
-
+    getCarUnit: ({ commit, dispatch }, { truckId, date }) => {
+      return {
+        truckId,
+        date
+      }
+    }
   },
   getters: {
     vehicleType: state => state.vehicleType.filter(item => item.value !== 'trailer'),
