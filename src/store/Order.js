@@ -1,6 +1,6 @@
 import { apolloClient } from '../vue-apollo'
 import moment from 'moment'
-import { createOrderMutation, updateOrderMutation } from '@/gql/orders.js'
+import { createOrderMutation, updateOrderMutation, confirmOrderMutation } from '@/gql/orders.js'
 import store from './index'
 
 export default {
@@ -134,7 +134,7 @@ export default {
     confirmOrder ({ dispatch }, payload) {
       const { id, carId, dateRange, carType } = payload
       apolloClient.mutate({
-        mutation: updateOrderMutation,
+        mutation: confirmOrderMutation,
         variables: {
           id,
           carId,

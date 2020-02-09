@@ -144,6 +144,7 @@
             <v-text-field label="Примечание" v-model="editedOrder.note" />
           </v-col>
         </v-row>
+        {{ editedOrder.driverId1 }}
       </v-container>
     </v-card-text>
     <v-card-actions>

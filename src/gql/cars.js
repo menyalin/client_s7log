@@ -152,3 +152,15 @@ export const updateCarMutation = gql`
     }
   }
 `
+export const carUnitQuery = gql`
+  query getCarUnit ($date: String!  $truckId: String!) {
+    carUnit (date: $date, truckId: $truckId) {
+      id
+      startDate
+      truckId
+      driverId1
+      driverId2
+      trailerId
+    }
+}
+`

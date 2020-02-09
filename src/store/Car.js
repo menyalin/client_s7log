@@ -1,6 +1,8 @@
 import { apolloClient } from '../vue-apollo'
 import moment from 'moment'
 import store from './index'
+import { carUnitQuery } from '../gql/cars'
+
 
 export default {
   state: {
@@ -42,11 +44,26 @@ export default {
     },
   },
   actions: {
-    getCarUnit: ({ commit, dispatch }, { truckId, date }) => {
-      return {
-        truckId,
-        date
-      }
+    getCarUnitFields: ({ dispatch }, payload) => {
+      return new Promise((resolve, reject) => {
+        apolloClient.query({
+          query: carUnitQuery,
+          variables: payload
+        }).then(({ data: { carUnit } }) => {
+          let carUnitFields = {
+            driverId1: null,
+            driverId2: null,
+            trailerId: null
+          }
+          if (!!carUnit) {
+            carUnitFields.driverId1 = carUnit.driverId1
+            carUnitFields.driverId2 = carUnit.driverId2
+            carUnitFields.trailerId = carUnit.trailerId
+          }
+          resolve(carUnitFields)
+        }).catch(e => dispatch('setError', e.message))
+      })
+
     }
   },
   getters: {

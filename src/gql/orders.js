@@ -18,6 +18,9 @@ export const updateOrderMutation = gql`
     $lengthCell: Int
     $templateId: String
     $attention: Boolean
+    $driverId1: String
+    $driverId2: String
+    $trailerId: String
   ) {
     updateOrder(
       id: $id
@@ -37,60 +40,35 @@ export const updateOrderMutation = gql`
       isClientNotified: $isClientNotified
       templateId: $templateId
       attention: $attention
+      driverId1: $driverId1 
+      driverId2: $driverId2
+      trailerId: $trailerId
     ) {
       id
       number
     }
   }
 `
-export const orderPageQuery = gql`
-  query orderPage($limit: Int, $offset: Int) {
-    orderPage(offset: $offset, limit: $limit) {
-      orders {
-        id
-        carType
-        number
-        status
-        dateRange {
-          value
-          inclusive
-        }
-        note
-        shippingDate
-        shippingTime
-        deliveryDate
-        deliveryTime
-        shipperId
-        shipper {
-          id
-          shortName
-          address
-          note
-          partner
-        }
-        consigneeId
-        consignee {
-          id
-          shortName
-          address
-          note
-          partner
-        }
-        carId
-        Car {
-          id
-          title
-          isOwned
-          type
-          maxPltCount
-        }
-        isDriverNotified
-        isClientNotified
-      }
-      orderCount
+// --------------------------------
+export const confirmOrderMutation = gql`
+  mutation confirmOrder(
+    $id: ID!
+    $carType: String!
+    $dateRange: String!
+    $carId: String
+  ) {
+    confirmOrder(
+      id: $id
+      carType: $carType
+      dateRange: $dateRange
+      carId: $carId
+    ) {
+      id
+      number
     }
   }
 `
+
 export const createOrderMutation = gql`
   mutation createOrder(
     $carType: String!
@@ -108,7 +86,10 @@ export const createOrderMutation = gql`
     $isDriverNotified: Boolean
     $isClientNotified: Boolean
     $templateId: String
-    $attention: Boolean 
+    $attention: Boolean
+      $driverId1: String
+    $driverId2: String
+    $trailerId: String
   ) {
     createOrder(
       carType: $carType
@@ -127,6 +108,9 @@ export const createOrderMutation = gql`
       isClientNotified: $isClientNotified
       templateId: $templateId
       attention: $attention
+      driverId1: $driverId1 
+      driverId2: $driverId2
+      trailerId: $trailerId
     ) {
       id
     }
@@ -179,6 +163,9 @@ export const ordersForVuexQuery = gql`
       isClientNotified
       templateId
       attention
+      driverId1
+      driverId2
+      trailerId
     }
   }
 `
@@ -206,6 +193,9 @@ export const orderAddedSubscription = gql`
       lengthCell
       templateId
       attention
+      driverId1
+      driverId2
+      trailerId
     }
   }
 `
@@ -233,6 +223,9 @@ export const orderUpdatedSubscription = gql`
       lengthCell
       templateId
       attention
+      driverId1
+      driverId2
+      trailerId
     }
   }
 `

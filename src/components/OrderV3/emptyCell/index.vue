@@ -17,34 +17,48 @@ export default {
   props: ['cell'],
   methods: {
     newOrder() {
-      this.$store.commit('openEditOrderForm', {
-        lengthCell: 1,
-        carType: this.cell.carType,
-        dateRange: this.getDateRange(moment(this.cell.id), 1),
-        carId: this.cell.carId,
-        shippingDate: this.cell.id
-      })
+      this.$store
+        .dispatch('getCarUnitFields', {
+          truckId: this.cell.carId,
+          date: this.cell.id
+        })
+        .then(carUnitFields => {
+          this.$store.commit('openEditOrderForm', {
+            lengthCell: 1,
+            carType: this.cell.carType,
+            dateRange: this.getDateRange(moment(this.cell.id), 1),
+            carId: this.cell.carId,
+            shippingDate: this.cell.id,
+            ...carUnitFields
+          })
+        })
     },
 
     async dropHandler(event, arg) {
       event.preventDefault()
       const order = JSON.parse(event.dataTransfer.getData('order'))
-      let carUnit = await this.$store.dispatch('getCarUnit', {
-        truckId: this.cell.carId,
-        date: this.cell.id
-      })
-      console.log(carUnit)
       if (arg === 'new') {
-        this.$store.dispatch('createNewOrder', {
-          status: '10',
-          carType: this.cell.carType,
-          carId: this.cell.carId,
-          dateRange: this.getDateRange(moment(this.cell.id), order.lengthCell),
-          lengthCell: order.lengthCell,
-          shipperId: order.shipperId,
-          consigneeId: order.consigneeId,
-          shippingDate: this.cell.id
-        })
+        this.$store
+          .dispatch('getCarUnitFields', {
+            truckId: this.cell.carId,
+            date: this.cell.id
+          })
+          .then(carUnitFields => {
+            this.$store.dispatch('createNewOrder', {
+              status: '10',
+              carType: this.cell.carType,
+              carId: this.cell.carId,
+              dateRange: this.getDateRange(
+                moment(this.cell.id),
+                order.lengthCell
+              ),
+              lengthCell: order.lengthCell,
+              shipperId: order.shipperId,
+              consigneeId: order.consigneeId,
+              shippingDate: this.cell.id,
+              ...carUnitFields
+            })
+          })
       } else {
         this.$store.dispatch('confirmOrder', {
           id: order.id,
