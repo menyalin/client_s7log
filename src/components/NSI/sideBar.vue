@@ -19,6 +19,18 @@
 export default {
   data: () => ({
     items: [
+      {
+        id: '06',
+        title: 'Сцепки',
+        url: '/nsi/carUnits',
+        icon: 'mdi-truck-fast'
+      },
+      {
+        id: '05',
+        title: 'График работы машин',
+        url: '/nsi/carWorkSchedule',
+        icon: 'mdi-calendar-text'
+      },
       { id: '01', title: 'Адреса', url: '/nsi/addresses', icon: 'mdi-city' },
       { id: '02', title: 'Машины', url: '/nsi/cars', icon: 'mdi-truck' },
       {
@@ -32,12 +44,6 @@ export default {
         title: 'Шаблоны заказов',
         url: '/nsi/orderTemplates',
         icon: 'mdi-file-document-box'
-      },
-      {
-        id: '05',
-        title: 'График работы машин',
-        url: '/nsi/carWorkSchedule',
-        icon: 'mdi-calendar-text'
       }
     ]
   })

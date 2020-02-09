@@ -96,7 +96,12 @@ export default {
     items: [
       // { id: 11, title: 'tests', icon: '', url: '/orders/tests' },
       //  { id: 10, title: 'Заказы', icon: 'mdi-view-list', url: '/orders/list' },
-      { id: 9, title: 'НСИ', icon: 'mdi-book-open-page-variant', url: '/nsi' },
+      {
+        id: 9,
+        title: 'НСИ',
+        icon: 'mdi-book-open-page-variant',
+        url: '/nsi/carUnits'
+      },
       { id: 6, title: '10_tn', icon: 'mdi-dump-truck', url: '/orders/10tn' },
       { id: 8, title: '20_tn', icon: 'mdi-dump-truck', url: '/orders/20tn' },
       { id: 1, title: 'Company', icon: 'mdi-domain', url: '/company' },

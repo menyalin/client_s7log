@@ -3,6 +3,7 @@ import carList from '@/components/NSI/carList/index.vue'
 import orderTemplateList from '@/components/NSI/orderTemplateList/index.vue'
 import carWorkSchedule from '@/components/NSI/carWorkSchedule/index.vue'
 import drivers from '@/components/NSI/drivers/index.vue'
+import carUnitList from '@/components/NSI/carUnits/index.vue'
 
 export default [
   {
@@ -24,5 +25,9 @@ export default [
   {
     path: 'drivers',
     component: drivers
+  },
+  {
+    path: 'carUnits',
+    component: carUnitList
   }
 ]

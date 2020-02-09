@@ -161,6 +161,25 @@ export const carUnitQuery = gql`
       driverId1
       driverId2
       trailerId
+      isActive
+      note
     }
 }
+`
+export const carUnitsPageQuery = gql`
+  query carUnitsPage ($offset: Int $limit: Int) {
+    carUnitsPage(offset: $offset limit: $limit) {
+      carUnits {
+        id
+        startDate
+        truckId
+        driverId1
+        driverId2
+        trailerId
+        isActive
+        note
+      }
+      count
+    } 
+  }
 `
