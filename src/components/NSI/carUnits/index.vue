@@ -2,12 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col>
-        <v-dialog
-          v-model="dialog"
-          max-width="500"
-          persistent
-          @keydown.esc="cancelHandler"
-        >
+        <v-dialog v-model="dialog" max-width="500" persistent @keydown.esc="cancelHandler">
           <car-unit-form
             v-model="editedItem"
             @cancel_edit="cancelHandler"
@@ -41,27 +36,25 @@
               </v-row>
             </v-container>
           </template>
-          <template v-slot:item.startDate="{ item }">
-            {{ item.startDate | unixDateToStr }}
-          </template>
-          <template v-slot:item.truckId="{ item }">
-            {{ carById(item.truckId) ? carById(item.truckId).title : null }}
-          </template>
-          <template v-slot:item.trailerId="{ item }">
-            {{ carById(item.trailerId) ? carById(item.trailerId).title : null }}
-          </template>
+          <template v-slot:item.startDate="{ item }">{{ item.startDate | unixDateToStr }}</template>
+          <template
+            v-slot:item.truckId="{ item }"
+          >{{ carById(item.truckId) ? carById(item.truckId).title : null }}</template>
+          <template
+            v-slot:item.trailerId="{ item }"
+          >{{ carById(item.trailerId) ? carById(item.trailerId).title : null }}</template>
           <template v-slot:item.driverId1="{ item }">
             {{
-              driverById(item.driverId1)
-                ? driverById(item.driverId1).shortName
-                : null
+            driverById(item.driverId1)
+            ? driverById(item.driverId1).shortName
+            : null
             }}
           </template>
           <template v-slot:item.driverId2="{ item }">
             {{
-              driverById(item.driverId2)
-                ? driverById(item.driverId2).shortName
-                : null
+            driverById(item.driverId2)
+            ? driverById(item.driverId2).shortName
+            : null
             }}
           </template>
         </v-data-table>
@@ -135,6 +128,7 @@ export default {
                 offset: this.options.itemsPerPage * (this.options.page - 1)
               }
             })
+            console.log(data.carUnitsPage.carUnits)
             data.carUnitsPage.carUnits.unshift(createCarUnit)
             store.writeQuery({ query: carUnitsPageQuery, data })
           }
@@ -149,7 +143,7 @@ export default {
         .mutate({
           mutation: updateCarUnitMutation,
           variables: this.editedItem,
-          update: (store, { data: { updateCarUnit } }) => {
+          update: (store, { data: { createCarUnit } }) => {
             const data = store.readQuery({
               query: carUnitsPageQuery,
               variables: {
@@ -157,7 +151,9 @@ export default {
                 offset: this.options.itemsPerPage * (this.options.page - 1)
               }
             })
-            // console.log(data.carUnitsPage.carUnits)
+            let res = data.carUnitsPage.carUnits.find(item => item.id === createCarUnit.id ) {
+              // стлось заменить знчение в массиак
+            }
           }
         })
         .then(this.cancelHandler())
@@ -174,8 +170,7 @@ export default {
           limit: this.options.itemsPerPage,
           offset: this.options.itemsPerPage * (this.options.page - 1)
         }
-      },
-      fetchPolicy: 'no-cache'
+      }
     }
   }
 }
