@@ -1,10 +1,10 @@
 <template>
   <v-menu
-    ref="menu"
     v-model="menu"
     :close-on-content-click="true"
     transition="scale-transition"
     offset-y
+    max-width="290px"
     min-width="290px"
   >
     <template v-slot:activator="{ on }">
@@ -16,7 +16,6 @@
         @click:clear="reset"
         hide-details
         v-on="on"
-        class="mt-0 pt-0"
         append-icon="mdi-calendar-text-outline"
       ></v-text-field>
     </template>

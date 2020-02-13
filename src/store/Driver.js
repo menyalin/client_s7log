@@ -20,6 +20,7 @@ export default {
   actions: {},
   getters: {
     drivers: ({ drivers }) => drivers,
+    driverById: ({ drivers }) => (id) => drivers.find(item => item.id === id),
     activeDrivers: ({ drivers }) => drivers.filter(item => item.isActive)
   }
 }

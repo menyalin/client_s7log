@@ -183,3 +183,32 @@ export const carUnitsPageQuery = gql`
     } 
   }
 `
+export const createNewCarUnitMutation = gql`
+  mutation createCarUnit ($startDate: String! $truckId: String! $trailerId: String $driverId1:String! $driverId2:String $note:String) {
+    createCarUnit (startDate: $startDate truckId: $truckId trailerId: $trailerId driverId1: $driverId1 driverId2: $driverId2 note: $note ) {
+      id
+      startDate
+      truckId
+      driverId1
+      driverId2
+      trailerId
+      isActive
+      note
+    }
+  }
+`
+
+export const updateCarUnitMutation = gql`
+  mutation updateCarUnit ($id: ID! $startDate: String! $truckId: String! $trailerId: String $driverId1:String! $driverId2:String $note:String) {
+    updateCarUnit (id: $id startDate: $startDate truckId: $truckId trailerId: $trailerId driverId1: $driverId1 driverId2: $driverId2 note: $note ) {
+      id
+      startDate
+      truckId
+      driverId1
+      driverId2
+      trailerId
+      isActive
+      note
+    }
+  }
+`

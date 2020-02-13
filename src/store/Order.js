@@ -190,7 +190,12 @@ export default {
         return state.addresses.find(item => item.id === id)
       else return null
     },
-    dispatchersStaff: (state) => state.staff.filter(item => (item.role === 'dispatcher' && item.isActive)).map(item => ({ userId: item.userId, userName: item.user.name, userEmail: item.user.email })),
+    dispatchersStaff: ({ staff }) => {
+      if (staff.length) {
+        return staff.filter(item => (item.role === 'dispatcher' && item.isActive)).map(item => ({ userId: item.userId, userName: item.user.name, userEmail: item.user.email }))
+      } else null
+
+    },
     dutyDispatcher: (state) => (date) => state.schedule.find(item => item.date === date),
     orderTemplates: (state) => (carType) => state.orderTemplates.filter(item => item.carType === carType),
     allOrderTemplates: (state) => state.orderTemplates,

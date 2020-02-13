@@ -76,7 +76,8 @@ export default {
       if (cars.length && id) return cars.find(item => item.id === id)
       else return null
     },
-    carsForAutocomplete: ({ cars }) => (type) => type ? cars.filter(item => item.type === type && !item.isTempSlot && item.type !== 'trailer') : cars,
+    carsForAutocomplete: ({ cars }) => (type) => type ? cars.filter(item => item.type === type && !item.isTempSlot) : cars,
+    carsForAutocomplete_v2: ({ cars }) => (types) => cars.filter(item => types.indexOf(item.type) !== -1 && !item.isTempSlot),
     carsByType: ({ cars }) => (type) => cars
       .filter(item => (item.type === type && !item.isTempSlot && item.isActive))
       .sort((a, b) => a.listItem - b.listItem),

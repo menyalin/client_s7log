@@ -2,6 +2,19 @@
   <v-container fluid>
     <v-row>
       <v-col>
+        <v-dialog
+          v-model="dialog"
+          max-width="500"
+          persistent
+          @keydown.esc="cancelHandler"
+        >
+          <car-unit-form
+            v-model="editedItem"
+            @cancel_edit="cancelHandler"
+            @createCarUnit="createNewCarUnit"
+            @updateCarUnit="updateCarUnit"
+          />
+        </v-dialog>
         <v-data-table
           class="elevation-1"
           :items="carUnitsPage.carUnits"
@@ -14,7 +27,7 @@
           align="center"
           @click:row="clickRowHandler"
           :footer-props="{
-            'items-per-page-options': [50, 100, -1]
+            'items-per-page-options': [50, 100]
           }"
         >
           <template v-slot:top>
@@ -28,6 +41,29 @@
               </v-row>
             </v-container>
           </template>
+          <template v-slot:item.startDate="{ item }">
+            {{ item.startDate | unixDateToStr }}
+          </template>
+          <template v-slot:item.truckId="{ item }">
+            {{ carById(item.truckId) ? carById(item.truckId).title : null }}
+          </template>
+          <template v-slot:item.trailerId="{ item }">
+            {{ carById(item.trailerId) ? carById(item.trailerId).title : null }}
+          </template>
+          <template v-slot:item.driverId1="{ item }">
+            {{
+              driverById(item.driverId1)
+                ? driverById(item.driverId1).shortName
+                : null
+            }}
+          </template>
+          <template v-slot:item.driverId2="{ item }">
+            {{
+              driverById(item.driverId2)
+                ? driverById(item.driverId2).shortName
+                : null
+            }}
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -35,12 +71,26 @@
 </template>
 
 <script>
-import { carUnitsPageQuery } from '@/gql/cars'
+import moment from 'moment'
+import carUnitForm from './carUnitForm'
+import {
+  carUnitsPageQuery,
+  createNewCarUnitMutation,
+  updateCarUnitMutation
+} from '@/gql/cars'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'CarUnitList',
+  components: {
+    carUnitForm
+  },
+  computed: {
+    ...mapGetters(['carById', 'driverById'])
+  },
   data: () => ({
     dialog: false,
+    editedItem: {},
     limit: 50,
     carUnitsPage: {
       carUnits: [],
@@ -57,11 +107,63 @@ export default {
     ]
   }),
   methods: {
+    cancelHandler() {
+      this.editedItem = Object.assign({}, {})
+      this.$nextTick(() => {
+        this.dialog = false
+      })
+    },
     newItemHandler() {
-      console.log(this.options)
+      this.dialog = true
     },
     clickRowHandler(item) {
-      console.log(item)
+      this.editedItem = Object.assign({}, item)
+      this.$nextTick(() => {
+        this.dialog = true
+      })
+    },
+    createNewCarUnit() {
+      this.$apollo
+        .mutate({
+          mutation: createNewCarUnitMutation,
+          variables: this.editedItem,
+          update: (store, { data: { createCarUnit } }) => {
+            const data = store.readQuery({
+              query: carUnitsPageQuery,
+              variables: {
+                limit: this.options.itemsPerPage,
+                offset: this.options.itemsPerPage * (this.options.page - 1)
+              }
+            })
+            data.carUnitsPage.carUnits.unshift(createCarUnit)
+            store.writeQuery({ query: carUnitsPageQuery, data })
+          }
+        })
+        .then(this.cancelHandler())
+        .catch(e => {
+          this.$store.dispatch('setError', e.message)
+        })
+    },
+    updateCarUnit() {
+      this.$apollo
+        .mutate({
+          mutation: updateCarUnitMutation,
+          variables: this.editedItem,
+          update: (store, { data: { updateCarUnit } }) => {
+            const data = store.readQuery({
+              query: carUnitsPageQuery,
+              variables: {
+                limit: this.options.itemsPerPage,
+                offset: this.options.itemsPerPage * (this.options.page - 1)
+              }
+            })
+            // console.log(data.carUnitsPage.carUnits)
+          }
+        })
+        .then(this.cancelHandler())
+        .catch(e => {
+          this.$store.dispatch('setError', e.message)
+        })
     }
   },
   apollo: {
@@ -72,7 +174,8 @@ export default {
           limit: this.options.itemsPerPage,
           offset: this.options.itemsPerPage * (this.options.page - 1)
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     }
   }
 }

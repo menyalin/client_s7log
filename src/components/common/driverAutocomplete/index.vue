@@ -4,7 +4,9 @@
       @change="onChangeHandler"
       :value="propValue"
       clearable
-      :disabled="!noType && !type"
+      :disabled="disabled"
+      class="pa-0"
+      hide-details
       @click:clear="resetHandler"
       :items="itemsForSelect"
       color="primary"
@@ -14,9 +16,9 @@
 </template>
 
 <script>
-function carTransform(item) {
+function driverTransform(item) {
   return {
-    text: `${item.title} (${item.type})`,
+    text: item.shortName,
     value: item.id
   }
 }
@@ -28,9 +30,7 @@ export default {
   },
   computed: {
     itemsForSelect() {
-      return this.$store.getters
-        .carsForAutocomplete(this.type)
-        .map(carTransform)
+      return this.$store.getters.drivers.map(driverTransform)
     }
   },
   methods: {
@@ -41,7 +41,12 @@ export default {
       this.$emit('change', val)
     }
   },
-  props: ['label', 'propValue', 'type', 'noType', 'hide-details']
+  // props: ['label', 'propValue', 'types', 'noType']
+  props: {
+    label: String,
+    propValue: String,
+    disabled: Boolean
+  }
 }
 </script>
 
