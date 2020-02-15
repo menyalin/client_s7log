@@ -212,3 +212,8 @@ export const updateCarUnitMutation = gql`
     }
   }
 `
+export const deleteCarUnitMutation = gql`
+  mutation deleteCarUnit($id: ID!) {
+    deleteCarUnit (id: $id) 
+  }
+`
