@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import orderEditDialog from '@/components/common/orderEditDialog'
+import orderEditDialog from '@/components/common/orderEditDialog_v2'
 import carRow from './carRow'
 import { mapGetters } from 'vuex'
 import moment from 'moment'

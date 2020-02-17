@@ -8,10 +8,12 @@ export const updateOrderMutation = gql`
     $consigneeId: String
     $status: String
     $note: String
-    $shippingDate: String
-    $shippingTime: String
-    $deliveryDate: String
-    $deliveryTime: String
+    $plannedShippingDate: String
+    $plannedDeliveryDate: String
+    $loadingStart: String
+    $loadingEnd: String
+    $unLoadingStart: String
+    $unLoadingEnd: String
     $carId: String
     $isDriverNotified: Boolean
     $isClientNotified: Boolean
@@ -21,6 +23,10 @@ export const updateOrderMutation = gql`
     $driverId1: String
     $driverId2: String
     $trailerId: String
+    $plannedCarType: String
+    $weight: String
+    $pltCount: String
+    $price: String
   ) {
     updateOrder(
       id: $id
@@ -31,10 +37,12 @@ export const updateOrderMutation = gql`
       status: $status
       note: $note
       lengthCell: $lengthCell
-      shippingDate: $shippingDate
-      shippingTime: $shippingTime
-      deliveryDate: $deliveryDate
-      deliveryTime: $deliveryTime
+      plannedShippingDate: $plannedShippingDate
+      plannedDeliveryDate: $plannedDeliveryDate
+      loadingStart: $loadingStart
+      loadingEnd: $loadingEnd
+      unLoadingStart: $unLoadingStart
+      unLoadingEnd: $unLoadingEnd
       carId: $carId
       isDriverNotified: $isDriverNotified
       isClientNotified: $isClientNotified
@@ -43,6 +51,10 @@ export const updateOrderMutation = gql`
       driverId1: $driverId1 
       driverId2: $driverId2
       trailerId: $trailerId
+      plannedCarType: $plannedCarType
+      weight: $weight
+      pltCount: $pltCount
+      price: $price
     ) {
       id
       number
@@ -77,10 +89,12 @@ export const createOrderMutation = gql`
     $consigneeId: String
     $status: String
     $note: String
-    $shippingDate: String
-    $shippingTime: String
-    $deliveryDate: String
-    $deliveryTime: String
+    $plannedShippingDate: String
+    $plannedDeliveryDate: String
+    $loadingStart: String
+    $loadingEnd: String
+    $unLoadingStart: String
+    $unLoadingEnd: String
     $carId: String
     $lengthCell: Int
     $isDriverNotified: Boolean
@@ -90,6 +104,10 @@ export const createOrderMutation = gql`
       $driverId1: String
     $driverId2: String
     $trailerId: String
+    $plannedCarType: String
+    $weight: String
+    $pltCount: String
+    $price: String
   ) {
     createOrder(
       carType: $carType
@@ -98,10 +116,12 @@ export const createOrderMutation = gql`
       consigneeId: $consigneeId
       status: $status
       note: $note
-      shippingDate: $shippingDate
-      shippingTime: $shippingTime
-      deliveryDate: $deliveryDate
-      deliveryTime: $deliveryTime
+      plannedShippingDate: $plannedShippingDate
+      plannedDeliveryDate: $plannedDeliveryDate
+      loadingStart: $loadingStart
+      loadingEnd: $loadingEnd
+       unLoadingStart: $unLoadingStart
+      unLoadingEnd: $unLoadingEnd
       lengthCell: $lengthCell
       carId: $carId
       isDriverNotified: $isDriverNotified
@@ -111,6 +131,10 @@ export const createOrderMutation = gql`
       driverId1: $driverId1 
       driverId2: $driverId2
       trailerId: $trailerId
+      plannedCarType: $plannedCarType
+      weight: $weight
+      pltCount: $pltCount
+      price: $price
     ) {
       id
     }
@@ -125,6 +149,10 @@ export const createOrderTemplateMutation = gql`
     $note: String
     $templateName: String
     $lengthCell: Int!
+    $plannedCarType: String
+    $weight: String
+    $pltCount: String
+    $price: String
   ) {
     createOrderTemplate(
       carType: $carType
@@ -134,6 +162,10 @@ export const createOrderTemplateMutation = gql`
       note: $note
       templateName: $templateName
       lengthCell: $lengthCell
+      plannedCarType: $plannedCarType
+      weight: $weight
+      pltCount: $pltCount
+      price: $price
     ) {
       id
     }
@@ -154,10 +186,12 @@ export const ordersForVuexQuery = gql`
       consigneeId
       carId
       note
-      shippingDate
-      shippingTime
-      deliveryDate
-      deliveryTime
+      plannedShippingDate
+      plannedDeliveryDate
+      loadingStart
+      loadingEnd
+      unLoadingStart
+      unLoadingEnd
       lengthCell
       isDriverNotified
       isClientNotified
@@ -166,6 +200,10 @@ export const ordersForVuexQuery = gql`
       driverId1
       driverId2
       trailerId
+      plannedCarType
+      weight
+      pltCount
+      price
     }
   }
 `
@@ -183,10 +221,12 @@ export const orderAddedSubscription = gql`
         value
         inclusive
       }
-      shippingDate
-      shippingTime
-      deliveryDate
-      deliveryTime
+      plannedShippingDate
+      plannedDeliveryDate
+      loadingStart
+      loadingEnd
+      unLoadingStart
+      unLoadingEnd
       isDriverNotified
       isClientNotified
       carId
@@ -196,6 +236,10 @@ export const orderAddedSubscription = gql`
       driverId1
       driverId2
       trailerId
+      plannedCarType
+      weight
+      pltCount
+      price
     }
   }
 `
@@ -213,10 +257,12 @@ export const orderUpdatedSubscription = gql`
         value
         inclusive
       }
-      shippingDate
-      shippingTime
-      deliveryDate
-      deliveryTime
+      plannedShippingDate
+      plannedDeliveryDate
+      loadingStart
+      loadingEnd
+      unLoadingStart
+      unLoadingEnd
       isDriverNotified
       isClientNotified
       carId
@@ -226,6 +272,10 @@ export const orderUpdatedSubscription = gql`
       driverId1
       driverId2
       trailerId
+      plannedCarType
+      weight
+      pltCount
+      price
     }
   }
 `
@@ -240,6 +290,10 @@ export const updateTemplateMutation = gql`
     $note: String
     $templateName: String
     $showInMenu: Boolean
+     $plannedCarType: String
+    $weight: String
+    $pltCount: String
+    $price: String
   ) {
     updateTemplate(
       id: $id
@@ -251,6 +305,10 @@ export const updateTemplateMutation = gql`
       note: $note
       templateName: $templateName
       showInMenu: $showInMenu
+      plannedCarType: $plannedCarType
+      weight: $weight
+      pltCount: $pltCount
+      price: $price
     ) {
       id
     }
@@ -269,6 +327,10 @@ export const orderTemplateUpdatedSubscription = gql`
       consigneeId
       showInMenu
       lengthCell
+      plannedCarType
+      weight
+      pltCount
+      price
     }
   }
 `

@@ -8,6 +8,7 @@
             @cancel_edit="cancelHandler"
             @createCarUnit="createNewCarUnit"
             @updateCarUnit="updateCarUnit"
+            @deleteCarUnit="deleteCarUnit"
           />
         </v-dialog>
         <v-data-table
@@ -69,7 +70,8 @@ import carUnitForm from './carUnitForm'
 import {
   carUnitsPageQuery,
   createNewCarUnitMutation,
-  updateCarUnitMutation
+  updateCarUnitMutation,
+  deleteCarUnitMutation
 } from '@/gql/cars'
 import { mapGetters } from 'vuex'
 
@@ -130,6 +132,7 @@ export default {
             })
             console.log(data.carUnitsPage.carUnits)
             data.carUnitsPage.carUnits.unshift(createCarUnit)
+            data.carUnitsPage.count = +1
             store.writeQuery({ query: carUnitsPageQuery, data })
           }
         })
@@ -151,9 +154,36 @@ export default {
                 offset: this.options.itemsPerPage * (this.options.page - 1)
               }
             })
-            let res = data.carUnitsPage.carUnits.find(item => item.id === createCarUnit.id ) {
-              // стлось заменить знчение в массиак
-            }
+            let updatedCarUnit = data.carUnitsPage.carUnits.find(
+              item => item.id === updateCarUnit.id
+            )
+            updatedCarUnit = Object.assign({}, updateCarUnit)
+          }
+        })
+        .then(this.cancelHandler())
+        .catch(e => {
+          this.$store.dispatch('setError', e.message)
+        })
+    },
+    deleteCarUnit() {
+      this.$apollo
+        .mutate({
+          mutation: deleteCarUnitMutation,
+          variables: this.editedItem,
+          update: (store, { data: { deleteCarUnit } }) => {
+            const data = store.readQuery({
+              query: carUnitsPageQuery,
+              variables: {
+                limit: this.options.itemsPerPage,
+                offset: this.options.itemsPerPage * (this.options.page - 1)
+              }
+            })
+            data.carUnitsPage.carUnits.splice(
+              data.carUnitsPage.carUnits.findIndex(
+                item => item.id === deleteCarUnit
+              ),
+              1
+            )
           }
         })
         .then(this.cancelHandler())

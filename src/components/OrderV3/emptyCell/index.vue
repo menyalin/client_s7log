@@ -26,9 +26,10 @@ export default {
           this.$store.commit('openEditOrderForm', {
             lengthCell: 1,
             carType: this.cell.carType,
+            plannedCarType: this.cell.carType,
             dateRange: this.getDateRange(moment(this.cell.id), 1),
             carId: this.cell.carId,
-            shippingDate: this.cell.id,
+            plannedShippingDate: this.cell.id,
             ...carUnitFields
           })
         })
@@ -55,7 +56,11 @@ export default {
               lengthCell: order.lengthCell,
               shipperId: order.shipperId,
               consigneeId: order.consigneeId,
-              shippingDate: this.cell.id,
+              plannedShippingDate: this.cell.id,
+              plannedCarType: order.plannedCarType,
+              weight: order.weight,
+              pltCount: order.pltCount,
+              price: order.price,
               ...carUnitFields
             })
           })

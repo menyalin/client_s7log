@@ -57,6 +57,10 @@ export const queryFilterLess = gql`
             consigneeId
             lengthCell
             showInMenu
+            plannedCarType
+            weight
+            pltCount
+            price
         }
         
     } 

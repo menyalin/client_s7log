@@ -9,12 +9,10 @@
               : null
           }}
         </div>
-        <div class="col-time">{{ time ? time.slice(0, 2) : '' }}</div>
+        <div class="col-time">{{ timeForRow }}</div>
       </div>
     </template>
-    <div class="tooltip--row">
-      {{ tooltipText }} : {{ formatedDate }} {{ time }}
-    </div>
+    <div class="tooltip--row">{{ tooltipText }} : {{ formatedDate }}</div>
   </v-tooltip>
 </template>
 
@@ -22,7 +20,7 @@
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 export default {
-  props: ['partnerId', 'time', 'date'],
+  props: ['partnerId', 'date'],
   computed: {
     ...mapGetters(['isAddressesUpload', 'addressById']),
     tooltipText() {
@@ -33,8 +31,18 @@ export default {
       else return null
     },
     formatedDate() {
-      if (this.date) return moment(this.date).format('DD.MM.YYYY')
+      if (this.date) return moment(+this.date).format('DD.MM.YYYY HH:mm')
       else return null
+    },
+    timeForRow() {
+      if (this.date) {
+        let tmpDate = moment(+this.date)
+        if (tmpDate._isValid) {
+          return tmpDate.format('HH:mm') !== '00:00'
+            ? tmpDate.format('HH')
+            : null
+        } else return null
+      } else return null
     }
   }
 }

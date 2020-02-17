@@ -75,7 +75,7 @@ export default {
       _endTime: null
     }
   }),
-  created() {
+  mounted() {
     this.initDateRange(this.propDate)
   },
   watch: {
