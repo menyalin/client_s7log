@@ -48,7 +48,11 @@ export default {
         consigneeId: orderTemplate.consigneeId,
         shipperId: orderTemplate.shipperId,
         note: orderTemplate.note,
-        status: orderTemplate.status
+        status: orderTemplate.status,
+        plannedCarType: orderTemplate.plannedCarType,
+        weight: orderTemplate.weight,
+        pltCount: orderTemplate.pltCount,
+        price: orderTemplate.price
       })
     },
     clearTemplateId: (state) => {
@@ -131,7 +135,7 @@ export default {
           dispatch('setError', e.message)
         })
     },
-    confirmOrder ({ dispatch }, payload) {
+    confirmOrder({ dispatch }, payload) {
       const { id, carId, dateRange, carType } = payload
       apolloClient.mutate({
         mutation: confirmOrderMutation,
@@ -146,7 +150,7 @@ export default {
           dispatch('setError', e.message)
         })
     },
-    createNewOrder ({ commit, getters }, payload) {
+    createNewOrder({ commit, getters }, payload) {
       let variables = null
       if (payload) variables = payload
       else variables = getters.editedOrder

@@ -132,7 +132,7 @@ export default {
             })
             console.log(data.carUnitsPage.carUnits)
             data.carUnitsPage.carUnits.unshift(createCarUnit)
-            data.carUnitsPage.count = +1
+            data.carUnitsPage.count += 1
             store.writeQuery({ query: carUnitsPageQuery, data })
           }
         })
@@ -146,7 +146,7 @@ export default {
         .mutate({
           mutation: updateCarUnitMutation,
           variables: this.editedItem,
-          update: (store, { data: { createCarUnit } }) => {
+          update: (store, { data: { updateCarUnit } }) => {
             const data = store.readQuery({
               query: carUnitsPageQuery,
               variables: {
@@ -184,6 +184,7 @@ export default {
               ),
               1
             )
+            data.carUnitsPage.count -= 1
           }
         })
         .then(this.cancelHandler())
