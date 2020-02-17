@@ -22,28 +22,30 @@
           <template v-slot:item.shipper="{ item }">
             <span>
               {{
-              item.shipperId
-              ? `${addressById(item.shipperId).shortName} : ${
-              addressById(item.shipperId).partner
-              }`
-              : null
+                item.shipperId
+                  ? `${addressById(item.shipperId).shortName} : ${
+                      addressById(item.shipperId).partner
+                    }`
+                  : null
               }}
             </span>
           </template>
           <template v-slot:item.consignee="{ item }">
             <span>
               {{
-              item.consigneeId
-              ? `${addressById(item.consigneeId).shortName} : ${
-              addressById(item.consigneeId).partner
-              }`
-              : null
+                item.consigneeId
+                  ? `${addressById(item.consigneeId).shortName} : ${
+                      addressById(item.consigneeId).partner
+                    }`
+                  : null
               }}
             </span>
           </template>
-          <template
-            v-slot:item.status="{ item }"
-          >{{ statusTitleById(item.status) ? statusTitleById(item.status).title : '(пусто)'}}</template>
+          <template v-slot:item.status="{ item }">{{
+            statusTitleById(item.status)
+              ? statusTitleById(item.status).title
+              : '(пусто)'
+          }}</template>
         </v-data-table>
         <v-dialog v-model="dialog" max-width="500px" persistent>
           <order-template-edit-form
@@ -82,10 +84,14 @@ export default {
         sortable: false
       },
       { text: 'Тип ТС', value: 'carType' },
-      { text: 'Погрузка', value: 'shipper' },
-      { text: 'Разгрузка', value: 'consignee' },
+      { text: 'Тип ТС (План)', value: 'plannedCarType' },
       { text: 'Статус', value: 'status' },
       { text: 'Кол-во ячеек', value: 'lengthCell', align: 'center' },
+      { text: 'Погрузка', value: 'shipper' },
+      { text: 'Разгрузка', value: 'consignee' },
+      { text: 'Вес', value: 'weight', align: 'center' },
+      { text: 'Кол-во ПЛТ', value: 'pltCount', align: 'center' },
+      { text: 'Стоимость', value: 'price', align: 'center' },
       { text: 'Примечание', value: 'note' }
     ]
   }),

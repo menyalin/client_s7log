@@ -5,7 +5,19 @@
         <!-- Строка заголовка формы -->
         <v-row align="center">
           <v-col dense>
-            <h3>Заголовок формы</h3>
+            <h3>
+              {{ isNewOrder ? 'Новый заказ' : `Заказ №${editedOrder.number}` }}
+            </h3>
+          </v-col>
+        </v-row>
+        <v-row v-show="false">
+          <v-col>
+            <date-time-range
+              v-model="editedOrder.dateRange"
+              startLabel="Начало рейса"
+              endLabel="Конец рейса"
+              :lengthCell="editedOrder.lengthCell"
+            />
           </v-col>
         </v-row>
         <v-row>
@@ -14,7 +26,10 @@
               <div class="status-block">
                 <v-card class="block-wrapper">
                   <v-card-text>
-                    <v-radio-group class="status-group-wrapper">
+                    <v-radio-group
+                      class="status-group-wrapper"
+                      v-model="editedOrder.status"
+                    >
                       <v-radio
                         dense
                         v-for="status in statuses"
@@ -28,16 +43,19 @@
                         label="Водитель оповещен"
                         hide-details
                         color="primary"
+                        v-model="editedOrder.isDriverNotified"
                       />
                       <v-checkbox
                         label="Клиент оповещен"
                         hide-details
                         color="primary"
+                        v-model="editedOrder.isClientNotified"
                       />
                       <v-checkbox
                         label="На контроль"
                         hide-details
                         color="primary"
+                        v-model="editedOrder.attention"
                       />
                     </div>
                   </v-card-text>
@@ -47,16 +65,28 @@
                 <v-card>
                   <v-card-text>
                     <v-col cols="auto" class="pa-0">
-                      <v-select label="Заполнить из шаблона" />
+                      <v-select
+                        label="Заполнить из шаблона"
+                        :items="orderTemplates(editedOrder.carType)"
+                        :disabled="!editedOrder.carType"
+                        item-text="templateName"
+                        item-value="id"
+                        @input="changeTemplate"
+                        :value="editedOrder.templateId"
+                        clearable
+                        @click:clear="clearTemplateSelect"
+                      />
                     </v-col>
                     <my-partner-autocomplete
                       label="Место погрузки"
                       placeType="shippingPlace"
+                      v-model="editedOrder.shipperId"
                       hide-details
                     />
                     <my-partner-autocomplete
                       label="Место выгрузки"
                       placeType="deliveryPlace"
+                      v-model="editedOrder.consigneeId"
                       hide-details
                     />
                   </v-card-text>
@@ -65,11 +95,19 @@
               <div class="info-block">
                 <v-card>
                   <v-card-text class="info-controls">
-                    <v-select label="Тип ТС*" hide-details />
+                    <v-select
+                      :items="vehicleType"
+                      label="Тип ТС*"
+                      item-text="text"
+                      item-value="value"
+                      hide-details
+                      v-model="editedOrder.carType"
+                    />
                     <v-text-field
-                      label="Ячеек"
+                      label="Кол-во ячеек"
                       type="number"
                       min="1"
+                      v-model.number="editedOrder.lengthCell"
                       hide-details
                     />
                   </v-card-text>
@@ -78,12 +116,36 @@
               <div class="date-block">
                 <v-card class="block-wrapper">
                   <v-card-text class="date-controls-group">
-                    <date-time-control label="План погрузки" dense />
-                    <date-time-control label="План выгрузки" dense />
-                    <date-time-control label="Прибытие на погрузку" dense />
-                    <date-time-control label="Окончание погрузки" dense />
-                    <date-time-control label="Прибытие на выгрузку" dense />
-                    <date-time-control label="Окончание выгрузки" dense />
+                    <date-time-control
+                      label="План погрузки"
+                      dense
+                      v-model="editedOrder.plannedShippingDate"
+                    />
+                    <date-time-control
+                      label="План выгрузки"
+                      dense
+                      v-model="editedOrder.plannedDeliveryDate"
+                    />
+                    <date-time-control
+                      label="Прибытие на погрузку"
+                      dense
+                      v-model="editedOrder.loadingStart"
+                    />
+                    <date-time-control
+                      label="Окончание погрузки"
+                      dense
+                      v-model="editedOrder.loadingEnd"
+                    />
+                    <date-time-control
+                      label="Прибытие на выгрузку"
+                      dense
+                      v-model="editedOrder.unLoadingStart"
+                    />
+                    <date-time-control
+                      label="Окончание выгрузки"
+                      dense
+                      v-model="editedOrder.unLoadingEnd"
+                    />
                   </v-card-text>
                 </v-card>
               </div>
@@ -91,13 +153,29 @@
                 <v-card>
                   <v-card-text class="dop-info-control-group">
                     <v-select
+                      :items="vehicleType"
+                      item-text="text"
+                      item-value="value"
                       label="Тип ТС (план)"
                       hide-details
                       class="carTypePlan"
+                      v-model="editedOrder.plannedCarType"
                     />
-                    <v-text-field hide-details label="Вес, тн" />
-                    <v-text-field hide-details label="Кол-во ПЛТ" />
-                    <v-text-field hide-details label="Стоимость" />
+                    <v-text-field
+                      hide-details
+                      label="Вес, тн"
+                      v-model="editedOrder.weight"
+                    />
+                    <v-text-field
+                      hide-details
+                      label="Кол-во ПЛТ"
+                      v-model="editedOrder.pltCount"
+                    />
+                    <v-text-field
+                      hide-details
+                      label="Стоимость"
+                      v-model="editedOrder.price"
+                    />
                   </v-card-text>
                 </v-card>
               </div>
@@ -105,16 +183,32 @@
                 <v-card>
                   <v-card-text class="car-selects-wrapper">
                     <div>
-                      <v-select hide-details label="Машина" />
+                      <car-autocomplete
+                        v-model="editedOrder.carId"
+                        :types="['20tn', '10tn']"
+                        label="Грузовик"
+                      />
                     </div>
                     <div>
-                      <v-select hide-details label="Прицеп" />
+                      <car-autocomplete
+                        :types="['trailer']"
+                        label="Прицеп"
+                        v-model="editedOrder.trailerId"
+                        :disabled="trailerDisabled"
+                      />
                     </div>
                     <div>
-                      <v-select hide-details label="Водитель" />
+                      <driver-autocomplete
+                        v-model="editedOrder.driverId1"
+                        label="Водитель 1"
+                      />
                     </div>
                     <div>
-                      <v-select hide-details label="Водитель 2" />
+                      <driver-autocomplete
+                        label="Водитель 2"
+                        v-model="editedOrder.driverId2"
+                        :disabled="!editedOrder.driverId1"
+                      />
                     </div>
                   </v-card-text>
                 </v-card>
@@ -135,15 +229,19 @@
           </v-col>
           <v-col cols="auto">
             <div class="pa-1">
-              <v-btn outlined color="primary" @click="openTemplateModal" small
-                >Сохранить как шаблон</v-btn
+              <v-btn outlined color="primary" @click="openTemplateModal" small>
+                Сохранить как шаблон
+              </v-btn>
+            </div>
+            <div class="pa-1">
+              <v-btn small block outlined color="primary" disabled
+                >button2</v-btn
               >
             </div>
             <div class="pa-1">
-              <v-btn small block outlined color="primary">button2</v-btn>
-            </div>
-            <div class="pa-1">
-              <v-btn small block outlined color="primary">button3</v-btn>
+              <v-btn small block outlined color="primary" disabled
+                >button3</v-btn
+              >
             </div>
           </v-col>
         </v-row>
@@ -167,16 +265,17 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-3" text @click="templateModalCancel"
-            >Отмена</v-btn
-          >
+          <v-btn color="green darken-3" text @click="templateModalCancel">
+            Отмена
+          </v-btn>
           <v-btn
             color="green darken-3"
             text
             @click="templateModalSave"
             :disabled="!templateName"
-            >Сохранить</v-btn
           >
+            Сохранить
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -191,6 +290,9 @@ import myTimeTextField from '@/components/common/myTimeTextField/index.vue'
 import myCarAutocomplete from '@/components/common/myCarAutocomplete/index.vue'
 import dateTimeRow from './dateTimeRow'
 import dateTimeRange from '@/components/common/dateTimeRange'
+import carAutocomplete from '@/components/common/carAutocomplete'
+import driverAutocomplete from '@/components/common/driverAutocomplete'
+
 import { createOrderTemplateMutation } from '@/gql/orders'
 import { mapGetters } from 'vuex'
 export default {
@@ -208,16 +310,24 @@ export default {
     ]),
     isNewOrder() {
       return !this.editedOrder.id
+    },
+    trailerDisabled() {
+      return (
+        !this.editedOrder.carId ||
+        this.$store.getters.carById(this.editedOrder.carId).type !== '20tn'
+      )
     }
   },
   components: {
     dateTimeControl,
     dateTimeRange,
-    myDatePicker,
+    // myDatePicker,
     myPartnerAutocomplete,
-    myTimeTextField,
-    myCarAutocomplete,
-    dateTimeRow
+    // myTimeTextField,
+    // myCarAutocomplete,
+    // dateTimeRow
+    carAutocomplete,
+    driverAutocomplete
   },
   data: () => ({
     templateModal: false,
@@ -265,7 +375,11 @@ export default {
             consigneeId: this.editedOrder.consigneeId,
             note: this.editedOrder.note,
             templateName: this.templateName,
-            lengthCell: this.editedOrder.lengthCell
+            lengthCell: this.editedOrder.lengthCell,
+            plannedCarType: this.editedOrder.plannedCarType,
+            weight: this.editedOrder.weight,
+            pltCount: this.editedOrder.pltCount,
+            price: this.editedOrder.price
           }
         })
         .then(() => {

@@ -1,6 +1,16 @@
 <template>
-  <v-dialog v-model="showOrderDialog_v2" max-width="1600px">
-    <order-edit-form v-model="editedOrder_v2" />
+  <v-dialog
+    v-model="showOrderDialog"
+    max-width="1600px"
+    persistent
+    @keydown.esc="cancelFormHandler"
+  >
+    <order-edit-form
+      v-model="editedOrder"
+      @cancelEdit="cancelFormHandler"
+      @createOrder="createOrderHandler"
+      @updateOrder="updateOrderHandler"
+    />
   </v-dialog>
 </template>
 
@@ -9,21 +19,21 @@ import { mapGetters } from 'vuex'
 import orderEditForm from './orderEditForm'
 export default {
   computed: {
-    ...mapGetters(['showOrderDialog_v2', 'editedOrder_v2'])
+    ...mapGetters(['showOrderDialog', 'editedOrder'])
   },
   components: {
     orderEditForm
   },
   methods: {
-    // cancelFormHandler() {
-    //   this.$store.commit('cancelOrderEdit')
-    // },
-    // createOrderHandler() {
-    //   this.$store.dispatch('createNewOrder')
-    // },
-    // updateOrderHandler() {
-    //   this.$store.dispatch('updateOrder')
-    // }
+    cancelFormHandler() {
+      this.$store.commit('cancelOrderEdit')
+    },
+    createOrderHandler() {
+      this.$store.dispatch('createNewOrder')
+    },
+    updateOrderHandler() {
+      this.$store.dispatch('updateOrder')
+    }
   }
 }
 </script>

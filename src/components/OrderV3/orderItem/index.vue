@@ -8,13 +8,11 @@
   >
     <order-item-row
       :partnerId="order.shipperId"
-      :time="order.shippingTime"
-      :date="order.shippingDate"
+      :date="order.plannedShippingDate"
     />
     <order-item-row
       :partnerId="order.consigneeId"
-      :time="order.deliveryTime"
-      :date="order.deliveryDate"
+      :date="order.plannedDeliveryDate"
     />
   </div>
 </template>
