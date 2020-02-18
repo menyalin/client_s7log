@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper" @click="openDialog">
     <small>
-      {{ isExistDispatcher ? dutyDispatcher(date).user.name : 'Не задан' }}
+      {{ dutyDispatcher(date) ? dutyDispatcher(date).user.name : 'Не задан' }}
     </small>
     <v-dialog v-model="dialog" max-width="290">
       <v-card>
@@ -53,14 +53,6 @@ export default {
     displayDate() {
       moment.locale('ru')
       return moment(this.date).format('DD MMM YYYY, ddd')
-    },
-    isExistScheduleItem() {
-      return !!this.dutyDispatcher(this.date)
-    },
-    isExistDispatcher() {
-      if (this.isExistScheduleItem && !!this.dutyDispatcher(this.date)) {
-        return !!this.dutyDispatcher(this.date).user
-      } else return null
     }
   },
   data: () => ({

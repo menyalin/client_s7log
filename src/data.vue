@@ -182,6 +182,7 @@ export default {
         store.commit('setOrders', ordersForVuex)
         store.commit('setSchedule', scheduleForVuex)
       },
+      throttle: 2000,
       skip() {
         return !store.getters.currentDate
       }
