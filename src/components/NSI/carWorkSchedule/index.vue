@@ -2,6 +2,9 @@
   <v-container fluid>
     <v-row>
       <v-col>
+        <v-alert type="info">
+          Отображаются записи, пересекающиеся с активным диапазоном дат
+        </v-alert>
         <v-data-table
           class="elevation-1"
           :items="carWorkSchedule"
