@@ -58,7 +58,7 @@ export default {
       return !!this.dutyDispatcher(this.date)
     },
     isExistDispatcher() {
-      if (this.isExistScheduleItem) {
+      if (this.isExistScheduleItem && !!this.dutyDispatcher(this.date)) {
         return !!this.dutyDispatcher(this.date).user
       } else return null
     }
