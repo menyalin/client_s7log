@@ -248,7 +248,7 @@
       </v-container>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="warning" fab small dark>
+      <v-btn color="warning" fab small dark @click="$emit('deleteOrder')">
         <v-icon>mdi-delete</v-icon>
       </v-btn>
       <v-spacer />

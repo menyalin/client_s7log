@@ -1,6 +1,6 @@
 import { apolloClient } from '../vue-apollo'
 import moment from 'moment'
-import { createOrderMutation, updateOrderMutation, confirmOrderMutation } from '@/gql/orders.js'
+import { createOrderMutation, updateOrderMutation, confirmOrderMutation, deleteOrderMutation } from '@/gql/orders.js'
 import store from './index'
 
 export default {
@@ -82,6 +82,12 @@ export default {
     addOrder: (state, orderAdded) => {
       state.orders.push(orderAdded)
     },
+    orderDeleted: ({ orders }, { id }) => {
+      const idx = orders.findIndex(item => item.id === id)
+      if (idx !== -1) {
+        orders.splice(idx, 1)
+      }
+    },
     updateOrder: (state, orderUpdated) => {
       let order = state.orders.find(item => item.id === orderUpdated.id)
       if (order) {
@@ -123,6 +129,18 @@ export default {
     }
   },
   actions: {
+    deleteOrder: ({ commit, dispatch, getters }) => {
+      apolloClient.mutate({
+        mutation: deleteOrderMutation,
+        variables: getters.editedOrder
+      })
+        .then(() => {
+          commit('cancelOrderEdit')
+        })
+        .catch(e => {
+          dispatch('setError', e.message)
+        })
+    },
     updateOrder: ({ commit, dispatch, getters }) => {
       apolloClient.mutate({
         mutation: updateOrderMutation,
@@ -135,7 +153,7 @@ export default {
           dispatch('setError', e.message)
         })
     },
-    confirmOrder({ dispatch }, payload) {
+    confirmOrder ({ dispatch }, payload) {
       const { id, carId, dateRange, carType } = payload
       apolloClient.mutate({
         mutation: confirmOrderMutation,
@@ -150,7 +168,7 @@ export default {
           dispatch('setError', e.message)
         })
     },
-    createNewOrder({ commit, getters }, payload) {
+    createNewOrder ({ commit, getters }, payload) {
       let variables = null
       if (payload) variables = payload
       else variables = getters.editedOrder
@@ -195,7 +213,7 @@ export default {
       else return null
     },
 
-    
+
     dispatchersStaff: ({ staff }) => {
       if (staff.length) {
         return staff.filter(item => (item.role === 'dispatcher' && item.isActive)).map(item => ({ userId: item.userId, userName: item.user.name, userEmail: item.user.email }))

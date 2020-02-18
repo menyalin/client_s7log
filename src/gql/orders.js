@@ -1,4 +1,19 @@
 import gql from 'graphql-tag'
+export const deleteOrderMutation = gql`
+  mutation deleteOrder($id: ID!) {
+    deleteOrder (id: $id) {
+      id
+    }
+  }
+`
+export const orderDeletedSubscription = gql`
+  subscription orderDeleted {
+    orderDeleted {
+      id
+    }
+  }
+`
+
 export const updateOrderMutation = gql`
   mutation updateOrder(
     $id: ID!

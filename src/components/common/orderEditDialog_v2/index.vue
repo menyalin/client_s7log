@@ -10,6 +10,7 @@
       @cancelEdit="cancelFormHandler"
       @createOrder="createOrderHandler"
       @updateOrder="updateOrderHandler"
+      @deleteOrder="deleteOrderHandler"
     />
   </v-dialog>
 </template>
@@ -33,6 +34,9 @@ export default {
     },
     updateOrderHandler() {
       this.$store.dispatch('updateOrder')
+    },
+    deleteOrderHandler() {
+      this.$store.dispatch('deleteOrder')
     }
   }
 }

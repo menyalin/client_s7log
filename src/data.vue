@@ -10,6 +10,7 @@ import store from './store/index'
 import {
   orderAddedSubscription,
   orderUpdatedSubscription,
+  orderDeletedSubscription,
   orderTemplateUpdatedSubscription,
   orderTemplateDeletedSubscription
 } from './gql/orders'
@@ -125,6 +126,12 @@ export default {
         query: orderAddedSubscription,
         result({ data: { orderAdded } }) {
           store.commit('addOrder', orderAdded)
+        }
+      },
+      orderDeleted: {
+        query: orderDeletedSubscription,
+        result({ data: { orderDeleted } }) {
+          store.commit('orderDeleted', orderDeleted)
         }
       },
       orderUpdated: {
