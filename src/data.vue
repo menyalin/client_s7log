@@ -8,13 +8,12 @@ import moment from 'moment'
 import gql from 'graphql-tag'
 import store from './store/index'
 import {
-  ordersForVuexQuery,
   orderAddedSubscription,
   orderUpdatedSubscription,
   orderTemplateUpdatedSubscription,
   orderTemplateDeletedSubscription
 } from './gql/orders'
-import { queryFilterLess } from './gql/queryForVuex'
+import { queryFilterLess, queryDatesFilter } from './gql/queryForVuex'
 import {
   driverUpdatedSubscription,
   driverDeletedSubscription
@@ -23,7 +22,6 @@ import {
   carsForVuexQuery,
   updatedCarWorkScheduleSubscription,
   deletedCarWorkScheduleSubscription,
-  carWorkScheduleForVuexQuery,
   carUpdatedSubscription
 } from './gql/cars'
 import { mapGetters } from 'vuex'
@@ -53,19 +51,6 @@ const addressUpdatedSubscription = gql`
       isActive
       isShippingPlace
       isDeliveryPlace
-    }
-  }
-`
-const scheduleForVuexQuery = gql`
-  query scheduleForVuex($startDate: String, $endDate: String) {
-    scheduleForVuex(startDate: $startDate, endDate: $endDate) {
-      id
-      type
-      date
-      user {
-        id
-        name
-      }
     }
   }
 `
@@ -185,6 +170,22 @@ export default {
         }
       }
     },
+    queryDatesFilter: {
+      query: queryDatesFilter,
+      variables: () => store.getters.dateRange,
+      fetchPolicy: 'no-cache',
+      error(error) {
+        store.dispatch('setError', error.message)
+      },
+      update: ({ carWorkScheduleForVuex, ordersForVuex, scheduleForVuex }) => {
+        store.commit('setCarWorkSchedule', carWorkScheduleForVuex)
+        store.commit('setOrders', ordersForVuex)
+        store.commit('setSchedule', scheduleForVuex)
+      },
+      skip() {
+        return !store.getters.currentDate
+      }
+    },
     queryFilterLess: {
       query: queryFilterLess,
       fetchPolicy: 'no-cache',
@@ -203,47 +204,6 @@ export default {
         store.commit('setAddresses', addressesForVuex)
         store.commit('setStaff', staff)
         store.commit('setOrderTemplates', orderTemplates)
-      }
-    },
-    carWorkScheduleForVuex: {
-      query: carWorkScheduleForVuexQuery,
-      fetchPolicy: 'no-cache',
-      error(error) {
-        store.dispatch('setError', error.message)
-      },
-      update: ({ carWorkScheduleForVuex }) => {
-        store.commit('setCarWorkSchedule', carWorkScheduleForVuex)
-      },
-      skip() {
-        return !store.getters.currentDate
-      }
-    },
-    ordersForVuex: {
-      query: ordersForVuexQuery,
-      variables: () => store.getters.dateRange,
-      fetchPolicy: 'no-cache',
-      error(error) {
-        store.dispatch('setError', error.message)
-      },
-      update: ({ ordersForVuex }) => {
-        store.commit('setOrders', ordersForVuex)
-      },
-      skip() {
-        return !store.getters.currentDate
-      }
-    },
-    scheduleForVuex: {
-      query: scheduleForVuexQuery,
-      variables: () => store.getters.dateRange,
-      fetchPolicy: 'no-cache',
-      error(error) {
-        store.dispatch('setError', error.message)
-      },
-      update: ({ scheduleForVuex }) => {
-        store.commit('setSchedule', scheduleForVuex)
-      },
-      skip() {
-        return !store.getters.currentDate
       }
     }
   }

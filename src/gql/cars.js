@@ -80,21 +80,7 @@ export const deletedCarWorkScheduleSubscription = gql`
     deletedCarWorkSchedule
   }
 `
-export const carWorkScheduleForVuexQuery = gql`
-  query carWorkScheduleForVuex {
-    carWorkScheduleForVuex {
-      id
-      type
-      note
-      title
-      dateRange {
-        value
-        inclusive
-      }
-      carId
-    }
-  }
-`
+
 export const carUpdatedSubscription = gql`
   subscription carUpdated {
     carUpdated {

@@ -1,5 +1,62 @@
 import gql from 'graphql-tag'
 
+export const queryDatesFilter = gql`
+    query queryDatesFilter ($startDate: String $endDate: String) {
+        carWorkScheduleForVuex (startDate: $startDate endDate: $endDate){
+            id
+            type
+            note
+            title
+            dateRange {
+                value
+                inclusive
+            }
+            carId
+        }
+        ordersForVuex(startDate: $startDate, endDate: $endDate) {
+            id
+            carType
+            number
+            status
+            dateRange {
+                value
+                inclusive
+            }
+            shipperId
+            consigneeId
+            carId
+            note
+            plannedShippingDate
+            plannedDeliveryDate
+            loadingStart
+            loadingEnd
+            unLoadingStart
+            unLoadingEnd
+            lengthCell
+            isDriverNotified
+            isClientNotified
+            templateId
+            attention
+            driverId1
+            driverId2
+            trailerId
+            plannedCarType
+            weight
+            pltCount
+            price
+        }
+        scheduleForVuex(startDate: $startDate, endDate: $endDate) {
+            id
+            type
+            date
+            user {
+                id
+                name
+            }
+        }
+    }
+`
+
 export const queryFilterLess = gql`
     query queryFilterLess {
         driversForVuex {

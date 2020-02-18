@@ -65,12 +65,16 @@ export default {
             })
           })
       } else {
-        this.$store.dispatch('confirmOrder', {
-          id: order.id,
-          carId: this.cell.carId,
-          carType: this.cell.carType,
-          dateRange: this.getDateRange(moment(this.cell.id), order.lengthCell)
-        })
+        if (order.isDriverNotified || order.isClientNotified) {
+          this.$store.dispatch('setError', 'Водитель и/или клиент оповещены')
+        } else {
+          this.$store.dispatch('confirmOrder', {
+            id: order.id,
+            carId: this.cell.carId,
+            carType: this.cell.carType,
+            dateRange: this.getDateRange(moment(this.cell.id), order.lengthCell)
+          })
+        }
       }
 
       return false
