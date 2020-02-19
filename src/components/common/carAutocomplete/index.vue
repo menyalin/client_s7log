@@ -43,7 +43,6 @@ export default {
       this.$emit('change', val)
     }
   },
-  // props: ['label', 'propValue', 'types', 'noType']
   props: {
     label: String,
     types: {

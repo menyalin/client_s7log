@@ -48,17 +48,13 @@ export default {
       return new Promise((resolve, reject) => {
         apolloClient.query({
           query: carUnitQuery,
-          variables: payload
+          variables: payload,
+          fetchPolicy: 'no-cache'
         }).then(({ data: { carUnit } }) => {
           let carUnitFields = {
-            driverId1: null,
-            driverId2: null,
-            trailerId: null
-          }
-          if (!!carUnit) {
-            carUnitFields.driverId1 = carUnit.driverId1
-            carUnitFields.driverId2 = carUnit.driverId2
-            carUnitFields.trailerId = carUnit.trailerId
+            driverId1: carUnit.driverId1,
+            driverId2: carUnit.driverId2,
+            trailerId: carUnit.trailerId
           }
           resolve(carUnitFields)
         }).catch(e => dispatch('setError', e.message))

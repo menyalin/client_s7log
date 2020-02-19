@@ -39,6 +39,7 @@ export default {
         'status--40': this.order.status == 40,
         'status--50': this.order.status == 50,
         'status--60': this.order.status == 60,
+        'status--97': this.order.status == 97,
         'status--98': this.order.status == 98,
         'status--99': this.order.status == 99,
         attention: this.order.attention
@@ -115,9 +116,13 @@ export default {
 .status--50 > div:nth-child(4) {
   color: red;
 }
-.status--98 {
+.status--97 {
   color: red;
   background-color: black;
+}
+.status--98 {
+  color: red;
+  background-color: darkgray;
 }
 .status--99 {
   color: black;

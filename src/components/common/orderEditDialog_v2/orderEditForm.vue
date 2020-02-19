@@ -185,8 +185,9 @@
                     <div>
                       <car-autocomplete
                         v-model="editedOrder.carId"
-                        :types="['20tn', '10tn']"
+                        :types="[editedOrder.carType]"
                         label="Грузовик"
+                        @change="changeCarHandler($event)"
                       />
                     </div>
                     <div>
@@ -248,7 +249,14 @@
       </v-container>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="warning" fab small dark @click="$emit('deleteOrder')">
+      <v-btn
+        color="warning"
+        fab
+        small
+        dark
+        @click="deleteItemHandler"
+        v-if="!isNewOrder"
+      >
         <v-icon>mdi-delete</v-icon>
       </v-btn>
       <v-spacer />
@@ -283,31 +291,22 @@
 </template>
 
 <script>
+import moment from 'moment'
 import dateTimeControl from '@/components/common/dateTimeControl'
-import myDatePicker from '@/components/common/myDatePicker/index.vue'
 import myPartnerAutocomplete from '@/components/common/myPartnerAutocomplete/index.vue'
-import myTimeTextField from '@/components/common/myTimeTextField/index.vue'
-import myCarAutocomplete from '@/components/common/myCarAutocomplete/index.vue'
-import dateTimeRow from './dateTimeRow'
 import dateTimeRange from '@/components/common/dateTimeRange'
 import carAutocomplete from '@/components/common/carAutocomplete'
 import driverAutocomplete from '@/components/common/driverAutocomplete'
-
 import { createOrderTemplateMutation } from '@/gql/orders'
 import { mapGetters } from 'vuex'
+
 export default {
   model: {
     prop: 'editedOrder',
     event: 'change'
   },
   computed: {
-    ...mapGetters([
-      'timeZones',
-      'statuses',
-      'currentUser',
-      'vehicleType',
-      'orderTemplates'
-    ]),
+    ...mapGetters(['statuses', 'currentUser', 'vehicleType', 'orderTemplates']),
     isNewOrder() {
       return !this.editedOrder.id
     },
@@ -321,11 +320,7 @@ export default {
   components: {
     dateTimeControl,
     dateTimeRange,
-    // myDatePicker,
     myPartnerAutocomplete,
-    // myTimeTextField,
-    // myCarAutocomplete,
-    // dateTimeRow
     carAutocomplete,
     driverAutocomplete
   },
@@ -339,6 +334,32 @@ export default {
     }
   },
   methods: {
+    getStartDateFromRange(range) {
+      const regExp = /^\[(2[\d\s-:\+]+),(2[\d\s-:\+]+)[\]|\)]$/
+      if (range.match(regExp).length !== 3) {
+        return null
+      } else {
+        return moment(range.match(regExp)[1]).format('YYYY-MM-DD HH:mm')
+      }
+    },
+    changeCarHandler(val) {
+      const startDate = this.getStartDateFromRange(this.editedOrder.dateRange)
+      if (startDate && val) {
+        this.$store
+          .dispatch('getCarUnitFields', {
+            truckId: val,
+            date: startDate
+          })
+          .then(({ trailerId, driverId1, driverId2 }) => {
+            this.editedOrder.trailerId = trailerId
+            this.editedOrder.driverId1 = driverId1
+            this.editedOrder.driverId2 = driverId2
+          })
+          .catch(e => {
+            this.$store.dispatch('setError', e.message)
+          })
+      }
+    },
     clearTemplateSelect() {
       this.$store.commit('clearTemplateId')
     },
@@ -356,6 +377,12 @@ export default {
       } else {
         this.$emit('updateOrder')
       }
+    },
+    async deleteItemHandler() {
+      const res = await this.$confirm('Вы уверены?', {
+        title: 'Удаление заказа'
+      })
+      if (res) this.$emit('deleteOrder')
     },
     openTemplateModal() {
       this.templateModal = true

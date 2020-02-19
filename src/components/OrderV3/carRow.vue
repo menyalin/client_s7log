@@ -163,8 +163,10 @@ export default {
 .car-title-cell {
   height: 100%;
   width: 100%;
+  line-height: 1.7rem;
   font-size: 0.85rem;
   text-align: center;
+  vertical-align: middle;
 }
 .owned--car {
   background-color: rgba(135, 206, 250, 0.65);
