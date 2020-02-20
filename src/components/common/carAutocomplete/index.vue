@@ -5,7 +5,6 @@
       :value="propValue"
       clearable
       hide-details
-      class="pa-0"
       :disabled="disabled"
       @click:clear="resetHandler"
       :items="itemsForSelect"

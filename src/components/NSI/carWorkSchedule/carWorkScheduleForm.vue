@@ -7,10 +7,10 @@
       <v-container>
         <v-row>
           <v-col>
-            <my-car-autocomplete
+            <car-autocomplete
               label="Машина"
               v-model="editedItem.carId"
-              :noType="true"
+              :types="['20tn', '10tn']"
             />
           </v-col>
           <v-col>
@@ -20,10 +20,15 @@
               :items="carWorkScheduleTypes"
               item-value="id"
               item-text="title"
+              hide-details
             />
           </v-col>
           <v-col>
-            <v-text-field label="Заголовок" v-model="editedItem.title" />
+            <v-text-field
+              label="Заголовок"
+              v-model="editedItem.title"
+              hide-details
+            />
           </v-col>
         </v-row>
         <v-row>
@@ -60,12 +65,12 @@
 
 <script>
 import dateTimeRange from '@/components/common/dateTimeRange'
-import myCarAutocomplete from '@/components/common/myCarAutocomplete'
+import carAutocomplete from '@/components/common/carAutocomplete'
 import { mapGetters } from 'vuex'
 export default {
   components: {
     dateTimeRange,
-    myCarAutocomplete
+    carAutocomplete
   },
   computed: {
     ...mapGetters(['carWorkScheduleTypes']),

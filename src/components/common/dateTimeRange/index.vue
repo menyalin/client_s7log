@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid class="pa-0 ma-0">
     <v-row>
       <v-col :cols="renderedCols[0]" :sm="renderedCols[1]">
         <date-picker

@@ -17,6 +17,7 @@ export const createCarWorkScheduleMutation = gql`
     ) {
       id
       type
+      title
       note
       dateRange {
         value
@@ -169,6 +170,24 @@ export const carUnitsPageQuery = gql`
     } 
   }
 `
+export const carWorkSchedulePagesQuery = gql`
+  query CarWorkSchedulePages($offset:Int $limit:Int!) {
+    carWorkSchedulePage(offset: $offset limit: $limit) {
+      carWorkSchedule{ 
+        id
+        carId
+        type
+        dateRange {
+          value
+        }
+        title
+        note
+      }
+      count
+    }
+  }
+`
+
 export const createNewCarUnitMutation = gql`
   mutation createCarUnit ($startDate: String! $truckId: String! $trailerId: String $driverId1:String! $driverId2:String $note:String) {
     createCarUnit (startDate: $startDate truckId: $truckId trailerId: $trailerId driverId1: $driverId1 driverId2: $driverId2 note: $note ) {

@@ -260,9 +260,14 @@
         <v-icon>mdi-delete</v-icon>
       </v-btn>
       <v-spacer />
-      <v-btn color="primary" @click="save" :loading="$apollo.loading"
-        >Сохранить</v-btn
+      <v-btn
+        color="primary"
+        @click="save"
+        :loading="$apollo.loading"
+        :disabled="!isValidForm"
       >
+        Сохранить
+      </v-btn>
       <v-btn color="primary" @click="cancel">Отмена</v-btn>
     </v-card-actions>
     <v-dialog v-model="templateModal" max-width="350">
@@ -315,6 +320,15 @@ export default {
         !this.editedOrder.carId ||
         this.$store.getters.carById(this.editedOrder.carId).type !== '20tn'
       )
+    },
+    isValidForm() {
+      const res =
+        this.editedOrder.carType &&
+        this.editedOrder.carId &&
+        this.editedOrder.shipperId &&
+        this.editedOrder.consigneeId &&
+        this.editedOrder.plannedShippingDate
+      return res
     }
   },
   components: {

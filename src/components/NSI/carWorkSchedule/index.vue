@@ -2,19 +2,19 @@
   <v-container fluid>
     <v-row>
       <v-col>
-        <v-alert type="info">
-          Отображаются записи, пересекающиеся с активным диапазоном дат
-        </v-alert>
         <v-data-table
           class="elevation-1"
-          :items="carWorkSchedule"
+          :loading="$apollo.loading"
+          :options.sync="options"
+          :items="carWorkSchedulePage.carWorkSchedule"
+          :server-items-length="carWorkSchedulePage.count"
           :items-per-page="limit"
           :headers="headers"
           dense
           align="center"
           @click:row="clickRowHandler"
           :footer-props="{
-            'items-per-page-options': [50, 100, -1]
+            'items-per-page-options': [50, 100]
           }"
         >
           <template v-slot:top>
@@ -63,7 +63,8 @@ import gql from 'graphql-tag'
 import {
   createCarWorkScheduleMutation,
   updateCarWorkScheduleMutation,
-  deleteCarWorkScheduleMutation
+  deleteCarWorkScheduleMutation,
+  carWorkSchedulePagesQuery
 } from '@/gql/cars'
 
 export default {
@@ -74,6 +75,11 @@ export default {
   data: () => ({
     dialog: false,
     editedSchedule: {},
+    carWorkSchedulePage: {
+      count: 0,
+      carWorkSchedule: []
+    },
+    options: {},
     headers: [
       { text: 'id', value: 'id', align: 'center' },
       { text: 'Машина', value: 'car', align: 'center' },
@@ -83,7 +89,7 @@ export default {
       { text: 'Конец', value: 'endDate', align: 'center' },
       { text: 'Комментарий', value: 'note', align: 'center' }
     ],
-    limit: 30
+    limit: 50
   }),
   computed: {
     ...mapGetters([
@@ -109,7 +115,21 @@ export default {
       this.$apollo
         .mutate({
           mutation: createCarWorkScheduleMutation,
-          variables: this.queryVariables
+          variables: this.queryVariables,
+          update: (store, { data: { createCarWorkSchedule } }) => {
+            const data = store.readQuery({
+              query: carWorkSchedulePagesQuery,
+              variables: {
+                limit: this.options.itemsPerPage || this.limit,
+                offset: this.options.itemsPerPage * (this.options.page - 1) || 0
+              }
+            })
+            data.carWorkSchedulePage.carWorkSchedule.unshift(
+              createCarWorkSchedule
+            )
+            data.carWorkSchedulePage.count += 1
+            store.writeQuery({ query: carWorkSchedulePagesQuery, data })
+          }
         })
         .then(() => {
           this.cancelHandler()
@@ -122,7 +142,20 @@ export default {
       this.$apollo
         .mutate({
           mutation: updateCarWorkScheduleMutation,
-          variables: this.queryVariables
+          variables: this.queryVariables,
+          update: (store, { data: { updateCarWorkSchedule } }) => {
+            const data = store.readQuery({
+              query: carWorkSchedulePagesQuery,
+              variables: {
+                limit: this.options.itemsPerPage || this.limit,
+                offset: this.options.itemsPerPage * (this.options.page - 1) || 0
+              }
+            })
+            let updatedCarWorkSchedule = data.carWorkSchedulePage.carWorSchedule.find(
+              item => item.id === updateCarWorkSchedule.id
+            )
+            updatedCarWorkSchedule = Object.assign({}, updateCarWorkSchedule)
+          }
         })
         .then(() => {
           this.cancelHandler()
@@ -144,7 +177,23 @@ export default {
       this.$apollo
         .mutate({
           mutation: deleteCarWorkScheduleMutation,
-          variables: this.editedSchedule
+          variables: this.editedSchedule,
+          update: (store, { data: { deleteCarWorkSchedule } }) => {
+            const data = store.readQuery({
+              query: carWorkSchedulePagesQuery,
+              variables: {
+                limit: this.options.itemsPerPage,
+                offset: this.options.itemsPerPage * (this.options.page - 1)
+              }
+            })
+            data.carWorkSchedulePage.carWorkSchedule.splice(
+              data.carWorkSchedulePage.carWorkSchedule.findIndex(
+                item => item.id === deleteCarWorkSchedule
+              ),
+              1
+            )
+            data.carWorkSchedulePage.count = data.carWorkSchedulePage.count - 1
+          }
         })
         .then(this.cancelHandler())
         .catch(e => {
@@ -156,6 +205,17 @@ export default {
       if (Array.isArray(dateRange) && dateRange.length === 2) {
         return moment(+dateRange[pos].value).format('DD.MM.YYYY, HH:mm')
       } else return ''
+    }
+  },
+  apollo: {
+    carWorkSchedulePage: {
+      query: carWorkSchedulePagesQuery,
+      variables() {
+        return {
+          limit: this.options.itemsPerPage || this.limit,
+          offset: this.options.itemsPerPage * (this.options.page - 1) || 0
+        }
+      }
     }
   }
 }

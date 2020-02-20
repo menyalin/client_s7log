@@ -1,7 +1,6 @@
 <template>
   <v-select
     hide-details
-    class="mt-0 pt-0"
     :items="timeZones"
     :value="propTime"
     append-icon="mdi-clock-outline"

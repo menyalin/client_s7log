@@ -204,8 +204,8 @@ export default {
       query: carUnitsPageQuery,
       variables() {
         return {
-          limit: this.options.itemsPerPage,
-          offset: this.options.itemsPerPage * (this.options.page - 1)
+          limit: this.options.itemsPerPage || this.limit,
+          offset: this.options.itemsPerPage * (this.options.page - 1) || 0
         }
       }
     }
