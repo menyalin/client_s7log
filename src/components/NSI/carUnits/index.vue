@@ -4,7 +4,7 @@
       <v-col>
         <v-dialog
           v-model="dialog"
-          max-width="500"
+          max-width="650"
           persistent
           @keydown.esc="cancelHandler"
         >
@@ -42,8 +42,8 @@
               </v-row>
             </v-container>
           </template>
-          <template v-slot:item.startDate="{ item }">{{
-            item.startDate | unixDateToStr
+          <template v-slot:item.dateRange="{ item }">{{
+            item.dateRange | dateRangeToStr
           }}</template>
           <template v-slot:item.truckId="{ item }">{{
             carById(item.truckId) ? carById(item.truckId).title : null
@@ -51,17 +51,17 @@
           <template v-slot:item.trailerId="{ item }">{{
             carById(item.trailerId) ? carById(item.trailerId).title : null
           }}</template>
-          <template v-slot:item.driverId1="{ item }">
+          <template v-slot:item.driver1Id="{ item }">
             {{
-              driverById(item.driverId1)
-                ? driverById(item.driverId1).shortName
+              driverById(item.driver1Id)
+                ? driverById(item.driver1Id).shortName
                 : null
             }}
           </template>
-          <template v-slot:item.driverId2="{ item }">
+          <template v-slot:item.driver2Id="{ item }">
             {{
-              driverById(item.driverId2)
-                ? driverById(item.driverId2).shortName
+              driverById(item.driver2Id)
+                ? driverById(item.driver2Id).shortName
                 : null
             }}
           </template>
@@ -76,7 +76,7 @@ import moment from 'moment'
 import carUnitForm from './carUnitForm'
 import {
   carUnitsPageQuery,
-  createNewCarUnitMutation,
+  createCarUnitMutation,
   updateCarUnitMutation,
   deleteCarUnitMutation
 } from '@/gql/cars'
@@ -100,11 +100,11 @@ export default {
     },
     options: {},
     headers: [
-      { text: 'Дата', value: 'startDate' },
+      { text: 'Дата', value: 'dateRange' },
       { text: 'Машина', value: 'truckId' },
       { text: 'Прицеп', value: 'trailerId' },
-      { text: 'Водитель 1', value: 'driverId1' },
-      { text: 'Водитель 2', value: 'driverId2' },
+      { text: 'Водитель 1', value: 'driver1Id' },
+      { text: 'Водитель 2', value: 'driver2Id' },
       { text: 'Примечание', value: 'note' }
     ]
   }),
@@ -119,15 +119,15 @@ export default {
       this.dialog = true
     },
     clickRowHandler(item) {
-      this.editedItem = Object.assign({}, item)
+      this.dialog = true
       this.$nextTick(() => {
-        this.dialog = true
+        this.editedItem = Object.assign({}, item)
       })
     },
     createNewCarUnit() {
       this.$apollo
         .mutate({
-          mutation: createNewCarUnitMutation,
+          mutation: createCarUnitMutation,
           variables: this.editedItem,
           update: (store, { data: { createCarUnit } }) => {
             const data = store.readQuery({
@@ -163,7 +163,8 @@ export default {
             let updatedCarUnit = data.carUnitsPage.carUnits.find(
               item => item.id === updateCarUnit.id
             )
-            updatedCarUnit = Object.assign({}, updateCarUnit)
+            updatedCarUnit = updateCarUnit
+            store.writeQuery({ query: carUnitsPageQuery, data })
           }
         })
         .then(this.cancelHandler())

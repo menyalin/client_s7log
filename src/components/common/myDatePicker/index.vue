@@ -57,7 +57,7 @@ export default {
       this.menu = false
     },
     reset() {
-      this.$emit('change', null)
+      this.$emit('change', '')
     }
   },
   computed: {

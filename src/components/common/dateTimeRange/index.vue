@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pa-0 ma-0">
+  <v-container fluid class="pt-0 pb-0 mt-0 mb-0">
     <v-row>
       <v-col :cols="renderedCols[0]" :sm="renderedCols[1]">
         <date-picker
@@ -13,13 +13,14 @@
       <v-col :cols="renderedCols[0] / 2" :sm="renderedCols[1] / 2">
         <time-zone-select
           v-model="res._startTime"
+          :disabled="!res._startDate"
           @change="changeHandler($event, '_startTime')"
         />
       </v-col>
       <v-col cols="8" sm="4" v-if="lengthCell === 0">
         <date-picker
           :label="endLabel"
-          :isClearable="false"
+          :isClearable="isOpenRange"
           :min="res._startDate"
           v-model="res._endDate"
           @change="changeHandler($event, '_endDate')"
@@ -27,6 +28,7 @@
       </v-col>
       <v-col cols="4" sm="2" v-if="lengthCell === 0">
         <time-zone-select
+          :disabled="!res._endDate"
           v-model="res._endTime"
           @change="changeHandler($event, '_endTime')"
         />
@@ -61,6 +63,10 @@ export default {
     lengthCell: {
       type: Number,
       default: 0
+    },
+    isOpenRange: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
@@ -102,12 +108,19 @@ export default {
       } else return '00:00+03:00'
     },
     endTime() {
-      if (this.res._endTime) {
-        return `${this.res._endTime}+03:00`
-      } else return '00:00+03:00'
+      if (this.res._endDate) {
+        if (this.res._endTime) {
+          return `${this.res._endTime}+03:00`
+        } else return '00:00+03:00'
+      } else return null
     },
     resultStr() {
-      return `[${this.res._startDate} ${this.startTime},${this.res._endDate} ${this.endTime}]`
+      if (this.res._startDate && this.isOpenRange && !this.res._endDate) {
+        return `[${this.res._startDate} ${this.startTime},]`
+      } else if (this.res._startDate && this.res._endDate) {
+        return `[${this.res._startDate} ${this.startTime},${this.res._endDate ||
+          ''} ${this.endTime || ''}]`
+      } else return ''
     }
   },
   methods: {
@@ -116,21 +129,39 @@ export default {
       const timeF = 'HH:mm'
       if (Array.isArray(val) && this.isValidArrayDates(val)) {
         this.res._startDate = moment(+val[0].value).format(dateF)
-        this.res._endDate = moment(+val[1].value).format(dateF)
         this.res._startTime = moment(+val[0].value).format(timeF)
-        this.res._endTime = moment(+val[1].value).format(timeF)
+        if (val[1].value) {
+          this.res._endDate = moment(+val[1].value).format(dateF)
+          this.res._endTime = moment(+val[1].value).format(timeF)
+        } else if (!this.isOpenRange) {
+          this.res._endDate = this.res._startDate
+          this.res._endTime = this.res._startTime
+        } else {
+          this.res._endDate = null
+          this.res._endTime = null
+        }
         this.$emit('change', this.resultStr)
       } else if (typeof val === 'string' && this.isValidStrDate(val)) {
         const dates = this.parsedDates(val)
         this.res._startDate = moment(dates[1]).format(dateF)
-        this.res._endDate = moment(dates[2]).format(dateF)
         this.res._startTime = moment(dates[1]).format(timeF)
-        this.res._endTime = moment(dates[2]).format(timeF)
+        if (dates[2]) {
+          this.res._endDate = moment(dates[2]).format(dateF)
+          this.res._endTime = moment(dates[2]).format(timeF)
+        } else if (!this.isOpenRange) {
+          this.res._endDate = this.res._startDate
+          this.res._endTime = this.res._startTime
+        } else {
+          this.res._endDate = ''
+          this.res._endTime = ''
+        }
+        this.$emit('change', this.resultStr)
       } else {
-        this.res._startDate = null
-        this.res._endDate = null
-        this.res._startTime = null
-        this.res._endTime = null
+        this.res._startDate = ''
+        this.res._endDate = ''
+        this.res._startTime = ''
+        this.res._endTime = ''
+        this.$emit('change', this.resultStr)
       }
     },
     isValidStrDate(str) {
@@ -141,7 +172,7 @@ export default {
       return true
     },
     parsedDates(str) {
-      const regExp = /^[\[|\(](2[\d\s-:\+]+),(2[\d\s-:\+]+)[\]|\)]$/
+      const regExp = /^\[(2[\d\s-:\+]+),([\d\s-:\+]*)\]$/
       return str.match(regExp)
     },
     updateEndDate(lengthCellVal) {
@@ -157,16 +188,29 @@ export default {
     changeHandler(e, label) {
       this.res[label] = e
       if (
-        this.lengthCell === 0 &&
+        this.res._startDate &&
+        this.res._endDate &&
+        this.res._endTime &&
+        this.res._startTime &&
+        this.res._startDate === this.res._endDate &&
+        moment(this.res._endTime).isBefore(this.res._startTime)
+      ) {
+        this.res._endTime = this.res._startTime
+      }
+      if (
+        !this.isOpenRange &&
         this.res._startDate &&
         this.res._startTime &&
         !this.res._endDate
       ) {
-        this.res._endDate = this.res._startDate
-        this.res._endTime = this.res._startTime
-      }
-      if (this.lengthCell > 0 && this.res._startDate && this.res._startTime) {
         this.updateEndDate(this.lengthCell)
+      } else if (
+        this.isOpenRange &&
+        this.res._endDate &&
+        this.res._startDate === this.res._endDate &&
+        !this.res._endTime
+      ) {
+        this.res._endTime = this.res._startTime
       }
       if (this.isValidStrDate(this.resultStr)) {
         this.$emit('change', this.resultStr)

@@ -8,9 +8,22 @@
         <v-row>
           <v-col>
             <car-autocomplete
-              label="Машина"
+              label="Грузовик"
               v-model="editedItem.carId"
               :types="['20tn', '10tn']"
+            />
+          </v-col>
+          <v-col>
+            <car-autocomplete
+              label="Прицеп"
+              v-model="editedItem.trailerId"
+              :types="['trailer']"
+            />
+          </v-col>
+          <v-col>
+            <driver-autocomplete
+              v-model="editedItem.driverId"
+              label="Водитель"
             />
           </v-col>
           <v-col>
@@ -65,12 +78,14 @@
 
 <script>
 import dateTimeRange from '@/components/common/dateTimeRange'
+import driverAutocomplete from '@/components/common/driverAutocomplete'
 import carAutocomplete from '@/components/common/carAutocomplete'
 import { mapGetters } from 'vuex'
 export default {
   components: {
     dateTimeRange,
-    carAutocomplete
+    carAutocomplete,
+    driverAutocomplete
   },
   computed: {
     ...mapGetters(['carWorkScheduleTypes']),
@@ -80,7 +95,9 @@ export default {
     isValidForm() {
       return (
         !!this.editedItem.dateRange &&
-        !!this.editedItem.carId &&
+        (this.editedItem.carId ||
+          this.editedItem.trailerId ||
+          this.editedItem.driverId) &&
         !!this.editedItem.type
       )
     }

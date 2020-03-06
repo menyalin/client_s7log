@@ -10,7 +10,7 @@ import VueTheMask from 'vue-the-mask'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
 
-import { unixDateToStr } from './filters'
+import { unixDateToStr, dateRangeToStr } from './filters'
 
 Vue.config.productionTip = false
 Vue.use(VueTheMask)
@@ -25,6 +25,7 @@ Vue.use(VuetifyConfirm, {
   width: 350,
 })
 Vue.filter('unixDateToStr', unixDateToStr)
+Vue.filter('dateRangeToStr', dateRangeToStr)
 
 new Vue({
   router,

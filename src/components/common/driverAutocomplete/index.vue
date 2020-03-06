@@ -29,12 +29,13 @@ export default {
   },
   computed: {
     itemsForSelect() {
-      return this.$store.getters.drivers.map(driverTransform)
+      if (this.driverList) return this.driverList.map(driverTransform)
+      else return this.$store.getters.drivers.map(driverTransform)
     }
   },
   methods: {
     resetHandler() {
-      this.$emit('change', '')
+      this.$emit('change', null)
     },
     onChangeHandler(val) {
       this.$emit('change', val)
@@ -44,7 +45,8 @@ export default {
   props: {
     label: String,
     propValue: String,
-    disabled: Boolean
+    disabled: Boolean,
+    driverList: Array // Список водителей, если нужны не все записи из VUEX
   }
 }
 </script>

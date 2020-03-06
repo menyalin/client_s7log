@@ -28,9 +28,19 @@
               </v-row>
             </v-container>
           </template>
-          <template v-slot:item.car="{ item }">{{
-            carById(item.carId) ? carById(item.carId).title : 'Не найден'
-          }}</template>
+          <template v-slot:item.car="{ item }">
+            {{ carById(item.carId) ? carById(item.carId).title : '' }}
+          </template>
+          <template v-slot:item.trailer="{ item }">
+            {{ carById(item.trailerId) ? carById(item.trailerId).title : '' }}
+          </template>
+          <template v-slot:item.driver="{ item }">
+            {{
+              driverById(item.driverId)
+                ? driverById(item.driverId).shortName
+                : ''
+            }}
+          </template>
           <template v-slot:item.startDate="{ item }">{{
             dateRender(item.dateRange, 0)
           }}</template>
@@ -81,12 +91,13 @@ export default {
     },
     options: {},
     headers: [
-      { text: 'id', value: 'id', align: 'center' },
-      { text: 'Машина', value: 'car', align: 'center' },
-      { text: 'Тип', value: 'type', align: 'center' },
-      { text: 'Заголовок', value: 'title', align: 'center' },
       { text: 'Начало', value: 'startDate', align: 'center' },
       { text: 'Конец', value: 'endDate', align: 'center' },
+      { text: 'Тип', value: 'type', align: 'center' },
+      { text: 'Заголовок', value: 'title', align: 'center' },
+      { text: 'Машина', value: 'car', align: 'center' },
+      { text: 'Прицеп', value: 'trailer', align: 'center' },
+      { text: 'Водитель', value: 'driver', align: 'center' },
       { text: 'Комментарий', value: 'note', align: 'center' }
     ],
     limit: 50
@@ -96,7 +107,8 @@ export default {
       'carWorkSchedule',
       'carById',
       'timeZoneById',
-      'carWorkScheduleTypeById'
+      'carWorkScheduleTypeById',
+      'driverById'
     ]),
     queryVariables() {
       return {
@@ -151,7 +163,7 @@ export default {
                 offset: this.options.itemsPerPage * (this.options.page - 1) || 0
               }
             })
-            let updatedCarWorkSchedule = data.carWorkSchedulePage.carWorSchedule.find(
+            let updatedCarWorkSchedule = data.carWorkSchedulePage.carWorkSchedule.find(
               item => item.id === updateCarWorkSchedule.id
             )
             updatedCarWorkSchedule = Object.assign({}, updateCarWorkSchedule)

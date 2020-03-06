@@ -16,23 +16,34 @@ export default {
   name: 'emptyCell',
   props: ['cell'],
   methods: {
+    // newOrder() {
+    //   this.$store
+    //     .dispatch('getCarUnitFields', {
+    //       truckId: this.cell.carId,
+    //       date: this.cell.id
+    //     })
+    //     .then(carUnitFields => {
+    //       this.$store.commit('openEditOrderForm', {
+    //         lengthCell: 1,
+    //         carType: this.cell.carType,
+    //         plannedCarType: this.cell.carType,
+    //         dateRange: this.getDateRange(moment(this.cell.id), 1),
+    //         carId: this.cell.carId,
+    //         plannedShippingDate: this.cell.id,
+    //         ...carUnitFields
+    //       })
+    //     })
+    // },
     newOrder() {
-      this.$store
-        .dispatch('getCarUnitFields', {
-          truckId: this.cell.carId,
-          date: this.cell.id
-        })
-        .then(carUnitFields => {
-          this.$store.commit('openEditOrderForm', {
-            lengthCell: 1,
-            carType: this.cell.carType,
-            plannedCarType: this.cell.carType,
-            dateRange: this.getDateRange(moment(this.cell.id), 1),
-            carId: this.cell.carId,
-            plannedShippingDate: this.cell.id,
-            ...carUnitFields
-          })
-        })
+      this.$store.commit('openEditOrderForm', {
+        lengthCell: 1,
+        carType: this.cell.carType,
+        plannedCarType: this.cell.carType,
+        dateRange: this.getDateRange(moment(this.cell.id), 1),
+        carId: this.cell.carId,
+        plannedShippingDate: this.cell.id
+        // ...carUnitFields
+      })
     },
 
     async dropHandler(event, arg) {

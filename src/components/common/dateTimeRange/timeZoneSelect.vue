@@ -3,6 +3,7 @@
     hide-details
     :items="timeZones"
     :value="propTime"
+    :disabled="disabled"
     append-icon="mdi-clock-outline"
     @change="changeHandler"
     item-value="startTime"
@@ -19,7 +20,11 @@ export default {
     event: 'change'
   },
   props: {
-    propTime: String
+    propTime: String,
+    disabled: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     ...mapGetters(['timeZones'])

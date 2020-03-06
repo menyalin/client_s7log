@@ -29,9 +29,14 @@ export default {
   },
   computed: {
     itemsForSelect() {
-      return this.$store.getters
-        .carsForAutocomplete_v2(this.types)
-        .map(carTransform)
+      if (this.carList)
+        return this.carList
+          .filter(item => this.types.indexOf(item.type) !== -1)
+          .map(carTransform)
+      else
+        return this.$store.getters
+          .carsForAutocomplete_v2(this.types)
+          .map(carTransform)
     }
   },
   methods: {
@@ -49,7 +54,8 @@ export default {
       required: true
     },
     propValue: String,
-    disabled: Boolean
+    disabled: Boolean,
+    carList: Array
   }
 }
 </script>

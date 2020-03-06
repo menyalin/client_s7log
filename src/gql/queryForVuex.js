@@ -2,6 +2,18 @@ import gql from 'graphql-tag'
 
 export const queryDatesFilter = gql`
     query queryDatesFilter ($startDate: String $endDate: String) {
+        carUnitForVuex (startDate: $startDate endDate: $endDate) {
+            id
+            dateRange {
+                value
+                inclusive
+            }
+            truckId
+            trailerId
+            driver1Id
+            driver2Id
+            note
+        }
         carWorkScheduleForVuex (startDate: $startDate endDate: $endDate){
             id
             type
@@ -12,6 +24,8 @@ export const queryDatesFilter = gql`
                 inclusive
             }
             carId
+            trailerId
+            driverId
         }
         ordersForVuex(startDate: $startDate, endDate: $endDate) {
             id

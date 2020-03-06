@@ -3,7 +3,9 @@ import gql from 'graphql-tag'
 export const createCarWorkScheduleMutation = gql`
   mutation createCarWorkSchedule(
     $type: CarWorkScheduleType!
-    $carId: String!
+    $carId: String
+    $trailerId: String
+    $driverId: String
     $title: String
     $dateRange: String!
     $note: String
@@ -11,6 +13,8 @@ export const createCarWorkScheduleMutation = gql`
     createCarWorkSchedule(
       type: $type
       carId: $carId
+      trailerId: $trailerId
+      driverId: $driverId
       title: $title
       dateRange: $dateRange
       note: $note
@@ -24,6 +28,8 @@ export const createCarWorkScheduleMutation = gql`
         inclusive
       }
       carId
+      trailerId
+      driverId
     }
   }
 `
@@ -32,7 +38,9 @@ export const updateCarWorkScheduleMutation = gql`
     $id: ID!
     $type: CarWorkScheduleType!
     $title: String
-    $carId: String!
+    $carId: String
+    $trailerId: String
+    $driverId: String
     $dateRange: String!
     $note: String
   ) {
@@ -41,6 +49,8 @@ export const updateCarWorkScheduleMutation = gql`
       type: $type
       title: $title
       carId: $carId
+      trailerId: $trailerId
+      driverId: $driverId
       dateRange: $dateRange
       note: $note
     ) {
@@ -53,6 +63,8 @@ export const updateCarWorkScheduleMutation = gql`
         inclusive
       }
       carId
+      trailerId
+      driverId
     }
   }
 `
@@ -73,6 +85,8 @@ export const updatedCarWorkScheduleSubscription = gql`
         inclusive
       }
       carId
+      trailerId
+      driverId
     }
   }
 `
@@ -143,10 +157,13 @@ export const carUnitQuery = gql`
   query getCarUnit ($date: String!  $truckId: String!) {
     carUnit (date: $date, truckId: $truckId) {
       id
-      startDate
+      dateRange {
+        value
+        inclusive
+      }
       truckId
-      driverId1
-      driverId2
+      driver1Id
+      driver2Id
       trailerId
       isActive
       note
@@ -158,10 +175,13 @@ export const carUnitsPageQuery = gql`
     carUnitsPage(offset: $offset limit: $limit) {
       carUnits {
         id
-        startDate
+        dateRange {
+          value
+          inclusive
+        }
         truckId
-        driverId1
-        driverId2
+        driver1Id
+        driver2Id
         trailerId
         isActive
         note
@@ -176,6 +196,8 @@ export const carWorkSchedulePagesQuery = gql`
       carWorkSchedule{ 
         id
         carId
+        trailerId
+        driverId
         type
         dateRange {
           value
@@ -188,14 +210,17 @@ export const carWorkSchedulePagesQuery = gql`
   }
 `
 
-export const createNewCarUnitMutation = gql`
-  mutation createCarUnit ($startDate: String! $truckId: String! $trailerId: String $driverId1:String! $driverId2:String $note:String) {
-    createCarUnit (startDate: $startDate truckId: $truckId trailerId: $trailerId driverId1: $driverId1 driverId2: $driverId2 note: $note ) {
+export const createCarUnitMutation = gql`
+  mutation createCarUnit ($dateRange: String! $truckId: String! $trailerId: String $driver1Id:String! $driver2Id:String $note:String) {
+    createCarUnit (dateRange: $dateRange truckId: $truckId trailerId: $trailerId driver1Id: $driver1Id driver2Id: $driver2Id note: $note ) {
       id
-      startDate
+      dateRange {
+        value
+        inclusive
+      }
       truckId
-      driverId1
-      driverId2
+      driver1Id
+      driver2Id
       trailerId
       isActive
       note
@@ -204,13 +229,16 @@ export const createNewCarUnitMutation = gql`
 `
 
 export const updateCarUnitMutation = gql`
-  mutation updateCarUnit ($id: ID! $startDate: String! $truckId: String! $trailerId: String $driverId1:String! $driverId2:String $note:String) {
-    updateCarUnit (id: $id startDate: $startDate truckId: $truckId trailerId: $trailerId driverId1: $driverId1 driverId2: $driverId2 note: $note ) {
+  mutation updateCarUnit ($id: ID! $dateRange: String! $truckId: String! $trailerId: String $driver1Id:String! $driver2Id:String $note:String) {
+    updateCarUnit (id: $id dateRange: $dateRange truckId: $truckId trailerId: $trailerId driver1Id: $driver1Id driver2Id: $driver2Id note: $note ) {
       id
-      startDate
+      dateRange {
+        value
+        inclusive
+      }
       truckId
-      driverId1
-      driverId2
+      driver1Id
+      driver2Id
       trailerId
       isActive
       note
@@ -221,4 +249,26 @@ export const deleteCarUnitMutation = gql`
   mutation deleteCarUnit($id: ID!) {
     deleteCarUnit (id: $id) 
   }
+`
+
+export const freeCarsQuery = gql`
+  query freeCars ($dateRange: String! $carUnitId: String){
+    freeCars (dateRange: $dateRange carUnitId: $carUnitId){
+      id
+      title
+      listItem
+      regNumber
+      reg
+      pts
+      isTempSlot
+      isOwned
+      owner
+      type
+      maxPltCount
+      note
+      isActive
+      createdAt
+      updatedAt
+    }
+}
 `

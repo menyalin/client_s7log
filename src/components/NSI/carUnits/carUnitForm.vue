@@ -4,23 +4,34 @@
       {{ isNewItem ? 'Новая сцепка' : 'Редактировать' }}
     </v-card-title>
     <v-card-text class="control--wrapper">
-      <date-time-control v-model="editedItem.startDate" label="Дата" />
+      <date-time-range v-model="editedItem.dateRange" isOpenRange />
+
       <car-autocomplete
         v-model="editedItem.truckId"
         :types="['20tn', '10tn']"
         label="Грузовик"
+        :carList="freeCars"
+        :disabled="!editedItem.dateRange"
+        @change="changeTrackIdHandler($event)"
       />
       <car-autocomplete
         :types="['trailer']"
         label="Прицеп"
         v-model="editedItem.trailerId"
+        :carList="freeCars"
         :disabled="trailerDisabled"
       />
-      <driver-autocomplete v-model="editedItem.driverId1" label="Водитель 1" />
+      <driver-autocomplete
+        v-model="editedItem.driver1Id"
+        label="Водитель 1"
+        :driverList="freeDrivers"
+        :disabled="!editedItem.dateRange"
+      />
       <driver-autocomplete
         label="Водитель 2"
-        v-model="editedItem.driverId2"
-        :disabled="!editedItem.driverId1"
+        v-model="editedItem.driver2Id"
+        :driverList="freeDrivers"
+        :disabled="!editedItem.driver1Id"
       />
       <v-text-field label="Примечание" hide-details v-model="editedItem.note" />
     </v-card-text>
@@ -46,24 +57,40 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import dateTimeControl from '@/components/common/dateTimeControl'
+import { freeDriversQuery } from '@/gql/drivers'
+import { freeCarsQuery } from '@/gql/cars'
+
+import dateTimeRange from '@/components/common/dateTimeRange'
 import carAutocomplete from '@/components/common/carAutocomplete'
 import driverAutocomplete from '@/components/common/driverAutocomplete'
+import moment from 'moment'
 
 export default {
   components: {
-    dateTimeControl,
     carAutocomplete,
-    driverAutocomplete
+    driverAutocomplete,
+    dateTimeRange
   },
   computed: {
-    ...mapGetters(['']),
+    ...mapGetters(['carById']),
     isNewItem() {
       return !this.editedItem.id
     },
     isValidForm() {
-      let { startDate, truckId, driverId1 } = this.editedItem
-      return !!startDate && !!truckId && !!driverId1
+      let {
+        dateRange,
+        truckId,
+        driver1Id,
+        driver2Id,
+        trailerId
+      } = this.editedItem
+      return (
+        !!dateRange &&
+        !!truckId &&
+        !!driver1Id &&
+        driver1Id !== driver2Id &&
+        (trailerId || this.trailerDisabled)
+      )
     },
     trailerDisabled() {
       return (
@@ -72,13 +99,31 @@ export default {
       )
     }
   },
-  data: () => ({}),
+  data: () => ({
+    freeDrivers: [],
+    freeCars: []
+  }),
   model: {
     prop: 'editedItem',
     event: 'change'
   },
   props: ['editedItem'],
   methods: {
+    changeTrackIdHandler(val) {
+      if (this.carById(val) && this.carById(val).type === '10tn') {
+        this.editedItem.trailerId = ''
+      }
+    },
+    dateRangeForQuery(range) {
+      const dateFormat = 'YYYY-MM-DD HH:mm'
+      if (typeof range === 'string') return range
+      else if (range.length && range[1].value)
+        return `[${moment(+range[0].value).format(dateFormat)},${moment(
+          +range[1].value
+        ).format(dateFormat)}]`
+      else if (range.length && !range[1].value)
+        return `[${moment(+range[0].value).format(dateFormat)},]`
+    },
     save() {
       this.$emit(this.isNewItem ? 'createCarUnit' : 'updateCarUnit')
     },
@@ -90,6 +135,32 @@ export default {
         title: 'Удаление записи'
       })
       if (res) this.$emit('deleteCarUnit')
+    }
+  },
+  apollo: {
+    freeDrivers: {
+      query: freeDriversQuery,
+      variables() {
+        return {
+          dateRange: this.dateRangeForQuery(this.editedItem.dateRange),
+          carUnitId: this.editedItem.id
+        }
+      },
+      skip() {
+        return !this.editedItem.dateRange
+      }
+    },
+    freeCars: {
+      query: freeCarsQuery,
+      variables() {
+        return {
+          dateRange: this.dateRangeForQuery(this.editedItem.dateRange),
+          carUnitId: this.editedItem.id
+        }
+      },
+      skip() {
+        return !this.editedItem.dateRange
+      }
     }
   }
 }

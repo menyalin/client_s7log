@@ -41,3 +41,18 @@ export const driverDeletedSubscription = gql`
     }
   }
 `
+
+export const freeDriversQuery = gql`
+  query freeDrivers ($dateRange: String! $carUnitId: String){
+    freeDrivers (dateRange: $dateRange carUnitId: $carUnitId){
+      id
+      shortName
+      phone1
+      phone2
+      passport
+      driversLicense
+      note
+      isActive
+    }
+}
+`
