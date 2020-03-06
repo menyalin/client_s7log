@@ -19,15 +19,15 @@ export default {
 
     staff: [],
     statuses: [
-      { id: '10', title: 'Надо получить' },
-      { id: '20', title: 'ОЧЕНЬ надо получить' },
-      { id: '30', title: 'Получен' },
-      { id: '40', title: 'В пути или на погрузке' },
-      { id: '50', title: 'В пути или на выгрузке' },
-      { id: '60', title: 'Выполнен' },
-      { id: '97', title: 'Мы сорвали' },
-      { id: '98', title: 'Мы отказались' },
-      { id: '99', title: 'Клиент снял заказ' }
+      { id: '10', title: 'Надо получить', forConfirmed: false },
+      { id: '20', title: 'ОЧЕНЬ надо получить', forConfirmed: false },
+      { id: '30', title: 'Получен', forConfirmed: false },
+      { id: '40', title: 'В пути или на погрузке', forConfirmed: true },
+      { id: '50', title: 'В пути или на выгрузке', forConfirmed: true },
+      { id: '60', title: 'Выполнен', forConfirmed: true },
+      { id: '97', title: 'Мы сорвали', forConfirmed: false },
+      { id: '98', title: 'Мы отказались', forConfirmed: false },
+      { id: '99', title: 'Клиент снял заказ', forConfirmed: false }
     ],
     schedule: [],
     timeZones: [

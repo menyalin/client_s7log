@@ -3,13 +3,14 @@
     <v-autocomplete
       @change="onChangeHandler"
       :value="propValue"
-      clearable
+      :clearable="!readonly"
       hide-details
       :disabled="disabled"
       @click:clear="resetHandler"
       :items="itemsForSelect"
       color="primary"
       :label="label"
+      :readonly="readonly"
     />
   </div>
 </template>
@@ -55,7 +56,11 @@ export default {
     },
     propValue: String,
     disabled: Boolean,
-    carList: Array
+    carList: Array,
+    readonly: {
+      type: Boolean,
+      default: false
+    }
   }
 }
 </script>

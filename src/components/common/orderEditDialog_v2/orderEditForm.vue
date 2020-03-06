@@ -36,6 +36,7 @@
                         :key="status.id"
                         :label="status.title"
                         :value="status.id"
+                        :disabled="!editedOrder.driver1Id && status.forConfirmed"
                       />
                     </v-radio-group>
                     <div class="checkbox-wrapper">
@@ -43,6 +44,7 @@
                         label="Водитель оповещен"
                         hide-details
                         color="primary"
+                        :disabled="!editedOrder.driver1Id"
                         v-model="editedOrder.isDriverNotified"
                       />
                       <v-checkbox
@@ -50,6 +52,7 @@
                         hide-details
                         color="primary"
                         v-model="editedOrder.isClientNotified"
+                        :disabled="!editedOrder.driver1Id"
                       />
                       <v-checkbox
                         label="На контроль"
@@ -188,6 +191,7 @@
                         :types="[editedOrder.carType]"
                         label="Грузовик"
                         @change="changeCarHandler($event)"
+                        :readonly="editedOrder.isDriverNotified || editedOrder.isClientNotified"
                       />
                     </div>
                     <div>
@@ -196,19 +200,22 @@
                         label="Прицеп"
                         v-model="editedOrder.trailerId"
                         :disabled="trailerDisabled"
+                        readonly
                       />
                     </div>
                     <div>
                       <driver-autocomplete
-                        v-model="editedOrder.driverId1"
+                        v-model="editedOrder.driver1Id"
                         label="Водитель 1"
+                        readonly
                       />
                     </div>
                     <div>
                       <driver-autocomplete
                         label="Водитель 2"
-                        v-model="editedOrder.driverId2"
-                        :disabled="!editedOrder.driverId1"
+                        v-model="editedOrder.driver2Id"
+                        :disabled="!editedOrder.driver1Id"
+                        readonly
                       />
                     </div>
                   </v-card-text>
@@ -364,10 +371,10 @@ export default {
             truckId: val,
             date: startDate
           })
-          .then(({ trailerId, driverId1, driverId2 }) => {
+          .then(({ trailerId, driver1Id, driver2Id }) => {
             this.editedOrder.trailerId = trailerId
-            this.editedOrder.driverId1 = driverId1
-            this.editedOrder.driverId2 = driverId2
+            this.editedOrder.driver1Id = driver1Id
+            this.editedOrder.driver2Id = driver2Id
           })
           .catch(e => {
             this.$store.dispatch('setError', e.message)

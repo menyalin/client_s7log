@@ -51,8 +51,8 @@ export const queryDatesFilter = gql`
             isClientNotified
             templateId
             attention
-            driverId1
-            driverId2
+            driver1Id
+            driver2Id
             trailerId
             plannedCarType
             weight

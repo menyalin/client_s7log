@@ -15,6 +15,9 @@ import moment from 'moment'
 export default {
   name: 'emptyCell',
   props: ['cell'],
+  computed: {
+    ...mapGetters(['carUnitFieldsForCell'])
+  },
   methods: {
     // newOrder() {
     //   this.$store
@@ -35,14 +38,18 @@ export default {
     //     })
     // },
     newOrder() {
+      const carUnitFields = this.carUnitFieldsForCell(
+        this.cell.id,
+        this.cell.carId
+      )
       this.$store.commit('openEditOrderForm', {
         lengthCell: 1,
         carType: this.cell.carType,
         plannedCarType: this.cell.carType,
         dateRange: this.getDateRange(moment(this.cell.id), 1),
         carId: this.cell.carId,
-        plannedShippingDate: this.cell.id
-        // ...carUnitFields
+        plannedShippingDate: this.cell.id,
+        ...carUnitFields
       })
     },
 

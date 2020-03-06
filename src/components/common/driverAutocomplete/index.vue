@@ -3,9 +3,10 @@
     <v-autocomplete
       @change="onChangeHandler"
       :value="propValue"
-      clearable
+      :clearable="!readonly"
       :disabled="disabled"
       hide-details
+      :readonly="readonly"
       @click:clear="resetHandler"
       :items="itemsForSelect"
       color="primary"
@@ -46,7 +47,11 @@ export default {
     label: String,
     propValue: String,
     disabled: Boolean,
-    driverList: Array // Список водителей, если нужны не все записи из VUEX
+    driverList: Array, // Список водителей, если нужны не все записи из VUEX
+    readonly: {
+      type: Boolean,
+      default: false
+    }
   }
 }
 </script>

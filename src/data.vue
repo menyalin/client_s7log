@@ -184,10 +184,16 @@ export default {
       error(error) {
         store.dispatch('setError', error.message)
       },
-      update: ({ carWorkScheduleForVuex, ordersForVuex, scheduleForVuex }) => {
+      update: ({
+        carWorkScheduleForVuex,
+        ordersForVuex,
+        scheduleForVuex,
+        carUnitForVuex
+      }) => {
         store.commit('setCarWorkSchedule', carWorkScheduleForVuex)
         store.commit('setOrders', ordersForVuex)
         store.commit('setSchedule', scheduleForVuex)
+        store.commit('setCarUnits', carUnitForVuex)
       },
       throttle: 2000,
       skip() {

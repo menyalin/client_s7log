@@ -35,8 +35,8 @@ export const updateOrderMutation = gql`
     $lengthCell: Int
     $templateId: String
     $attention: Boolean
-    $driverId1: String
-    $driverId2: String
+    $driver1Id: String
+    $driver2Id: String
     $trailerId: String
     $plannedCarType: String
     $weight: String
@@ -63,8 +63,8 @@ export const updateOrderMutation = gql`
       isClientNotified: $isClientNotified
       templateId: $templateId
       attention: $attention
-      driverId1: $driverId1 
-      driverId2: $driverId2
+      driver1Id: $driver1Id 
+      driver2Id: $driver2Id
       trailerId: $trailerId
       plannedCarType: $plannedCarType
       weight: $weight
@@ -116,8 +116,8 @@ export const createOrderMutation = gql`
     $isClientNotified: Boolean
     $templateId: String
     $attention: Boolean
-      $driverId1: String
-    $driverId2: String
+    $driver1Id: String
+    $driver2Id: String
     $trailerId: String
     $plannedCarType: String
     $weight: String
@@ -143,8 +143,8 @@ export const createOrderMutation = gql`
       isClientNotified: $isClientNotified
       templateId: $templateId
       attention: $attention
-      driverId1: $driverId1 
-      driverId2: $driverId2
+      driver1Id: $driver1Id 
+      driver2Id: $driver2Id
       trailerId: $trailerId
       plannedCarType: $plannedCarType
       weight: $weight
@@ -186,42 +186,7 @@ export const createOrderTemplateMutation = gql`
     }
   }`
 
-export const ordersForVuexQuery = gql`
-  query ordersForVuex($startDate: String, $endDate: String) {
-    ordersForVuex(startDate: $startDate, endDate: $endDate) {
-      id
-      carType
-      number
-      status
-      dateRange {
-        value
-        inclusive
-      }
-      shipperId
-      consigneeId
-      carId
-      note
-      plannedShippingDate
-      plannedDeliveryDate
-      loadingStart
-      loadingEnd
-      unLoadingStart
-      unLoadingEnd
-      lengthCell
-      isDriverNotified
-      isClientNotified
-      templateId
-      attention
-      driverId1
-      driverId2
-      trailerId
-      plannedCarType
-      weight
-      pltCount
-      price
-    }
-  }
-`
+
 export const orderAddedSubscription = gql`
   subscription orderAdded {
     orderAdded {
@@ -248,8 +213,8 @@ export const orderAddedSubscription = gql`
       lengthCell
       templateId
       attention
-      driverId1
-      driverId2
+      driver1Id
+      driver2Id
       trailerId
       plannedCarType
       weight
@@ -284,8 +249,8 @@ export const orderUpdatedSubscription = gql`
       lengthCell
       templateId
       attention
-      driverId1
-      driverId2
+      driver1Id
+      driver2Id
       trailerId
       plannedCarType
       weight

@@ -3,6 +3,23 @@ import moment from 'moment'
 import store from './index'
 import { carUnitQuery } from '../gql/cars'
 
+const dateInRange = (range, dateStr) => {
+  try {
+    const date = moment(dateStr)
+    if (range[1].value) {
+      // закрытый диапозон
+      const startRange = moment(+range[0].value)
+      const endRange = moment(+range[1].value)
+      return startRange.isSameOrBefore(date) && date.isSameOrBefore(endRange)
+    } else {
+      // открытый диапазон
+      const startRange = moment(+range[0].value)
+      return startRange.isSameOrBefore(date)
+    }
+  } catch (e) {
+    store.dispatch('setError', e)
+  }
+}
 
 export default {
   state: {
@@ -20,8 +37,8 @@ export default {
     ],
   },
   mutations: {
-    setCarUnits: ({ carUnits }, payload) => {
-      carUnits = payload
+    setCarUnits: (state, payload) => {
+      state.carUnits = payload
     },
     setCarWorkSchedule: (state, payload) => {
       state.carWorkSchedule = payload
@@ -52,8 +69,8 @@ export default {
           fetchPolicy: 'no-cache'
         }).then(({ data: { carUnit } }) => {
           let carUnitFields = {
-            driverId1: carUnit.driverId1,
-            driverId2: carUnit.driverId2,
+            driver1Id: carUnit.driver1Id,
+            driver2Id: carUnit.driver2Id,
             trailerId: carUnit.trailerId
           }
           resolve(carUnitFields)
@@ -84,6 +101,19 @@ export default {
 
     carWorkSchedule: ({ carWorkSchedule }) => carWorkSchedule,
     carWorkScheduleTypes: ({ carWorkScheduleTypes }) => carWorkScheduleTypes,
-    carWorkScheduleTypeById: ({ carWorkScheduleTypes }) => (id) => carWorkScheduleTypes.find(item => item.id === id)
+    carWorkScheduleTypeById: ({ carWorkScheduleTypes }) => (id) => carWorkScheduleTypes.find(item => item.id === id),
+    carUnitFieldsForCell: ({ carUnits }) => (dateStr, truckId) => {
+      const carUnit = carUnits.find(item => item.truckId === truckId && dateInRange(item.dateRange, dateStr))
+      if (carUnit) {
+        return {
+          trailerId: carUnit.trailerId,
+          driver1Id: carUnit.driver1Id,
+          driver2Id: carUnit.driver2Id
+        }
+      } else {
+        return {}
+      }
+
+    }
   }
 }
