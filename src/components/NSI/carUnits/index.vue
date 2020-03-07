@@ -93,7 +93,17 @@ export default {
     filters
   },
   computed: {
-    ...mapGetters(['carById', 'driverById'])
+    ...mapGetters(['carById', 'driverById']),
+    variablesForQuery() {
+      return {
+        limit: this.options.itemsPerPage || this.limit,
+        offset: this.options.itemsPerPage * (this.options.page - 1) || 0,
+        driver: this.filterObject.driver || null,
+        truckId: this.filterObject.truckId || null,
+        trailerId: this.filterObject.trailerId || null,
+        date: this.filterObject.date || null
+      }
+    }
   },
   data: () => ({
     dialog: false,
@@ -138,10 +148,7 @@ export default {
           update: (store, { data: { createCarUnit } }) => {
             const data = store.readQuery({
               query: carUnitsPageQuery,
-              variables: {
-                limit: this.options.itemsPerPage,
-                offset: this.options.itemsPerPage * (this.options.page - 1)
-              }
+              variables: this.variablesForQuery
             })
             data.carUnitsPage.carUnits.unshift(createCarUnit)
             data.carUnitsPage.count += 1
@@ -161,10 +168,7 @@ export default {
           update: (store, { data: { updateCarUnit } }) => {
             const data = store.readQuery({
               query: carUnitsPageQuery,
-              variables: {
-                limit: this.options.itemsPerPage,
-                offset: this.options.itemsPerPage * (this.options.page - 1)
-              }
+              variables: this.variablesForQuery
             })
             let updatedCarUnit = data.carUnitsPage.carUnits.find(
               item => item.id === updateCarUnit.id
@@ -186,10 +190,7 @@ export default {
           update: (store, { data: { deleteCarUnit } }) => {
             const data = store.readQuery({
               query: carUnitsPageQuery,
-              variables: {
-                limit: this.options.itemsPerPage,
-                offset: this.options.itemsPerPage * (this.options.page - 1)
-              }
+              variables: this.variablesForQuery
             })
             data.carUnitsPage.carUnits.splice(
               data.carUnitsPage.carUnits.findIndex(
@@ -210,14 +211,7 @@ export default {
     carUnitsPage: {
       query: carUnitsPageQuery,
       variables() {
-        return {
-          limit: this.options.itemsPerPage || this.limit,
-          offset: this.options.itemsPerPage * (this.options.page - 1) || 0,
-          driver: this.filterObject.driver || null,
-          truckId: this.filterObject.truckId || null,
-          trailerId: this.filterObject.trailerId || null,
-          date: this.filterObject.date || null
-        }
+        return this.variablesForQuery
       }
     }
   }
