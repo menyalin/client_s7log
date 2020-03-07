@@ -40,6 +40,11 @@ export default {
     setCarUnits: (state, payload) => {
       state.carUnits = payload
     },
+    carUnitUpdated: (state, carUnit) => {
+      const updatedItem = state.carUnits.find(item => item.id === carUnit.id)
+      if (updatedItem) Object.assign(updatedItem, carUnit)
+      else state.carUnits.push(carUnit)
+    },
     setCarWorkSchedule: (state, payload) => {
       state.carWorkSchedule = payload
     },

@@ -23,7 +23,9 @@ import {
   carsForVuexQuery,
   updatedCarWorkScheduleSubscription,
   deletedCarWorkScheduleSubscription,
-  carUpdatedSubscription
+  carUpdatedSubscription,
+  carUnitUpdatedSubscription,
+  carUnitDeletedSubscription
 } from './gql/cars'
 import { mapGetters } from 'vuex'
 
@@ -174,6 +176,12 @@ export default {
         query: carUpdatedSubscription,
         result({ data: { carUpdated } }) {
           store.commit('carUpdated', carUpdated)
+        }
+      },
+      carUnitUpdated: {
+        query: carUnitUpdatedSubscription,
+        result({ data: { carUnitUpdated } }) {
+          store.commit('carUnitUpdated', carUnitUpdated)
         }
       }
     },

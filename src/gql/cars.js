@@ -170,6 +170,28 @@ export const carUnitQuery = gql`
     }
 }
 `
+export const carUnitUpdatedSubscription = gql`
+  subscription carUnitUpdated{
+    carUnitUpdated {
+      id
+      dateRange {
+        value
+        inclusive
+      }
+      truckId
+      driver1Id
+      driver2Id
+      trailerId
+      isActive
+      note
+    }
+  }
+`
+export const carUnitDeltedSubscription = gql`
+  subscription carUnitDeleted {
+    carUnitDeleted
+  }
+`
 export const carUnitsPageQuery = gql`
   query carUnitsPage ($offset: Int $limit: Int) {
     carUnitsPage(offset: $offset limit: $limit) {
