@@ -3,7 +3,7 @@
     <v-autocomplete
       @change="onChangeHandler"
       :value="propValue"
-      :clearable="!readonly"
+      :clearable="!readonly && clearable"
       hide-details
       :disabled="disabled"
       @click:clear="resetHandler"
@@ -60,6 +60,10 @@ export default {
     readonly: {
       type: Boolean,
       default: false
+    },
+    clearable: {
+      type: Boolean,
+      default: true
     }
   }
 }

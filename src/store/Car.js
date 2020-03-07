@@ -45,6 +45,10 @@ export default {
       if (updatedItem) Object.assign(updatedItem, carUnit)
       else state.carUnits.push(carUnit)
     },
+    carUnitDeleted: ({ carUnits }, id) => {
+      let idx = carUnits.findIndex(item => item.id === id)
+      if (idx !== -1) carUnits.splice(idx, 1)
+    },
     setCarWorkSchedule: (state, payload) => {
       state.carWorkSchedule = payload
     },
@@ -54,7 +58,8 @@ export default {
       else state.carWorkSchedule.push(payload)
     },
     deletedCarWorkSchedule: ({ carWorkSchedule }, id) => {
-      carWorkSchedule.splice(carWorkSchedule.findIndex(item => item.id === id), 1)
+      const idx = carWorkSchedule.findIndex(item => item.id === id)
+      if (idx !== -1) carWorkSchedule.splice(idx, 1)
     },
     setCars: (state, payload) => {
       state.cars = payload

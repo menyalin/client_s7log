@@ -36,7 +36,9 @@
                         :key="status.id"
                         :label="status.title"
                         :value="status.id"
-                        :disabled="!editedOrder.driver1Id && status.forConfirmed"
+                        :disabled="
+                          !editedOrder.driver1Id && status.forConfirmed
+                        "
                       />
                     </v-radio-group>
                     <div class="checkbox-wrapper">
@@ -191,7 +193,11 @@
                         :types="[editedOrder.carType]"
                         label="Грузовик"
                         @change="changeCarHandler($event)"
-                        :readonly="editedOrder.isDriverNotified || editedOrder.isClientNotified"
+                        :readonly="
+                          editedOrder.isDriverNotified ||
+                            editedOrder.isClientNotified
+                        "
+                        :clearable="false"
                       />
                     </div>
                     <div>

@@ -10,7 +10,14 @@
       />
     </div>
     <div class="time">
+      <time-select
+        v-if="fixedTimeZones"
+        v-model="res.time"
+        :disabled="!res.date"
+        @change="changeHandler($event, 'time')"
+      />
       <time-input
+        v-else
         hide-details
         :dense="dense"
         v-model="res.time"
@@ -24,6 +31,7 @@
 <script>
 import datePicker from '@/components/common/myDatePicker'
 import timeInput from '@/components/common/timeInput'
+import timeSelect from './timeZoneSelect'
 import moment from 'moment'
 
 export default {
@@ -34,7 +42,8 @@ export default {
   },
   components: {
     datePicker,
-    timeInput
+    timeInput,
+    timeSelect
   },
   props: {
     inputDate: [String, null],
@@ -43,6 +52,10 @@ export default {
     },
     dense: {
       type: Boolean
+    },
+    fixedTimeZones: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
@@ -106,14 +119,14 @@ export default {
 
 <style scoped>
 .wrapper {
-  padding-top: 0.7em;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
 }
 .time {
   padding-left: 1em;
-  max-width: 5rem;
+  max-width: 5.7rem;
+  min-width: 3rem;
 }
 .date {
   width: 100%;

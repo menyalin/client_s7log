@@ -183,6 +183,12 @@ export default {
         result({ data: { carUnitUpdated } }) {
           store.commit('carUnitUpdated', carUnitUpdated)
         }
+      },
+      carUnitDeleted: {
+        query: carUnitDeletedSubscription,
+        result({data: {carUnitDeleted}}) {
+          store.commit('carUnitDeleted', carUnitDeleted)
+        }
       }
     },
     queryDatesFilter: {

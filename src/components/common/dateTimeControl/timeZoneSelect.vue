@@ -1,6 +1,7 @@
 <template>
   <v-select
-    :hide-details="hide-details"
+    hide-details
+    :disabled="disabled"
     :items="timeZones"
     :value="propTime"
     @change="changeHandler"
@@ -19,7 +20,7 @@ export default {
   },
   props: {
     propTime: String,
-    'hide-details': Boolean
+    disabled: Boolean
   },
   computed: {
     ...mapGetters(['timeZones'])

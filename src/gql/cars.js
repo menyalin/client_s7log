@@ -187,14 +187,14 @@ export const carUnitUpdatedSubscription = gql`
     }
   }
 `
-export const carUnitDeltedSubscription = gql`
+export const carUnitDeletedSubscription = gql`
   subscription carUnitDeleted {
     carUnitDeleted
   }
 `
 export const carUnitsPageQuery = gql`
-  query carUnitsPage ($offset: Int $limit: Int) {
-    carUnitsPage(offset: $offset limit: $limit) {
+  query carUnitsPage ($offset: Int $limit: Int, $driver: String $truckId: String $trailerId: String $date: String) {
+    carUnitsPage(offset: $offset limit: $limit driver:$driver truckId: $truckId trailerId: $trailerId date: $date) {
       carUnits {
         id
         dateRange {

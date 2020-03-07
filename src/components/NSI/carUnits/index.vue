@@ -39,6 +39,9 @@
                     <v-icon>mdi-plus</v-icon>Добавить
                   </v-btn>
                 </v-col>
+                <v-col>
+                  <filters v-model="filterObject" />
+                </v-col>
               </v-row>
             </v-container>
           </template>
@@ -74,6 +77,7 @@
 <script>
 import moment from 'moment'
 import carUnitForm from './carUnitForm'
+import filters from './filters'
 import {
   carUnitsPageQuery,
   createCarUnitMutation,
@@ -85,13 +89,15 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'CarUnitList',
   components: {
-    carUnitForm
+    carUnitForm,
+    filters
   },
   computed: {
     ...mapGetters(['carById', 'driverById'])
   },
   data: () => ({
     dialog: false,
+    filterObject: {},
     editedItem: {},
     limit: 50,
     carUnitsPage: {
@@ -206,7 +212,11 @@ export default {
       variables() {
         return {
           limit: this.options.itemsPerPage || this.limit,
-          offset: this.options.itemsPerPage * (this.options.page - 1) || 0
+          offset: this.options.itemsPerPage * (this.options.page - 1) || 0,
+          driver: this.filterObject.driver || null,
+          truckId: this.filterObject.truckId || null,
+          trailerId: this.filterObject.trailerId || null,
+          date: this.filterObject.date || null
         }
       }
     }
