@@ -4,8 +4,8 @@
       {{ isNewItem ? 'Новая сцепка' : 'Редактировать' }}
     </v-card-title>
     <v-card-text class="control--wrapper">
+      {{ editedItem }}
       <date-time-range v-model="editedItem.dateRange" isOpenRange />
-
       <car-autocomplete
         v-model="editedItem.truckId"
         :types="['20tn', '10tn']"
@@ -25,7 +25,6 @@
         v-model="editedItem.driver1Id"
         label="Водитель 1"
         :driverList="freeDrivers"
-        :disabled="!editedItem.dateRange"
       />
       <driver-autocomplete
         label="Водитель 2"
@@ -143,9 +142,12 @@ export default {
       variables() {
         return {
           dateRange: this.dateRangeForQuery(this.editedItem.dateRange),
-          carUnitId: this.editedItem.id
+          carUnitId: this.editedItem.id || null,
+          driver1Id: this.editedItem.driver1Id || null,
+          driver2Id: this.editedItem.driver2Id || null
         }
       },
+      fetchPolicy: 'no-cache',
       skip() {
         return !this.editedItem.dateRange
       }
@@ -155,9 +157,12 @@ export default {
       variables() {
         return {
           dateRange: this.dateRangeForQuery(this.editedItem.dateRange),
-          carUnitId: this.editedItem.id
+          carUnitId: this.editedItem.id || null,
+          trailerId: this.editedItem.trailerId || null,
+          truckId: this.editedItem.truckId || null
         }
       },
+      fetchPolicy: 'no-cache',
       skip() {
         return !this.editedItem.dateRange
       }

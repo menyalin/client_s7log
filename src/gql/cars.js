@@ -274,8 +274,8 @@ export const deleteCarUnitMutation = gql`
 `
 
 export const freeCarsQuery = gql`
-  query freeCars ($dateRange: String! $carUnitId: String){
-    freeCars (dateRange: $dateRange carUnitId: $carUnitId){
+  query freeCars ($dateRange: String! $carUnitId: String $trailerId: String $truckId: String){
+    freeCars (dateRange: $dateRange carUnitId: $carUnitId trailerId: $trailerId truckId:$truckId){
       id
       title
       listItem

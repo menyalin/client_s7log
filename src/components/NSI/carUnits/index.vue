@@ -126,21 +126,27 @@ export default {
   }),
   methods: {
     cancelHandler() {
-      this.dialog = false
+      this.editedItem = Object.assign({}, {})
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, {})
+        this.dialog = false
       })
     },
     newItemHandler() {
-      this.dialog = true
+      this.editedItem = Object.assign(
+        {},
+        {
+          truckId: '',
+          driver1Id: ''
+        }
+      )
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, {})
+        this.dialog = true
       })
     },
     clickRowHandler(item) {
-      this.dialog = true
+      this.editedItem = Object.assign({}, item)
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, item)
+        this.dialog = true
       })
     },
     createNewCarUnit() {

@@ -43,8 +43,8 @@ export const driverDeletedSubscription = gql`
 `
 
 export const freeDriversQuery = gql`
-  query freeDrivers ($dateRange: String! $carUnitId: String){
-    freeDrivers (dateRange: $dateRange carUnitId: $carUnitId){
+  query freeDrivers ($dateRange: String! $carUnitId: String $driver1Id: String $driver2Id: String){
+    freeDrivers (dateRange: $dateRange carUnitId: $carUnitId driver1Id: $driver1Id driver2Id: $driver2Id){
       id
       shortName
       phone1

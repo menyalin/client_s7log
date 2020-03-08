@@ -6,6 +6,7 @@
       :clearable="!readonly"
       :disabled="disabled"
       hide-details
+      hide-no-data
       :readonly="readonly"
       @click:clear="resetHandler"
       :items="itemsForSelect"
