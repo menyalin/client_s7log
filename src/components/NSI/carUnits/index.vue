@@ -126,15 +126,15 @@ export default {
   }),
   methods: {
     cancelHandler() {
+      this.dialog = false
       this.$nextTick(() => {
-        this.dialog = false
         this.editedItem = Object.assign({}, {})
       })
     },
     newItemHandler() {
-      this.editedItem = Object.assign({}, {})
+      this.dialog = true
       this.$nextTick(() => {
-        this.dialog = true
+        this.editedItem = Object.assign({}, {})
       })
     },
     clickRowHandler(item) {
