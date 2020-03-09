@@ -27,7 +27,9 @@ export default {
   },
   methods: {
     cancelFormHandler() {
-      this.$store.commit('cancelOrderEdit')
+      this.$nextTick(() => {
+        this.$store.commit('cancelOrderEdit')
+      })
     },
     createOrderHandler() {
       this.$store.dispatch('createNewOrder')

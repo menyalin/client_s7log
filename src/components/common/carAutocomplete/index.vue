@@ -11,6 +11,7 @@
       color="primary"
       :label="label"
       :readonly="readonly"
+      :search-input.sync="search"
     />
   </div>
 </template>
@@ -38,6 +39,16 @@ export default {
         return this.$store.getters
           .carsForAutocomplete_v2(this.types)
           .map(carTransform)
+    }
+  },
+  data: () => ({
+    search: ''
+  }),
+  watch: {
+    propValue(val) {
+      if (!val) {
+        this.search = ''
+      }
     }
   },
   methods: {

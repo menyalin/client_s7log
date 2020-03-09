@@ -7,6 +7,8 @@
           :items="carsForJournal"
           :headers="headers"
           dense
+          :sort-desc="[false, true]"
+          multi-sort
           :search="search"
           align="center"
           @click:row="clickRowHandler"
@@ -41,6 +43,12 @@
               <v-icon color="grey" v-else>mdi-minus</v-icon>
             </div>
           </template>
+          <template v-slot:item.isActive="{ item }">
+            <div>
+              <v-icon color="green" v-if="!!item.isActive">mdi-check</v-icon>
+              <v-icon color="grey" v-else>mdi-minus</v-icon>
+            </div>
+          </template>
         </v-data-table>
         <v-dialog v-model="dialog" max-width="500px" persistent>
           <car-edit-form
@@ -70,7 +78,8 @@ export default {
     search: '',
     editedItem: {},
     headers: [
-      { text: ' Тип', value: 'type' },
+      { text: 'isActive', value: 'isActive' },
+      { text: 'Тип', value: 'type' },
       { text: 'Заголовок', value: 'title' },
       { text: '№ списке', value: 'listItem', align: 'center' },
       { text: 'Собственная', value: 'isOwned', align: 'center' },

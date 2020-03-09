@@ -100,7 +100,8 @@ export default {
   },
   data: () => ({
     freeDrivers: [],
-    freeCars: []
+    freeCars: [],
+    driver1Search: ''
   }),
   model: {
     prop: 'editedItem',

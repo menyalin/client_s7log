@@ -6,12 +6,12 @@
       :clearable="!readonly"
       :disabled="disabled"
       hide-details
-      hide-no-data
       :readonly="readonly"
       @click:clear="resetHandler"
       :items="itemsForSelect"
       color="primary"
       :label="label"
+      :search-input.sync="search"
     />
   </div>
 </template>
@@ -33,6 +33,16 @@ export default {
     itemsForSelect() {
       if (this.driverList) return this.driverList.map(driverTransform)
       else return this.$store.getters.drivers.map(driverTransform)
+    }
+  },
+  data: () => ({
+    search: ''
+  }),
+  watch: {
+    propValue(val) {
+      if (!val) {
+        this.search = ''
+      }
     }
   },
   methods: {
