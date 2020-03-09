@@ -4,7 +4,6 @@
       {{ isNewItem ? 'Новая сцепка' : 'Редактировать' }}
     </v-card-title>
     <v-card-text class="control--wrapper">
-      {{ editedItem }}
       <date-time-range v-model="editedItem.dateRange" isOpenRange />
       <car-autocomplete
         v-model="editedItem.truckId"
@@ -25,6 +24,7 @@
         v-model="editedItem.driver1Id"
         label="Водитель 1"
         :driverList="freeDrivers"
+        :disabled="!editedItem.dateRange"
       />
       <driver-autocomplete
         label="Водитель 2"
