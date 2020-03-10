@@ -186,7 +186,7 @@ export default {
       },
       carUnitDeleted: {
         query: carUnitDeletedSubscription,
-        result({data: {carUnitDeleted}}) {
+        result({ data: { carUnitDeleted } }) {
           store.commit('carUnitDeleted', carUnitDeleted)
         }
       }

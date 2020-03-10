@@ -7,7 +7,8 @@
           :items="carsForJournal"
           :headers="headers"
           dense
-          :sort-desc="[false, true]"
+          :sort-by="['isActive', 'type', 'listItem']"
+          :sort-desc="[true, false, false]"
           multi-sort
           :search="search"
           align="center"

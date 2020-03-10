@@ -65,8 +65,8 @@ export default {
       state.cars = payload
     },
     carUpdated: ({ cars }, payload) => {
-      const car = cars.find(item => item.id === payload.id)
-      if (car) Object.assign(car, payload)
+      let car = cars.find(item => item.id === payload.id)
+      if (car) car = Object.assign(car, payload)
       else cars.push(payload)
     },
   },
