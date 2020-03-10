@@ -1,7 +1,7 @@
 <template>
   <div>
     <nsi-vuex-journal
-      :items="activeDrivers"
+      :items="drivers"
       :clickRowHandler="clickRowHandler"
       :headers="headers"
       :newItemHandler="newDriver"
@@ -45,7 +45,8 @@ export default {
       { value: 'phone2', text: 'Телефон 2' },
       { value: 'passport', text: 'Паспорт' },
       { value: 'driversLicense', text: 'Вод. удостоверение' },
-      { value: 'note', text: 'Примечание' }
+      { value: 'note', text: 'Примечание' },
+      { value: 'isActive', text: 'isActive' }
     ]
   }),
   components: {
@@ -53,7 +54,7 @@ export default {
     driverEditForm
   },
   computed: {
-    ...mapGetters(['activeDrivers'])
+    ...mapGetters(['drivers'])
   },
   methods: {
     newDriver() {

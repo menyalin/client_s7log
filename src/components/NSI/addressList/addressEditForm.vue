@@ -58,6 +58,13 @@
       </v-container>
     </v-card-text>
     <v-card-actions>
+      <v-checkbox
+        v-if="!isNewItem"
+        v-model="editedAddress.isActive"
+        @change="change($event, 'isActive')"
+        label="Запись активна"
+        class="pl-3"
+      />
       <v-spacer></v-spacer>
       <v-btn color="primary" @click="cancel">Отмена</v-btn>
       <v-btn
@@ -72,7 +79,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   model: {
@@ -84,7 +91,7 @@ export default {
     change(val, field) {
       this.$emit(
         'change',
-        Object.assign({}, this.editedAddress, {[field]: val})
+        Object.assign({}, this.editedAddress, { [field]: val })
       )
       this.$emit('modify')
     },

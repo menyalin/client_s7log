@@ -193,7 +193,7 @@ export default {
     statuses: (state) => state.statuses,
     statusTitleById: (state) => (id) => state.statuses.find(item => item.id === id),
     isAddressesUpload: (state) => !!state.addresses.length,
-
+    addresses: ({ addresses }) => addresses,
     addressesForAutocomplete: (state) => (type) => {
       if (type === 'shippingPlace') {
         return state.addresses.filter(item => item.isShippingPlace)

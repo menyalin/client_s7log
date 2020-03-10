@@ -11,7 +11,6 @@
           :sort-desc="[true, false, false]"
           multi-sort
           :search="search"
-          align="center"
           @click:row="clickRowHandler"
           :footer-props="{
             'items-per-page-options': [40, 80, 120, -1]
