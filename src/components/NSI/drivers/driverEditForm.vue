@@ -13,16 +13,12 @@
       <v-text-field label="Примечание" v-model="item.note" />
     </v-card-text>
     <v-card-actions>
-      <v-btn
+      <v-checkbox
         v-if="!isNewItem"
-        color="warning"
-        fab
-        small
-        dark
-        @click="$emit('delete-item')"
-      >
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
+        v-model="item.isActive"
+        label="Запись активна"
+        class="pl-3"
+      />
       <v-spacer />
       <v-btn @click="$emit('cancel')" color="primary">Отмена</v-btn>
       <v-btn @click="$emit('save', isNewItem)" color="primary">Сохранить</v-btn>

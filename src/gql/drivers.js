@@ -8,8 +8,8 @@ export const createDriverMutation = gql`
   }
 `
 export const updateDriverMutation = gql`
-  mutation updateDriver ($id: ID!, $fullName: String, $shortName: String, $phone1: String, $phone2: String, $passport: String, $driversLicense: String, $note: String) {
-    updateDriver (id: $id, fullName: $fullName, shortName: $shortName, phone1: $phone1, phone2: $phone2, passport: $passport, driversLicense: $driversLicense, note: $note) {
+  mutation updateDriver ($id: ID!, $fullName: String, $shortName: String, $phone1: String, $phone2: String, $passport: String, $driversLicense: String, $note: String $isActive:Boolean) {
+    updateDriver (id: $id, fullName: $fullName, shortName: $shortName, phone1: $phone1, phone2: $phone2, passport: $passport, driversLicense: $driversLicense, note: $note isActive:$isActive) {
       id     
     }
   }

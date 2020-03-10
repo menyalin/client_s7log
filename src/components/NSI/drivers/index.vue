@@ -1,30 +1,69 @@
 <template>
-  <div>
-    <nsi-vuex-journal
-      :items="drivers"
-      :clickRowHandler="clickRowHandler"
-      :headers="headers"
-      :newItemHandler="newDriver"
-    />
-    <v-dialog
-      v-model="dialog"
-      max-width="700px"
-      persistent
-      @keydown.esc="cancelHandler"
-    >
-      <driver-edit-form
-        :item="editedDriver"
-        @cancel="cancelHandler"
-        @keydown.esc="cancelHandler"
-        @save="saveHandler"
-        @delete-item="deleteHandler"
-      />
-    </v-dialog>
-  </div>
+  <v-container fluid>
+    <v-row>
+      <v-col>
+        <v-data-table
+          class="elevation-1"
+          :items="drivers"
+          :headers="headers"
+          :search="search"
+          dense
+          multi-sort
+          :sort-by="['isActive', 'fullName']"
+          :sort-desc="[true, false]"
+          align="center"
+          @click:row="clickRowHandler"
+          :footer-props="{
+            'items-per-page-options': [50, 100, -1]
+          }"
+        >
+          <template v-slot:item.isActive="{ item }">
+            <div>
+              <v-icon color="green" v-if="!!item.isActive">mdi-check</v-icon>
+              <v-icon color="grey" v-else>mdi-minus</v-icon>
+            </div>
+          </template>
+          <template v-slot:top>
+            <v-container fluid>
+              <v-row align="center">
+                <v-col cols="auto">
+                  <v-btn color="secondary" dark @click="newDriver">
+                    <v-icon>mdi-plus</v-icon>Добавить
+                  </v-btn>
+                </v-col>
+                <v-col>
+                  <v-text-field
+                    v-model="search"
+                    append-icon="mdi-search"
+                    label="Поиск"
+                    single-line
+                    hide-details
+                  />
+                </v-col>
+              </v-row>
+            </v-container>
+          </template>
+        </v-data-table>
+        <v-dialog
+          v-model="dialog"
+          max-width="700px"
+          persistent
+          @keydown.esc="cancelHandler"
+        >
+          <driver-edit-form
+            :item="editedDriver"
+            @cancel="cancelHandler"
+            @keydown.esc="cancelHandler"
+            @save="saveHandler"
+            @delete-item="deleteHandler"
+          />
+        </v-dialog>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import nsiVuexJournal from '@/components/common/nsiVuexJournal/index.vue'
 import driverEditForm from './driverEditForm'
 import {
   createDriverMutation,
@@ -37,20 +76,20 @@ export default {
   name: 'NSIDriversComponent',
   data: () => ({
     dialog: false,
+    search: '',
     editedDriver: {},
     headers: [
       { value: 'fullName', text: 'Имя (полное)' },
       { value: 'shortName', text: 'Имя (сокращенное)' },
-      { value: 'phone1', text: 'Телефон 1' },
-      { value: 'phone2', text: 'Телефон 2' },
-      { value: 'passport', text: 'Паспорт' },
-      { value: 'driversLicense', text: 'Вод. удостоверение' },
-      { value: 'note', text: 'Примечание' },
+      { value: 'phone1', text: 'Телефон 1', sortable: false },
+      { value: 'phone2', text: 'Телефон 2', sortable: false },
+      { value: 'passport', text: 'Паспорт', sortable: false },
+      { value: 'driversLicense', text: 'Вод. удостоверение', sortable: false },
+      { value: 'note', text: 'Примечание', sortable: false },
       { value: 'isActive', text: 'isActive' }
     ]
   }),
   components: {
-    nsiVuexJournal,
     driverEditForm
   },
   computed: {
@@ -70,7 +109,6 @@ export default {
       let mutation = ''
       if (isNewItem) mutation = createDriverMutation
       else mutation = updateDriverMutation
-
       this.$apollo
         .mutate({
           mutation,
