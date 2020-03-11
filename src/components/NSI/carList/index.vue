@@ -49,6 +49,11 @@
               <v-icon color="grey" v-else>mdi-minus</v-icon>
             </div>
           </template>
+          <template v-slot:item.type="{ item }">
+            <div>
+              {{ allVehicleTypes.find(i => item.type === i.value).text }}
+            </div>
+          </template>
         </v-data-table>
         <v-dialog v-model="dialog" max-width="500px" persistent>
           <car-edit-form
@@ -91,7 +96,7 @@ export default {
     ]
   }),
   computed: {
-    ...mapGetters(['carsForJournal'])
+    ...mapGetters(['carsForJournal', 'allVehicleTypes'])
   },
   methods: {
     cancelHandler() {

@@ -5,6 +5,7 @@
     @drop.ctrl="dropHandler($event, 'new')"
     @dragover="dragOver"
     class="empty--zone"
+    :class="classes"
   />
 </template>
 
@@ -16,27 +17,21 @@ export default {
   name: 'emptyCell',
   props: ['cell'],
   computed: {
-    ...mapGetters(['carUnitFieldsForCell'])
+    ...mapGetters(['carUnitFieldsForCell', 'carById']),
+    classes() {
+      const carUnit = this.carUnitFieldsForCell(this.cell.id, this.cell.carId)
+      let pltCount = 0
+      if (carUnit.trailerId) {
+        pltCount = this.carById(carUnit.trailerId).maxPltCount
+      }
+      return {
+        notConfirmed: !carUnit.driver1Id,
+        plt66: +pltCount >= 50,
+        tmpslot: this.carById(this.cell.carId).isTempSlot
+      }
+    }
   },
   methods: {
-    // newOrder() {
-    //   this.$store
-    //     .dispatch('getCarUnitFields', {
-    //       truckId: this.cell.carId,
-    //       date: this.cell.id
-    //     })
-    //     .then(carUnitFields => {
-    //       this.$store.commit('openEditOrderForm', {
-    //         lengthCell: 1,
-    //         carType: this.cell.carType,
-    //         plannedCarType: this.cell.carType,
-    //         dateRange: this.getDateRange(moment(this.cell.id), 1),
-    //         carId: this.cell.carId,
-    //         plannedShippingDate: this.cell.id,
-    //         ...carUnitFields
-    //       })
-    //     })
-    // },
     newOrder() {
       const carUnitFields = this.carUnitFieldsForCell(
         this.cell.id,
@@ -123,5 +118,14 @@ export default {
 }
 .empty--zone:hover {
   box-shadow: 0px 0px 3px rgba(5, 5, 5, 0.3);
+}
+.notConfirmed {
+  background-color: rgba(100, 99, 99, 0.07);
+}
+.plt66 {
+  border-bottom: 3px solid lightgreen;
+}
+.tmpslot {
+  background-color: unset;
 }
 </style>
