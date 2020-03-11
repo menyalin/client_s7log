@@ -95,11 +95,21 @@ export default {
     editedItem: {},
     headers: [
       { text: 'isActive', value: 'isActive' },
-      { text: 'Тип', value: 'type' },
-      { text: 'Заголовок', value: 'title' },
-      { text: '№ списке', value: 'listItem', align: 'center' },
+      { text: 'Тип', value: 'type', filterable: false },
+      { text: 'Заголовок', value: 'title', filterable: false },
+      {
+        text: '№ списке',
+        value: 'listItem',
+        align: 'center',
+        filterable: false
+      },
       { text: 'Собственная', value: 'isOwned', align: 'center' },
-      { text: 'Кол-во плт', value: 'maxPltCount', align: 'center' },
+      {
+        text: 'Кол-во плт',
+        value: 'maxPltCount',
+        align: 'center',
+        filterable: false
+      },
       {
         text: 'Гос.номер',
         value: 'regNumber',
