@@ -11,6 +11,7 @@
       color="primary"
       :label="label"
       :messages="note"
+      :search-input.sync="search"
     />
   </div>
 </template>
@@ -28,6 +29,16 @@ export default {
   model: {
     prop: 'propValue',
     event: 'change'
+  },
+  data: () => ({
+    search: ''
+  }),
+  watch: {
+    propValue(val) {
+      if (!val) {
+        this.search = ''
+      }
+    }
   },
   computed: {
     itemsForSelect() {

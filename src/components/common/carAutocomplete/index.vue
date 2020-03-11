@@ -17,28 +17,23 @@
 </template>
 
 <script>
-function carTransform(item) {
-  return {
-    text: `${item.title} (${item.type})`,
-    value: item.id
-  }
-}
-
+import { mapGetters } from 'vuex'
 export default {
   model: {
     prop: 'propValue',
     event: 'change'
   },
   computed: {
+    ...mapGetters(['allVehicleTypes']),
     itemsForSelect() {
       if (this.carList)
         return this.carList
           .filter(item => this.types.indexOf(item.type) !== -1)
-          .map(carTransform)
+          .map(this.carTransform)
       else
         return this.$store.getters
           .carsForAutocomplete_v2(this.types)
-          .map(carTransform)
+          .map(this.carTransform)
     }
   },
   data: () => ({
@@ -52,6 +47,13 @@ export default {
     }
   },
   methods: {
+    carTransform(item) {
+      let typeText = this.allVehicleTypes.find(i => item.type === i.value).text
+      return {
+        text: `${item.title} (${typeText})`,
+        value: item.id
+      }
+    },
     resetHandler() {
       this.$emit('change', '')
     },
