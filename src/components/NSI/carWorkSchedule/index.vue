@@ -28,28 +28,34 @@
               </v-row>
             </v-container>
           </template>
-          <template v-slot:item.car="{ item }">
-            {{ carById(item.carId) ? carById(item.carId).title : '' }}
-          </template>
-          <template v-slot:item.trailer="{ item }">
-            {{ carById(item.trailerId) ? carById(item.trailerId).title : '' }}
-          </template>
+          <template
+            v-slot:item.car="{ item }"
+          >{{ carById(item.carId) ? carById(item.carId).title : '' }}</template>
+          <template
+            v-slot:item.trailer="{ item }"
+          >{{ carById(item.trailerId) ? carById(item.trailerId).title : '' }}</template>
           <template v-slot:item.driver="{ item }">
             {{
-              driverById(item.driverId)
-                ? driverById(item.driverId).shortName
-                : ''
+            driverById(item.driverId)
+            ? driverById(item.driverId).shortName
+            : ''
             }}
           </template>
-          <template v-slot:item.startDate="{ item }">{{
+          <template v-slot:item.startDate="{ item }">
+            {{
             dateRender(item.dateRange, 0)
-          }}</template>
-          <template v-slot:item.endDate="{ item }">{{
+            }}
+          </template>
+          <template v-slot:item.endDate="{ item }">
+            {{
             dateRender(item.dateRange, 1)
-          }}</template>
-          <template v-slot:item.type="{ item }">{{
+            }}
+          </template>
+          <template v-slot:item.type="{ item }">
+            {{
             carWorkScheduleTypeById(item.type).title
-          }}</template>
+            }}
+          </template>
         </v-data-table>
         <v-dialog v-model="dialog" max-width="1024px" persistent>
           <car-work-schedule-form
@@ -91,14 +97,14 @@ export default {
     },
     options: {},
     headers: [
-      { text: 'Начало', value: 'startDate', align: 'center' },
-      { text: 'Конец', value: 'endDate', align: 'center' },
-      { text: 'Тип', value: 'type', align: 'center' },
-      { text: 'Заголовок', value: 'title', align: 'center' },
-      { text: 'Машина', value: 'car', align: 'center' },
-      { text: 'Прицеп', value: 'trailer', align: 'center' },
-      { text: 'Водитель', value: 'driver', align: 'center' },
-      { text: 'Комментарий', value: 'note', align: 'center' }
+      { text: 'Начало', value: 'startDate', align: 'center', sortable: false },
+      { text: 'Конец', value: 'endDate', align: 'center', sortable: false },
+      { text: 'Тип', value: 'type', align: 'center', sortable: false },
+      { text: 'Заголовок', value: 'title', align: 'center', sortable: false },
+      { text: 'Машина', value: 'car', align: 'center', sortable: false },
+      { text: 'Прицеп', value: 'trailer', align: 'center', sortable: false },
+      { text: 'Водитель', value: 'driver', align: 'center', sortable: false },
+      { text: 'Комментарий', value: 'note', align: 'center', sortable: false }
     ],
     limit: 50
   }),

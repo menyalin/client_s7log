@@ -13,7 +13,7 @@
           :search="search"
           @click:row="clickRowHandler"
           :footer-props="{
-            'items-per-page-options': [40, 80, 120, -1]
+            'items-per-page-options': [50, 100, -1]
           }"
         >
           <template v-slot:top>
@@ -60,9 +60,7 @@
             </div>
           </template>
           <template v-slot:item.type="{ item }">
-            <div>
-              {{ allVehicleTypes.find(i => item.type === i.value).text }}
-            </div>
+            <div>{{ allVehicleTypes.find(i => item.type === i.value).text }}</div>
           </template>
         </v-data-table>
         <v-dialog v-model="dialog" max-width="500px" persistent>
@@ -117,6 +115,7 @@ export default {
       },
       { text: 'Св-во регистрации', value: 'reg' },
       { text: 'ПТС', value: 'pts' },
+      { text: 'Принадлежность', value: 'owner' },
       { text: 'Примечание', value: 'note' }
     ]
   }),

@@ -2,12 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col>
-        <v-dialog
-          v-model="dialog"
-          max-width="650"
-          persistent
-          @keydown.esc="cancelHandler"
-        >
+        <v-dialog v-model="dialog" max-width="650" persistent @keydown.esc="cancelHandler">
           <car-unit-form
             v-model="editedItem"
             @cancel_edit="cancelHandler"
@@ -45,27 +40,33 @@
               </v-row>
             </v-container>
           </template>
-          <template v-slot:item.dateRange="{ item }">{{
+          <template v-slot:item.dateRange="{ item }">
+            {{
             item.dateRange | dateRangeToStr
-          }}</template>
-          <template v-slot:item.truckId="{ item }">{{
+            }}
+          </template>
+          <template v-slot:item.truckId="{ item }">
+            {{
             carById(item.truckId) ? carById(item.truckId).title : null
-          }}</template>
-          <template v-slot:item.trailerId="{ item }">{{
+            }}
+          </template>
+          <template v-slot:item.trailerId="{ item }">
+            {{
             carById(item.trailerId) ? carById(item.trailerId).title : null
-          }}</template>
+            }}
+          </template>
           <template v-slot:item.driver1Id="{ item }">
             {{
-              driverById(item.driver1Id)
-                ? driverById(item.driver1Id).shortName
-                : null
+            driverById(item.driver1Id)
+            ? driverById(item.driver1Id).shortName
+            : null
             }}
           </template>
           <template v-slot:item.driver2Id="{ item }">
             {{
-              driverById(item.driver2Id)
-                ? driverById(item.driver2Id).shortName
-                : null
+            driverById(item.driver2Id)
+            ? driverById(item.driver2Id).shortName
+            : null
             }}
           </template>
         </v-data-table>
@@ -116,12 +117,12 @@ export default {
     },
     options: {},
     headers: [
-      { text: 'Дата', value: 'dateRange' },
-      { text: 'Машина', value: 'truckId' },
-      { text: 'Прицеп', value: 'trailerId' },
-      { text: 'Водитель 1', value: 'driver1Id' },
-      { text: 'Водитель 2', value: 'driver2Id' },
-      { text: 'Примечание', value: 'note' }
+      { text: 'Дата', value: 'dateRange', sortable: false },
+      { text: 'Машина', value: 'truckId', sortable: false },
+      { text: 'Прицеп', value: 'trailerId', sortable: false },
+      { text: 'Водитель 1', value: 'driver1Id', sortable: false },
+      { text: 'Водитель 2', value: 'driver2Id', sortable: false },
+      { text: 'Примечание', value: 'note', sortable: false }
     ]
   }),
   methods: {
