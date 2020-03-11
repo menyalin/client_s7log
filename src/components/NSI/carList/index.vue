@@ -4,7 +4,7 @@
       <v-col>
         <v-data-table
           class="elevation-1"
-          :items="carsForJournal"
+          :items="carsForJournal(filterType)"
           :headers="headers"
           dense
           :sort-by="['isActive', 'type', 'listItem']"
@@ -23,6 +23,16 @@
                   <v-btn color="secondary" dark @click="newCarHandler">
                     <v-icon>mdi-plus</v-icon>Добавить
                   </v-btn>
+                </v-col>
+                <v-col cols="auto">
+                  <v-select
+                    v-model="filterType"
+                    label="Тип ТС"
+                    :items="allVehicleTypes"
+                    clearable
+                    hide-details
+                    id="filterType"
+                  />
                 </v-col>
                 <v-col>
                   <v-text-field
@@ -81,6 +91,7 @@ export default {
   data: () => ({
     dialog: false,
     search: '',
+    filterType: '',
     editedItem: {},
     headers: [
       { text: 'isActive', value: 'isActive' },
@@ -89,7 +100,11 @@ export default {
       { text: '№ списке', value: 'listItem', align: 'center' },
       { text: 'Собственная', value: 'isOwned', align: 'center' },
       { text: 'Кол-во плт', value: 'maxPltCount', align: 'center' },
-      { text: 'Гос.номер', value: 'regNumber' },
+      {
+        text: 'Гос.номер',
+        value: 'regNumber',
+        sortable: false
+      },
       { text: 'Св-во регистрации', value: 'reg' },
       { text: 'ПТС', value: 'pts' },
       { text: 'Примечание', value: 'note' }
@@ -147,4 +162,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+#filterType {
+  max-width: 3rem;
+}
+</style>

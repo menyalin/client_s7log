@@ -94,7 +94,11 @@ export default {
     allVehicleTypes: state => state.vehicleType,
     trailers: ({ cars }) => cars.filter(item => item.type === 'trailer' && !item.isTempSlot),
     cars: state => state.cars.filter(item => !item.isTempSlot && item.type !== 'trailer'),
-    carsForJournal: ({ cars }) => cars.filter(item => !item.isTempSlot),
+    carsForJournal: ({ cars }) => (type) => {
+      if (type) return cars.filter(item => !item.isTempSlot && item.type === type)
+      else return cars.filter(item => !item.isTempSlot)
+
+    },
     carById: ({ cars }) => (id) => {
       if (cars.length && id) return cars.find(item => item.id === id)
       else return null
