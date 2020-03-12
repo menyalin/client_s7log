@@ -108,7 +108,7 @@ export const queryFilterLess = gql`
             isDeliveryPlace
             isActive
         }
-        staff {
+        userRoles {
             id
             userId
             role

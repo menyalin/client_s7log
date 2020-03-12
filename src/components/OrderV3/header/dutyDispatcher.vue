@@ -1,13 +1,17 @@
 <template>
   <div class="wrapper" @click="openDialog">
     <small>
-      {{ dutyDispatcher(date) ? dutyDispatcher(date).user.name : 'Не задан' }}
+      {{
+        dutyDispatcher(date) && dutyDispatcher(date).user
+          ? dutyDispatcher(date).user.name
+          : 'Не задан'
+      }}
     </small>
     <v-dialog v-model="dialog" max-width="290">
       <v-card>
-        <v-card-title class="headline text-center">{{
-          displayDate
-        }}</v-card-title>
+        <v-card-title class="headline text-center">
+          {{ displayDate }}
+        </v-card-title>
         <v-card-text>
           <v-autocomplete
             label="Диспетчер"
@@ -32,18 +36,7 @@
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 import gql from 'graphql-tag'
-
-const updateScheduleMutation = gql`
-  mutation updateSchedule(
-    $date: String!
-    $userId: String
-    $scheduleId: String
-  ) {
-    updateSchedule(date: $date, userId: $userId, scheduleId: $scheduleId) {
-      id
-    }
-  }
-`
+import { createScheduleMutation, deleteScheduleMutation, updateScheduleMutation } from '@/gql/users'
 
 export default {
   name: 'dutyDispatcher',
@@ -53,6 +46,16 @@ export default {
     displayDate() {
       moment.locale('ru')
       return moment(this.date).format('DD MMM YYYY, ddd')
+    },
+    variables() {
+      return {
+        type: 'dispatcher',
+        date: this.date,
+        userId: this.editedDispatcherId,
+        id: this.dutyDispatcher(this.date)
+          ? this.dutyDispatcher(this.date).id
+          : null
+      }
     }
   },
   data: () => ({
@@ -61,7 +64,7 @@ export default {
   }),
   methods: {
     openDialog() {
-      if (this.isExistDispatcher) {
+      if (this.dutyDispatcher(this.date)) {
         this.editedDispatcherId = this.dutyDispatcher(this.date).user.id
       } else {
         this.editedDispatcherId = null
@@ -75,26 +78,27 @@ export default {
       this.dialog = false
     },
     saveHandler() {
+      let mutation = null
+      if (!this.dutyDispatcher(this.date) && this.editedDispatcherId)
+        mutation = createScheduleMutation
+      else if (this.dutyDispatcher(this.date) && this.editedDispatcherId) {
+        mutation = updateScheduleMutation
+      } else if (this.dutyDispatcher(this.date) && !this.editedDispatcherId) {
+        mutation = deleteScheduleMutation
+      } else {
+        console.log('Ошибка!!!')
+      }
       this.$apollo
         .mutate({
-          mutation: updateScheduleMutation,
-          variables: {
-            scheduleId: this.isExistScheduleItem
-              ? this.dutyDispatcher(this.date).id
-              : null,
-            date: this.date,
-            userId: this.editedDispatcherId || null
-          }
+          mutation,
+          variables: this.variables
         })
         .then(() => {
-          this.editedDispatcherId = null
-          this.$nextTick(() => {
-            this.dialog = false
-          })
+          this.cancelHandler()
         })
         .catch(e => {
           this.$store.commit('setError', e.message)
-          this.dialog = false
+          this.cancelHandler()
         })
     }
   }

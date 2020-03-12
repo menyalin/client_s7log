@@ -27,6 +27,12 @@ import {
   carUnitUpdatedSubscription,
   carUnitDeletedSubscription
 } from './gql/cars'
+
+import {
+  deletedScheduleSubscription,
+  scheduleUpdatedSubscription,
+  deletedUserRolesSubscription
+} from '@/gql/users'
 import { mapGetters } from 'vuex'
 
 const addressAddedSubscription = gql`
@@ -57,27 +63,16 @@ const addressUpdatedSubscription = gql`
     }
   }
 `
-const scheduleUpdatedSubscription = gql`
-  subscription scheduleUpdated {
-    scheduleUpdated {
-      id
-      type
-      date
-      user {
-        id
-        name
-      }
-    }
-  }
-`
-const staffUpdatedSubscription = gql`
-  subscription staffUpdated {
-    staffUpdated {
+
+const updatedUserRolesSubscription = gql`
+  subscription updatedUserRoles {
+    updatedUserRoles {
       id
       userId
       role
       isActive
       user {
+        id
         name
         email
       }
@@ -142,16 +137,28 @@ export default {
           store.commit('updateOrder', orderUpdated)
         }
       },
+      deletedSchedule: {
+        query: deletedScheduleSubscription,
+        result({ data: { deletedSchedule } }) {
+          store.commit('deletedSchedule', deletedSchedule)
+        }
+      },
       scheduleUpdated: {
         query: scheduleUpdatedSubscription,
         result({ data: { scheduleUpdated } }) {
           store.commit('scheduleUpdated', scheduleUpdated)
         }
       },
-      staffUpdated: {
-        query: staffUpdatedSubscription,
-        result({ data: { staffUpdated } }) {
-          store.commit('updateStaff', staffUpdated)
+      deletedUserRoles: {
+        query: deletedUserRolesSubscription,
+        result({ data: { deletedUserRoles } }) {
+          store.commit('deleteUserRoles', deletedUserRoles)
+        }
+      },
+      updatedUserRoles: {
+        query: updatedUserRolesSubscription,
+        result({ data: { updatedUserRoles } }) {
+          store.commit('updateUserRoles', updatedUserRoles)
         }
       },
       orderTemplateUpdated: {
@@ -224,13 +231,13 @@ export default {
         driversForVuex,
         carsForVuex,
         addressesForVuex,
-        staff,
+        userRoles,
         orderTemplates
       }) => {
         store.commit('setDrivers', driversForVuex)
         store.commit('setCars', carsForVuex)
         store.commit('setAddresses', addressesForVuex)
-        store.commit('setStaff', staff)
+        store.commit('setUserRoles', userRoles)
         store.commit('setOrderTemplates', orderTemplates)
       }
     }

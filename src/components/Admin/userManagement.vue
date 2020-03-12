@@ -15,10 +15,7 @@
           </template>
           <template v-slot:item.dispatcher="{ item }">
             <div @click="changeDispatcherRole(item)">
-              <v-icon
-                color="green"
-                v-if="item.roles && item.roles.indexOf('dispatcher') !== -1"
-              >
+              <v-icon color="green" v-if="isDispatcher(item)">
                 mdi-check
               </v-icon>
               <v-icon v-else>mdi-skull-crossbones</v-icon>
@@ -33,6 +30,8 @@
 <script>
 import {
   usersForAdminPanelQuery,
+  createRoleMutation,
+  deleteRoleMutation,
   changeUserStatusMutation,
   changeDispatcherRoleMutation
 } from '@/gql/users'
@@ -40,6 +39,9 @@ import {
 export default {
   name: 'userManagement',
   methods: {
+    isDispatcher(item) {
+      return item.roles && item.roles.indexOf('dispatcher') !== -1
+    },
     changeUserStatus(user) {
       this.$apollo
         .mutate({
@@ -54,29 +56,28 @@ export default {
         })
     },
     changeDispatcherRole(item) {
-      this.$apollo.mutate({
-        mutation: changeDispatcherRoleMutation,
-        variables: {
-          userId: item.id,
-          isDispatcher: !(item.roles && item.roles.indexOf('dispatcher') !== -1)
-        },
-        update: (store, { data: { changeDispatcherRole } }) => {
-          const data = store.readQuery({ query: usersForAdminPanelQuery })
-          const tmpUser = data.usersForAdminPanel.find(
-            item => item.id === changeDispatcherRole.userId
-          )
-          if (changeDispatcherRole.isActive) {
-            tmpUser.roles.push('dispatcher')
-          } else tmpUser.roles.splice(tmpUser.roles.indexOf('dispatcher'), 1)
-        }
-      })
+      let mutation = null
+      if (this.isDispatcher(item)) mutation = deleteRoleMutation
+      else mutation = createRoleMutation
+      this.$apollo
+        .mutate({
+          mutation,
+          variables: {
+            userId: item.id,
+            role: 'dispatcher'
+          }
+        })
+        .then(() => {
+          if (this.isDispatcher(item)) {
+            let idx = item.roles.indexOf('dispatcher')
+            if (idx !== -1) item.roles.splice(idx, 1)
+          } else {
+            item.roles.push('dispatcher')
+          }
+        })
     }
   },
-  computed: {
-    isDispatcher(item) {
-      return item.roles && item.roles.indexOf('dispatcher') !== -1
-    }
-  },
+
   data: () => ({
     usersForAdminPanel: [],
     headers: [

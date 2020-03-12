@@ -9,15 +9,10 @@ export default {
     editedOrder: {
       lengthCell: 1
     },
-    showOrderDialog_v2: true,
-    editedOrder_v2: {
-      lengthCell: 1
-    },
     currentDate: null,
     orderTemplates: [],
     addresses: [],
-
-    staff: [],
+    
     statuses: [
       { id: '10', title: 'Надо получить', forConfirmed: false },
       { id: '20', title: 'ОЧЕНЬ надо получить', forConfirmed: false },
@@ -29,7 +24,7 @@ export default {
       { id: '98', title: 'Мы отказались', forConfirmed: false },
       { id: '99', title: 'Клиент снял заказ', forConfirmed: false }
     ],
-    schedule: [],
+    
     timeZones: [
       { id: '01', title: '00-06', startTime: '00:00' },
       { id: '02', title: '06-12', startTime: '06:00' },
@@ -102,23 +97,6 @@ export default {
     setOrders: (state, payload) => {
       state.orders = payload
     },
-    setStaff: (state, payload) => {
-      state.staff = payload
-    },
-    setSchedule: (state, payload) => {
-      state.schedule = payload
-    },
-    scheduleUpdated: (state, payload) => {
-      let scheduleItem = state.schedule.find(item => item.id === payload.id)
-      if (scheduleItem) scheduleItem = Object.assign(scheduleItem, payload)
-      else state.schedule.push(payload)
-
-    },
-    updateStaff: (state, role) => {
-      let staffItem = state.staff.find(item => item.id === role.id)
-      if (staffItem) staffItem = Object.assign({}, staffItem, role)
-      else state.staff.push(role)
-    },
     updateOrderTemplate: (state, updatedOrder) => {
       let templateItem = state.orderTemplates.find(item => item.id === updatedOrder.id)
       if (templateItem) templateItem = Object.assign(templateItem, {}, updatedOrder)
@@ -187,7 +165,7 @@ export default {
   getters: {
     orders: ({ orders }) => orders,
     currentDate: (state) => state.currentDate,
-    personOnDuty: ({ schedule }) => (date) => schedule.find(item => item.date === date) || 'не задан',
+    
     timeZones: (state) => state.timeZones,
     timeZoneById: ({ timeZones }) => (id) => timeZones.find(item => item.id === id),
     statuses: (state) => state.statuses,
@@ -214,13 +192,7 @@ export default {
     },
 
 
-    dispatchersStaff: ({ staff }) => {
-      if (staff.length) {
-        return staff.filter(item => (item.role === 'dispatcher' && item.isActive)).map(item => ({ userId: item.userId, userName: item.user.name, userEmail: item.user.email }))
-      } else null
-
-    },
-    dutyDispatcher: (state) => (date) => state.schedule.find(item => item.date === date),
+    
     orderTemplates: (state) => (carType) => state.orderTemplates.filter(item => item.carType === carType),
     allOrderTemplates: (state) => state.orderTemplates,
     showOrderDialog: ({ showOrderDialog }) => showOrderDialog,
