@@ -29,7 +29,7 @@
             <v-text-field label="Заголовок*" v-model="editedItem.title" />
           </v-col>
           <v-col>
-            <v-text-field label="Рег.номер" v-model="editedItem.regNumber" />
+            <v-text-field label="Гос.номер" v-model="editedItem.regNumber" />
           </v-col>
         </v-row>
         <v-row no-gutters>

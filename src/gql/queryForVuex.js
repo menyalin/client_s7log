@@ -92,6 +92,7 @@ export const queryFilterLess = gql`
             isTempSlot
             reg
             pts
+            owner
             isOwned
             type
             maxPltCount
