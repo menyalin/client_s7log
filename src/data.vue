@@ -217,7 +217,7 @@ export default {
         store.commit('setSchedule', scheduleForVuex)
         store.commit('setCarUnits', carUnitForVuex)
       },
-      throttle: 2000,
+      throttle: 100,
       skip() {
         return !store.getters.currentDate
       }
