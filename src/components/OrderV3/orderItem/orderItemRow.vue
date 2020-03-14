@@ -31,12 +31,13 @@ export default {
       else return null
     },
     formatedDate() {
-      if (this.date) return moment(+this.date).format('DD.MM.YYYY HH:mm')
+      if (this.date)
+        return moment(+this.date || this.date).format('DD.MM.YYYY HH:mm')
       else return null
     },
     timeForRow() {
       if (this.date) {
-        let tmpDate = moment(+this.date)
+        let tmpDate = moment(+this.date || this.date)
         if (tmpDate._isValid) {
           return tmpDate.format('HH:mm') !== '00:00'
             ? tmpDate.format('HH')
