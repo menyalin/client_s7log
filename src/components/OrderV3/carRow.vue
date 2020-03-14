@@ -44,7 +44,7 @@ import carTitleHeader from './carTitleHeader'
 
 const getCellLengthInRange = (cell, startPosition, endPosition) => {
   let length = 0
-  const endConf = moment(+cell.dateRange[1].value)
+  const endConf = moment(+cell.dateRange[1].value || cell.dateRange[1].value)
   while (
     startPosition.isSameOrBefore(endConf) &&
     startPosition.isSameOrBefore(endPosition)
@@ -55,13 +55,17 @@ const getCellLengthInRange = (cell, startPosition, endPosition) => {
   return length
 }
 const isLastZone = endDate => {
-  return moment(endDate).hours() == 18
+  return moment(+endDate || endDate).hours() == 18
 }
 const getItemInRange = (array, startPosition) => {
   return array.find(
     item =>
-      startPosition.isSameOrAfter(+item.dateRange[0].value) &&
-      startPosition.isSameOrBefore(+item.dateRange[1].value)
+      startPosition.isSameOrAfter(
+        +item.dateRange[0].value || item.dateRange[0].value
+      ) &&
+      startPosition.isSameOrBefore(
+        +item.dateRange[1].value || item.dateRange[1].value
+      )
   )
 }
 
@@ -90,22 +94,30 @@ export default {
           res.push({
             ...tmpOrder,
             itemType: 'order',
-            isLastZone: isLastZone(+tmpOrder.dateRange[1].value),
+            isLastZone: isLastZone(tmpOrder.dateRange[1].value),
             lengthCell: getCellLengthInRange(tmpOrder, startPos, endPos)
           })
-          startPos = moment(+tmpOrder.dateRange[1].value).add(6, 'h')
+          startPos = moment(
+            +tmpOrder.dateRange[1].value || tmpOrder.dateRange[1].value
+          ).add(6, 'h')
         } else if (tmpCarWorkSchedule) {
           res.push({
             ...tmpCarWorkSchedule,
             itemType: 'carSchedule',
-            isLastZone: isLastZone(+tmpCarWorkSchedule.dateRange[1].value),
+            isLastZone: isLastZone(
+              +tmpCarWorkSchedule.dateRange[1].value ||
+                tmpCarWorkSchedule.dateRange[1].value
+            ),
             lengthCell: getCellLengthInRange(
               tmpCarWorkSchedule,
               startPos,
               endPos
             )
           })
-          startPos = moment(+tmpCarWorkSchedule.dateRange[1].value).add(6, 'h')
+          startPos = moment(
+            +tmpCarWorkSchedule.dateRange[1].value ||
+              tmpCarWorkSchedule.dateRange[1].value
+          ).add(6, 'h')
         } else {
           res.push({
             id: startPos.format('YYYY-MM-DD HH:mm'),

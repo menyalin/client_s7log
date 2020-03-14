@@ -12,7 +12,7 @@ export default {
     currentDate: null,
     orderTemplates: [],
     addresses: [],
-    
+
     statuses: [
       { id: '10', title: 'Надо получить', forConfirmed: false },
       { id: '20', title: 'ОЧЕНЬ надо получить', forConfirmed: false },
@@ -24,7 +24,7 @@ export default {
       { id: '98', title: 'Мы отказались', forConfirmed: false },
       { id: '99', title: 'Клиент снял заказ', forConfirmed: false }
     ],
-    
+
     timeZones: [
       { id: '01', title: '00-06', startTime: '00:00' },
       { id: '02', title: '06-12', startTime: '06:00' },
@@ -83,13 +83,11 @@ export default {
         orders.splice(idx, 1)
       }
     },
-    updateOrder: (state, orderUpdated) => {
-      let order = state.orders.find(item => item.id === orderUpdated.id)
-      if (order) {
-        Object.assign(order, orderUpdated)
-      } else {
-        state.orders.push(orderUpdated)
-      }
+    updateOrder: ({ orders }, orderUpdated) => {
+      console.log('order from mutation: ', orderUpdated.id);
+      const idx = orders.findIndex(i => i.id === orderUpdated.id)
+      if (idx !== -1) orders.splice(idx, 1)
+      orders.push(orderUpdated)
     },
     setCurrentDate: (state, payload) => {
       state.currentDate = payload
@@ -165,7 +163,7 @@ export default {
   getters: {
     orders: ({ orders }) => orders,
     currentDate: (state) => state.currentDate,
-    
+
     timeZones: (state) => state.timeZones,
     timeZoneById: ({ timeZones }) => (id) => timeZones.find(item => item.id === id),
     statuses: (state) => state.statuses,
@@ -192,7 +190,7 @@ export default {
     },
 
 
-    
+
     orderTemplates: (state) => (carType) => state.orderTemplates.filter(item => item.carType === carType),
     allOrderTemplates: (state) => state.orderTemplates,
     showOrderDialog: ({ showOrderDialog }) => showOrderDialog,

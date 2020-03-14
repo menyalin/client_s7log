@@ -128,11 +128,19 @@ export default {
       const dateF = 'YYYY-MM-DD'
       const timeF = 'HH:mm'
       if (Array.isArray(val) && this.isValidArrayDates(val)) {
-        this.res._startDate = moment(+val[0].value).format(dateF)
-        this.res._startTime = moment(+val[0].value).format(timeF)
+        this.res._startDate = moment(+val[0].value || val[0].value).format(
+          dateF
+        )
+        this.res._startTime = moment(+val[0].value || val[0].value).format(
+          timeF
+        )
         if (val[1].value) {
-          this.res._endDate = moment(+val[1].value).format(dateF)
-          this.res._endTime = moment(+val[1].value).format(timeF)
+          this.res._endDate = moment(+val[1].value || val[1].value).format(
+            dateF
+          )
+          this.res._endTime = moment(+val[1].value || val[1].value).format(
+            timeF
+          )
         } else if (!this.isOpenRange) {
           this.res._endDate = this.res._startDate
           this.res._endTime = this.res._startTime
