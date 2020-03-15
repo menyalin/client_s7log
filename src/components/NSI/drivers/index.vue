@@ -88,11 +88,11 @@ export default {
     editedDriver: {},
     headers: [
       { value: 'fullName', text: 'Имя (полное)' },
-      { value: 'shortName', text: 'Имя (сокращенное)' },
+      // { value: 'shortName', text: 'Имя (сокращенное)' },
       { value: 'phone1', text: 'Телефон 1', sortable: false },
       { value: 'phone2', text: 'Телефон 2', sortable: false },
-      { value: 'passport', text: 'Паспорт', sortable: false },
-      { value: 'driversLicense', text: 'Вод. удостоверение', sortable: false },
+      // { value: 'passport', text: 'Паспорт', sortable: false },
+      // { value: 'driversLicense', text: 'Вод. удостоверение', sortable: false },
       { value: 'note', text: 'Примечание', sortable: false },
       { value: 'isActive', text: 'isActive' }
     ]
