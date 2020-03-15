@@ -50,7 +50,10 @@ export default {
     carTransform(item) {
       let typeText = this.allVehicleTypes.find(i => item.type === i.value).text
       return {
-        text: `${item.title} (${typeText})`,
+        text:
+          item.type !== 'trailer'
+            ? `${item.title} (${typeText})`
+            : `${item.title} (${item.note || typeText})`,
         value: item.id
       }
     },
