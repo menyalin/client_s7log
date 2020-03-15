@@ -84,7 +84,6 @@ export default {
       }
     },
     updateOrder: ({ orders }, orderUpdated) => {
-      console.log('order from mutation: ', orderUpdated.id);
       const idx = orders.findIndex(i => i.id === orderUpdated.id)
       if (idx !== -1) orders.splice(idx, 1)
       orders.push(orderUpdated)
@@ -129,7 +128,7 @@ export default {
           dispatch('setError', e.message)
         })
     },
-    confirmOrder ({ dispatch }, payload) {
+    confirmOrder({ dispatch }, payload) {
       const { id, carId, dateRange, carType } = payload
       apolloClient.mutate({
         mutation: confirmOrderMutation,
@@ -144,7 +143,7 @@ export default {
           dispatch('setError', e.message)
         })
     },
-    createNewOrder ({ commit, getters }, payload) {
+    createNewOrder({ commit, getters }, payload) {
       let variables = null
       if (payload) variables = payload
       else variables = getters.editedOrder

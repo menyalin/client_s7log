@@ -57,15 +57,15 @@ const getCellLengthInRange = (cell, startPosition, endPosition) => {
 const isLastZone = endDate => {
   return moment(+endDate || endDate).hours() == 18
 }
+
 const getItemInRange = (array, startPosition) => {
-  return array.find(
-    item =>
-      startPosition.isSameOrAfter(
-        +item.dateRange[0].value || item.dateRange[0].value
-      ) &&
-      startPosition.isSameOrBefore(
-        +item.dateRange[1].value || item.dateRange[1].value
-      )
+  return array.find(item =>
+    startPosition.isBetween(
+      +item.dateRange[0].value || item.dateRange[0].value,
+      +item.dateRange[1].value || item.dateRange[1].value,
+      null,
+      '[]'
+    )
   )
 }
 
@@ -88,8 +88,11 @@ export default {
       let startPos = moment(this.dates[0] + ' 00:00')
       const endPos = moment(this.dates[this.dates.length - 1]).add(18, 'h')
       while (startPos.isSameOrBefore(endPos)) {
-        let tmpOrder = getItemInRange(orders, startPos)
-        let tmpCarWorkSchedule = getItemInRange(carSchedule, startPos)
+        let tmpOrder = null
+        let tmpCarWorkSchedule = null
+        if (orders.length) tmpOrder = getItemInRange(orders, startPos)
+        if (carSchedule.length)
+          tmpCarWorkSchedule = getItemInRange(carSchedule, startPos)
         if (tmpOrder) {
           res.push({
             ...tmpOrder,
@@ -104,10 +107,7 @@ export default {
           res.push({
             ...tmpCarWorkSchedule,
             itemType: 'carSchedule',
-            isLastZone: isLastZone(
-              +tmpCarWorkSchedule.dateRange[1].value ||
-                tmpCarWorkSchedule.dateRange[1].value
-            ),
+            isLastZone: isLastZone(tmpCarWorkSchedule.dateRange[1].value),
             lengthCell: getCellLengthInRange(
               tmpCarWorkSchedule,
               startPos,

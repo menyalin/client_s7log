@@ -134,7 +134,6 @@ export default {
       orderUpdated: {
         query: orderUpdatedSubscription,
         result({ data: { orderUpdated } }) {
-          console.log(orderUpdated)
           store.commit('updateOrder', orderUpdated)
         }
       },
