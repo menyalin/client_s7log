@@ -20,6 +20,10 @@ export default {
   actions: {},
   getters: {
     drivers: ({ drivers }) => drivers,
+    driversForJournal: ({ drivers }) => active => {
+      if (active) return drivers.filter(item => item.isActive)
+      else return drivers
+    },
     driverById: ({ drivers }) => (id) => drivers.find(item => item.id === id),
     activeDrivers: ({ drivers }) => drivers.filter(item => item.isActive)
   }

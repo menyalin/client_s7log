@@ -4,7 +4,7 @@
       <v-col>
         <v-data-table
           class="elevation-1"
-          :items="drivers"
+          :items="driversForJournal(onlyActive)"
           :headers="headers"
           :search="search"
           dense
@@ -30,6 +30,13 @@
                   <v-btn color="secondary" dark @click="newDriver">
                     <v-icon>mdi-plus</v-icon>Добавить
                   </v-btn>
+                </v-col>
+                <v-col cols="auto">
+                  <v-checkbox
+                    v-model="onlyActive"
+                    label="Активные"
+                    hide-details
+                  />
                 </v-col>
                 <v-col>
                   <v-text-field
@@ -77,6 +84,7 @@ export default {
   data: () => ({
     dialog: false,
     search: '',
+    onlyActive: true,
     editedDriver: {},
     headers: [
       { value: 'fullName', text: 'Имя (полное)' },
@@ -93,7 +101,7 @@ export default {
     driverEditForm
   },
   computed: {
-    ...mapGetters(['drivers'])
+    ...mapGetters(['drivers', 'driversForJournal'])
   },
   methods: {
     newDriver() {

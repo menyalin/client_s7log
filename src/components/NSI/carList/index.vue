@@ -4,7 +4,7 @@
       <v-col>
         <v-data-table
           class="elevation-1"
-          :items="carsForJournal(filterType)"
+          :items="carsForJournal(filterType, onlyActive)"
           :headers="headers"
           dense
           :sort-by="['isActive', 'type', 'listItem']"
@@ -23,6 +23,13 @@
                   <v-btn color="secondary" dark @click="newCarHandler">
                     <v-icon>mdi-plus</v-icon>Добавить
                   </v-btn>
+                </v-col>
+                <v-col cols="auto">
+                  <v-checkbox
+                    v-model="onlyActive"
+                    label="Активные"
+                    hide-details
+                  />
                 </v-col>
                 <v-col cols="auto">
                   <v-select
@@ -60,7 +67,9 @@
             </div>
           </template>
           <template v-slot:item.type="{ item }">
-            <div>{{ allVehicleTypes.find(i => item.type === i.value).text }}</div>
+            <div>
+              {{ allVehicleTypes.find(i => item.type === i.value).text }}
+            </div>
           </template>
         </v-data-table>
         <v-dialog v-model="dialog" max-width="500px" persistent>
@@ -88,6 +97,7 @@ export default {
   },
   data: () => ({
     dialog: false,
+    onlyActive: true,
     search: '',
     filterType: '',
     editedItem: {},
