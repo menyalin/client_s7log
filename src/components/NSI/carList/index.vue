@@ -104,7 +104,7 @@ export default {
     headers: [
       { text: 'isActive', value: 'isActive' },
       { text: 'Тип', value: 'type', filterable: false },
-      { text: 'Заголовок', value: 'title', filterable: false },
+      { text: 'Заголовок', value: 'title' },
       {
         text: '№ списке',
         value: 'listItem',

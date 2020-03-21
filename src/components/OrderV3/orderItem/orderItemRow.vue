@@ -64,7 +64,8 @@ export default {
 }
 .col-time {
   flex: 1;
-  padding-right: 1px;
+  padding-right: 2px;
+  text-align: right;
 }
 .tooltip--row {
   font-size: 0.8rem;
